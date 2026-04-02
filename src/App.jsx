@@ -10,7 +10,7 @@ function App() {
     return <StartPage onEnter={() => setScreen('main')} />
   }
 
-  return <MainPage />
+  return <MainPage onRestart={() => setScreen('start')} />
 }
 
 export default App

@@ -87,11 +87,16 @@ const SHELF_SLOTS = [
   { id: 'b10', shelf: 'bottom', h: 146, tone: 'tone-2' },
 ]
 
-function MainPage() {
+function MainPage({ onRestart }) {
   const [collectedOrbIds, setCollectedOrbIds] = useState([])
   const [activeBookId, setActiveBookId] = useState(null)
   const [activePage, setActivePage] = useState(0)
   const [scene, setScene] = useState('library')
+  const [doorPopup, setDoorPopup] = useState(null)
+  const [keyObtained, setKeyObtained] = useState(false)
+  const [passwordPopup, setPasswordPopup] = useState(false)
+  const [passwordInput, setPasswordInput] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState(null)
 
   const targetBySlot = useMemo(
     () =>
@@ -144,6 +149,24 @@ function MainPage() {
     )
   }
 
+  const handlePasswordSubmit = () => {
+    if (passwordInput === '0000') {
+      setPasswordMessage('success')
+      setKeyObtained(true)
+      setPasswordInput('')
+      setTimeout(() => {
+        setPasswordPopup(false)
+        setPasswordMessage(null)
+      }, 2000)
+    } else {
+      setPasswordMessage('error')
+      setPasswordInput('')
+      setTimeout(() => {
+        setPasswordMessage(null)
+      }, 2000)
+    }
+  }
+
   const sceneTitle =
     scene === 'library'
       ? '빛나는 책에서 기억 구슬 회수하기'
@@ -163,9 +186,16 @@ function MainPage() {
           <p className="eyebrow">Design Diary: Library Wing</p>
           <h1>{sceneTitle}</h1>
         </div>
-        <p className="progress" aria-live="polite">
-          수집한 구슬 <strong>{collectedCount}</strong> / {totalBooks}
-        </p>
+        <div className="progress-info" aria-live="polite">
+          <p className="progress">
+            수집한 구슬 <strong>{collectedCount}</strong> / {totalBooks}
+          </p>
+          {keyObtained && (
+            <p className="progress key-status">
+              🔑 <strong>KEY OBTAINED</strong>
+            </p>
+          )}
+        </div>
       </header>
 
       {scene === 'library' && (
@@ -182,7 +212,7 @@ function MainPage() {
           <button
             type="button"
             className="scene-nav-button right"
-            onClick={() => goToScene('control-room')}
+            onClick={() => goToScene('control-room-door')}
             aria-label="Control Room 문 화면으로 이동"
           >
             →
@@ -272,10 +302,15 @@ function MainPage() {
       {scene === 'exit-door' && (
         <section className="door-scene" aria-label="Exit 문 화면">
           <p className="door-top-label">Exit</p>
-          <div className="single-door keyhole-door" aria-hidden="true">
+          <button
+            type="button"
+            className="single-door keyhole-door door-interactive"
+            onClick={() => setDoorPopup('exit')}
+            aria-label="Exit 문과 상호작용하기"
+          >
             <span className="door-handle" />
             <span className="keyhole" />
-          </div>
+          </button>
           <button
             type="button"
             className="door-arrow return-right"
@@ -287,16 +322,23 @@ function MainPage() {
         </section>
       )}
 
-      {scene === 'control-room' && (
+      {scene === 'control-room-door' && (
         <section className="door-scene" aria-label="Control Room 문 화면">
           <p className="door-top-label">Control Room</p>
-          <div className="single-door barred-door" aria-hidden="true">
+          <motion.button
+            type="button"
+            className="single-door barred-door door-interactive"
+            onClick={() => setDoorPopup('control-room')}
+            aria-label="Control Room 문과 상호작용하기"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
             <span className="bar" />
             <span className="bar" />
             <span className="bar" />
             <span className="bar" />
             <span className="auth-plate">Authorized Personnel Only</span>
-          </div>
+          </motion.button>
           <button
             type="button"
             className="door-arrow return-left"
@@ -307,6 +349,209 @@ function MainPage() {
           </button>
         </section>
       )}
+
+      {scene === 'control-room-interior' && (
+        <section className="control-room-interior" aria-label="Control Room 내부">
+          <h2 className="room-title">Control Room</h2>
+          <div className="interior-content">
+            <div className="monitor">
+              <div className="monitor-screen">
+                <p>SYSTEM STATUS: ONLINE</p>
+                <p>SECURITY: ACTIVE</p>
+                <div className="data-display">█ ██ ███ █████ ███</div>
+                <div className="data-display">██ ███ █ ██ █████</div>
+              </div>
+              <div className="monitor-bezel" />
+            </div>
+            <div className="control-panel">
+              <div className="panel-light on" />
+              <div className="panel-light off" />
+              <div className="panel-light on" />
+              <div className="panel-button" />
+              <div className="panel-button" />
+            </div>
+            {!keyObtained && (
+              <div className="console-section">
+                <button
+                  type="button"
+                  className="console-button"
+                  onClick={() => setPasswordPopup(true)}
+                  aria-label="비밀번호 입력"
+                >
+                  ENTER PASSWORD
+                </button>
+              </div>
+            )}
+            {keyObtained && (
+              <div className="key-badge">
+                <span className="key-icon">🔑</span>
+                <p>KEY OBTAINED</p>
+              </div>
+            )}
+            <div className="desk">
+              <button
+                type="button"
+                className="control-room-book"
+                onClick={() => setActiveBookId('control-book')}
+                aria-label="콘솔 책 읽기"
+              >
+                <span className="book-title-small">System Log</span>
+              </button>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="door-arrow bottom-arrow"
+            onClick={() => goToScene('control-room-door')}
+            aria-label="Control Room 문으로 돌아가기"
+          >
+            ↓
+          </button>
+        </section>
+      )}
+
+      <AnimatePresence>
+        {doorPopup && (
+          <motion.section
+            className="door-popup-overlay"
+            key={doorPopup}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setDoorPopup(null)}
+          >
+            <motion.article
+              className="door-popup-content"
+              initial={{ y: 40, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 28, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.32 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <h3>{doorPopup === 'exit' ? 'Exit Door' : 'Control Room'}</h3>
+              <p className="door-popup-message">
+                {doorPopup === 'exit'
+                  ? keyObtained
+                    ? '🔑 Congratulation! You escaped!'
+                    : "You'll need a key to get out of here."
+                  : 'This door has 5 key holes. You need all 5 orbs to unlock it.'}
+              </p>
+              <p className="door-orb-counter">
+                {doorPopup === 'control-room' && (
+                  <>
+                    Orbs Collected: <span className="counter-value">{collectedCount} / 5</span>
+                  </>
+                )}
+              </p>
+              {doorPopup === 'exit' && keyObtained && (
+                <motion.button
+                  type="button"
+                  className="enter-button"
+                  onClick={() => {
+                    setDoorPopup(null)
+                    onRestart()
+                  }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Escape
+                </motion.button>
+              )}
+              {doorPopup === 'control-room' && collectedCount === 5 && (
+                <motion.button
+                  type="button"
+                  className="enter-button"
+                  onClick={() => {
+                    setDoorPopup(null)
+                    goToScene('control-room-interior')
+                  }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Enter Control Room
+                </motion.button>
+              )}
+              <button
+                type="button"
+                className="close-button"
+                onClick={() => setDoorPopup(null)}
+              >
+                Close
+              </button>
+            </motion.article>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {passwordPopup && (
+          <motion.section
+            className="password-popup-overlay"
+            key="password"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setPasswordPopup(false)}
+          >
+            <motion.article
+              className="password-popup-content"
+              initial={{ y: 40, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 28, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.32 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <h3>ENTER PASSWORD</h3>
+              {passwordMessage && (
+                <motion.p
+                  className={`password-feedback ${passwordMessage}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {passwordMessage === 'success'
+                    ? '✓ Correct! You obtained the key.'
+                    : '✗ Incorrect password.'}
+                </motion.p>
+              )}
+              <div className="password-input-group">
+                <input
+                  type="password"
+                  className="password-input"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
+                  placeholder="Enter 4 digits"
+                  maxLength="4"
+                  disabled={!!passwordMessage}
+                  aria-label="비밀번호"
+                />
+              </div>
+              <div className="password-button-group">
+                <button
+                  type="button"
+                  className="submit-button"
+                  onClick={handlePasswordSubmit}
+                  disabled={passwordInput.length !== 4 || !!passwordMessage}
+                >
+                  SUBMIT
+                </button>
+                <button
+                  type="button"
+                  className="close-button"
+                  onClick={() => setPasswordPopup(false)}
+                >
+                  CANCEL
+                </button>
+              </div>
+            </motion.article>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {activeBook && (
@@ -381,6 +626,42 @@ function MainPage() {
                 onClick={closeBook}
               >
                 책장으로 돌아가기
+              </button>
+            </motion.article>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {activeBookId === 'control-book' && (
+          <motion.section
+            className="memory-overlay"
+            key="control-book"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setActiveBookId(null)}
+          >
+            <motion.article
+              className="book-popup"
+              initial={{ y: 40, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 28, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.32 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="spread-tag">System Log</div>
+              <h2>Access Log</h2>
+              <section className="book-page-body">
+                <p className="access-log">Password: 0000</p>
+              </section>
+              <button
+                type="button"
+                className="close-button"
+                onClick={() => setActiveBookId(null)}
+              >
+                Close
               </button>
             </motion.article>
           </motion.section>
