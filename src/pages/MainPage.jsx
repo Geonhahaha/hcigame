@@ -1,154 +1,213 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const MEMORY_ORBS = [
+const MEMORY_BOOKS = [
   {
-    id: 'clock-tower',
-    label: '시계탑 단서',
-    x: 18,
-    y: 22,
-    spread: '시계탑 그림자 분석',
-    headline: '04:17에 멈춘 시계는 사건 시간이 아니다.',
-    dek: '그림자 방향과 분침 잔흔이 맞지 않는다. 누군가 의도적으로 시계를 조작했다.',
-    sections: [
-      {
-        title: 'Visual Breakdown',
-        body: '다이얼 유리면에 남은 미세 균열은 외부 충격이 아닌 내부 압력으로 발생했다. 시침은 4시를 가리키지만, 분침 축 하단의 금속가루 분포는 1시대의 회전을 마지막으로 보여준다.',
-      },
-      {
-        title: 'Hypothesis',
-        body: '사건 후 타임라인을 왜곡하기 위해 시곗바늘이 수동으로 재배치되었다. 범인은 구조물 접근이 가능한 내부 동선을 알고 있었다.',
-      },
+    id: 'book-1',
+    title: 'Atlas of Echoes',
+    x: 16,
+    y: 36,
+    pages: [
+      'Page 1. 이 책은 오래된 도시 설계도와 낙서가 겹쳐진 기록이다. 지도 가장자리에는 날짜 없는 메모가 반복된다.',
+      'Page 2. 공간 구성은 체계적이지만, 일부 복도는 의도적으로 감춰진 듯 두 번 그려져 있다.',
+      'Page 3. 주석에는 "소리 없는 방"이라는 표현이 등장한다. 출입 흔적은 있지만 통로 표시는 없다.',
+      'Page 4. 누군가 동일한 단어를 서로 다른 필체로 남겼다. 협업 기록인지 위장 기록인지 아직 미정.',
+      'Page 5. 마지막 장 모서리에서 흐릿한 빛이 감지된다. 구슬을 회수하면 책의 색인이 완성된다.',
     ],
   },
   {
-    id: 'wine-glass',
-    label: '와인잔 단서',
-    x: 62,
-    y: 31,
-    spread: '파편 패턴 기록',
-    headline: '와인잔은 떨어진 것이 아니라 밀려났다.',
-    dek: '파편 방사 각도는 테이블 끝 방향으로 비정상적으로 길다. 손목 스냅이 개입된 흔적이다.',
-    sections: [
-      {
-        title: 'Material Trace',
-        body: '유리 단면의 미세 스크래치에서 금속성 코팅 입자가 검출되었다. 피의자가 착용한 반지 표면 성분과 동일한 니켈-크롬 계열이다.',
-      },
-      {
-        title: 'Narrative Shift',
-        body: '"실수로 부딪혔다"는 진술과 달리, 파편의 72%가 동일 축으로 쏠려 있다. 반사적으로 밀친 동작이 더 설득력 있다.',
-      },
+    id: 'book-2',
+    title: 'Cabinet Notes',
+    x: 35,
+    y: 36,
+    pages: [
+      'Page 1. 목재 수납장의 힌지 소리와 관련된 관찰 로그. 시간별 소리의 높낮이가 적혀 있다.',
+      'Page 2. 특정 시간대에만 들리는 공명음이 있다. 책장 뒤 빈 공간과 관련 있는 듯하다.',
+      'Page 3. 장의 서랍 번호가 바뀌어 적혀 있다. 원본 도면과 현재 번호 체계가 불일치한다.',
+      'Page 4. 추정 메모: 내부 누군가가 순서를 섞어 단서를 분산시켰을 가능성.',
+      'Page 5. 책 안쪽 포켓에서 미세 입자가 떨어진다. 구슬을 눌러 샘플을 보관한다.',
     ],
   },
   {
-    id: 'door-handle',
-    label: '문고리 단서',
-    x: 79,
-    y: 64,
-    spread: '출입 기록 리포트',
-    headline: '문은 안에서 잠겼지만, 마지막 접촉자는 밖에 있었다.',
-    dek: '문고리 하단의 지문 위치가 비정상적으로 낮다. 바깥에서 고의로 흔들어 잠금 상태를 확인한 패턴이다.',
-    sections: [
-      {
-        title: 'Touch Geometry',
-        body: '지문은 위에서 잡는 일반 그립이 아니라, 손끝으로 아래를 받쳐 올리는 형태로 남았다. 급히 닫힌 직후 상태를 체크할 때 흔한 동작이다.',
-      },
-      {
-        title: 'Case Note',
-        body: '이 단서가 맞다면 밀실은 연출된 결과다. 핵심은 "누가 안에 있었는가"가 아니라 "누가 잠금 연출을 확인했는가"다.',
-      },
+    id: 'book-3',
+    title: 'Quiet Staircase',
+    x: 54,
+    y: 36,
+    pages: [
+      'Page 1. 계단 발자국 간격 분석. 오르막보다 내리막에서 흔적 간격이 넓어졌다.',
+      'Page 2. 난간 손자국의 높이가 일정치 않다. 두 명 이상 이동했을 가능성이 있다.',
+      'Page 3. 먼지 분포는 중간 층에서만 비어 있다. 특정 층을 우회한 동선이 존재한다.',
+      'Page 4. 페이지 하단 메모: "한 명은 시선을 끌고, 다른 한 명은 문서를 옮겼다".',
+      'Page 5. 봉인된 쪽지 대신 구슬이 보인다. 눌러 수집하고 기록을 해제한다.',
+    ],
+  },
+  {
+    id: 'book-4',
+    title: 'Lumen Register',
+    x: 73,
+    y: 36,
+    pages: [
+      'Page 1. 조명 점등 기록의 누락 구간이 확인된다. 야간 로그가 비정상적으로 짧다.',
+      'Page 2. 전구 교체 이력이 없는데도 밝기 지표가 크게 변했다. 인위적 차광 가능성.',
+      'Page 3. 반사면 각도 측정치가 벽면 도면과 다르다. 임시 설치물이 있었을 수 있다.',
+      'Page 4. 기록자는 "빛을 끄지 않고 어둡게 만드는 법"을 언급했다.',
+      'Page 5. 마지막 줄 옆에 빛나는 구슬이 맺혀 있다. 눌러 수집한다.',
+    ],
+  },
+  {
+    id: 'book-5',
+    title: 'Terminal Index',
+    x: 87,
+    y: 69,
+    pages: [
+      'Page 1. 인물 목록의 번호 체계가 사건 이후 다시 매겨졌다. 삭제된 인덱스가 보인다.',
+      'Page 2. 대조표의 공백 칸이 두 곳 남아 있다. 아직 찾지 못한 연결고리로 추정된다.',
+      'Page 3. 참고문헌에 동일 제목이 다른 출판사로 두 번 기록되어 있다.',
+      'Page 4. 마지막 전 메모: "답은 책 안이 아니라 책과 책 사이".',
+      'Page 5. 수집 가능한 핵심 구슬이 마지막 인덱스에 고정되어 있다. 눌러 확보한다.',
     ],
   },
 ]
 
 function MainPage() {
   const [collectedOrbIds, setCollectedOrbIds] = useState([])
-  const [activeOrbId, setActiveOrbId] = useState(null)
+  const [activeBookId, setActiveBookId] = useState(null)
+  const [activePage, setActivePage] = useState(0)
 
-  const activeOrb = useMemo(
-    () => MEMORY_ORBS.find((orb) => orb.id === activeOrbId) ?? null,
-    [activeOrbId],
+  const activeBook = useMemo(
+    () => MEMORY_BOOKS.find((book) => book.id === activeBookId) ?? null,
+    [activeBookId],
   )
 
   const collectedCount = collectedOrbIds.length
+  const totalBooks = MEMORY_BOOKS.length
+  const isLastPage = activePage === 4
+  const isActiveOrbCollected = activeBook
+    ? collectedOrbIds.includes(activeBook.id)
+    : false
 
-  const openMemoryOrb = (orbId) => {
-    setCollectedOrbIds((prev) => (prev.includes(orbId) ? prev : [...prev, orbId]))
-    setActiveOrbId(orbId)
+  const openBook = (bookId) => {
+    setActiveBookId(bookId)
+    setActivePage(0)
+  }
+
+  const closeBook = () => {
+    setActiveBookId(null)
+    setActivePage(0)
+  }
+
+  const collectOrb = () => {
+    if (!activeBook) {
+      return
+    }
+
+    setCollectedOrbIds((prev) =>
+      prev.includes(activeBook.id) ? prev : [...prev, activeBook.id],
+    )
   }
 
   return (
     <main className="case-file">
       <header className="status-bar">
         <div>
-          <p className="eyebrow">Design Diary: Scene 01</p>
-          <h1>적막한 응접실의 기억 구슬</h1>
+          <p className="eyebrow">Design Diary: Library Wing</p>
+          <h1>빛나는 책에서 기억 구슬 회수하기</h1>
         </div>
         <p className="progress" aria-live="polite">
-          수집한 구슬 <strong>{collectedCount}</strong> / {MEMORY_ORBS.length}
+          수집한 구슬 <strong>{collectedCount}</strong> / {totalBooks}
         </p>
       </header>
 
-      <section className="scene-wrapper" aria-label="사건 현장">
-        {MEMORY_ORBS.map((orb, index) => {
-          const isCollected = collectedOrbIds.includes(orb.id)
+      <section className="bookshelf-scene" aria-label="도서관 책장">
+        <div className="shelf shelf-top" />
+        <div className="shelf shelf-bottom" />
+
+        {MEMORY_BOOKS.map((book, index) => {
+          const isCollected = collectedOrbIds.includes(book.id)
 
           return (
             <motion.button
-              key={orb.id}
+              key={book.id}
               type="button"
-              className={`memory-orb ${isCollected ? 'is-collected' : ''}`}
-              style={{ left: `${orb.x}%`, top: `${orb.y}%` }}
-              onClick={() => openMemoryOrb(orb.id)}
+              className={`glowing-book ${isCollected ? 'is-collected' : ''}`}
+              style={{ left: `${book.x}%`, top: `${book.y}%` }}
+              onClick={() => openBook(book.id)}
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.12, duration: 0.35 }}
-              whileHover={{ scale: 1.18 }}
+              whileHover={{ scale: 1.08, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              aria-label={`${orb.label} 열기`}
+              aria-label={`${book.title} 열기`}
             >
-              <span className="orb-core" />
+              <span className="book-spine">{book.title}</span>
+              <span className="book-glow" />
             </motion.button>
           )
         })}
       </section>
 
       <AnimatePresence>
-        {activeOrb && (
+        {activeBook && (
           <motion.section
             className="memory-overlay"
-            key={activeOrb.id}
+            key={activeBook.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            onClick={() => setActiveOrbId(null)}
+            onClick={closeBook}
           >
             <motion.article
-              className="magazine-layout"
+              className="book-popup"
               initial={{ y: 40, opacity: 0, scale: 0.98 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 28, opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.32 }}
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="spread-tag">{activeOrb.spread}</div>
-              <h2>{activeOrb.headline}</h2>
-              <p className="dek">{activeOrb.dek}</p>
+              <div className="spread-tag">{activeBook.title}</div>
+              <h2>기록 열람</h2>
+              <p className="page-indicator">Page {activePage + 1} / 5</p>
 
-              {activeOrb.sections.map((section) => (
-                <section key={section.title} className="analysis-block">
-                  <h3>{section.title}</h3>
-                  <p>{section.body}</p>
-                </section>
-              ))}
+              <section className="book-page-body">
+                <p>{activeBook.pages[activePage]}</p>
+
+                {isLastPage && (
+                  <button
+                    type="button"
+                    className={`page-orb ${isActiveOrbCollected ? 'is-collected' : ''}`}
+                    onClick={collectOrb}
+                  >
+                    {isActiveOrbCollected ? '구슬 수집 완료' : '빛나는 구슬 수집'}
+                  </button>
+                )}
+              </section>
+
+              <div className="page-controls">
+                <button
+                  type="button"
+                  className="nav-arrow"
+                  onClick={() => setActivePage((prev) => Math.max(prev - 1, 0))}
+                  disabled={activePage === 0}
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  className="nav-arrow"
+                  onClick={() => setActivePage((prev) => Math.min(prev + 1, 4))}
+                  disabled={activePage === 4}
+                >
+                  →
+                </button>
+              </div>
 
               <button
                 type="button"
                 className="close-button"
-                onClick={() => setActiveOrbId(null)}
+                onClick={closeBook}
               >
-                현장으로 돌아가기
+                책장으로 돌아가기
               </button>
             </motion.article>
           </motion.section>
