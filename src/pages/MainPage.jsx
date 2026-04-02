@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const MEMORY_BOOKS = [
+const TARGET_BOOKS = [
   {
     id: 'book-1',
-    title: 'Atlas of Echoes',
-    x: 16,
-    y: 36,
+    slotId: 't2',
+    title: 'Apple Photos',
     pages: [
       'Page 1. 이 책은 오래된 도시 설계도와 낙서가 겹쳐진 기록이다. 지도 가장자리에는 날짜 없는 메모가 반복된다.',
       'Page 2. 공간 구성은 체계적이지만, 일부 복도는 의도적으로 감춰진 듯 두 번 그려져 있다.',
@@ -17,9 +16,8 @@ const MEMORY_BOOKS = [
   },
   {
     id: 'book-2',
-    title: 'Cabinet Notes',
-    x: 35,
-    y: 36,
+    slotId: 't5',
+    title: 'YouTube Music',
     pages: [
       'Page 1. 목재 수납장의 힌지 소리와 관련된 관찰 로그. 시간별 소리의 높낮이가 적혀 있다.',
       'Page 2. 특정 시간대에만 들리는 공명음이 있다. 책장 뒤 빈 공간과 관련 있는 듯하다.',
@@ -30,9 +28,8 @@ const MEMORY_BOOKS = [
   },
   {
     id: 'book-3',
-    title: 'Quiet Staircase',
-    x: 54,
-    y: 36,
+    slotId: 't8',
+    title: 'Google Maps',
     pages: [
       'Page 1. 계단 발자국 간격 분석. 오르막보다 내리막에서 흔적 간격이 넓어졌다.',
       'Page 2. 난간 손자국의 높이가 일정치 않다. 두 명 이상 이동했을 가능성이 있다.',
@@ -43,9 +40,8 @@ const MEMORY_BOOKS = [
   },
   {
     id: 'book-4',
-    title: 'Lumen Register',
-    x: 73,
-    y: 36,
+    slotId: 'b3',
+    title: 'Instagram Archive',
     pages: [
       'Page 1. 조명 점등 기록의 누락 구간이 확인된다. 야간 로그가 비정상적으로 짧다.',
       'Page 2. 전구 교체 이력이 없는데도 밝기 지표가 크게 변했다. 인위적 차광 가능성.',
@@ -56,9 +52,8 @@ const MEMORY_BOOKS = [
   },
   {
     id: 'book-5',
-    title: 'Terminal Index',
-    x: 87,
-    y: 69,
+    slotId: 'b7',
+    title: 'Nike Run Club',
     pages: [
       'Page 1. 인물 목록의 번호 체계가 사건 이후 다시 매겨졌다. 삭제된 인덱스가 보인다.',
       'Page 2. 대조표의 공백 칸이 두 곳 남아 있다. 아직 찾지 못한 연결고리로 추정된다.',
@@ -69,18 +64,60 @@ const MEMORY_BOOKS = [
   },
 ]
 
+const SHELF_SLOTS = [
+  { id: 't1', shelf: 'top', h: 144, tone: 'tone-1' },
+  { id: 't2', shelf: 'top', h: 150, tone: 'tone-2' },
+  { id: 't3', shelf: 'top', h: 138, tone: 'tone-3' },
+  { id: 't4', shelf: 'top', h: 146, tone: 'tone-4' },
+  { id: 't5', shelf: 'top', h: 152, tone: 'tone-5' },
+  { id: 't6', shelf: 'top', h: 140, tone: 'tone-2' },
+  { id: 't7', shelf: 'top', h: 148, tone: 'tone-1' },
+  { id: 't8', shelf: 'top', h: 144, tone: 'tone-3' },
+  { id: 't9', shelf: 'top', h: 154, tone: 'tone-4' },
+  { id: 't10', shelf: 'top', h: 142, tone: 'tone-5' },
+  { id: 'b1', shelf: 'bottom', h: 152, tone: 'tone-3' },
+  { id: 'b2', shelf: 'bottom', h: 146, tone: 'tone-1' },
+  { id: 'b3', shelf: 'bottom', h: 150, tone: 'tone-4' },
+  { id: 'b4', shelf: 'bottom', h: 141, tone: 'tone-5' },
+  { id: 'b5', shelf: 'bottom', h: 154, tone: 'tone-2' },
+  { id: 'b6', shelf: 'bottom', h: 145, tone: 'tone-3' },
+  { id: 'b7', shelf: 'bottom', h: 151, tone: 'tone-4' },
+  { id: 'b8', shelf: 'bottom', h: 143, tone: 'tone-1' },
+  { id: 'b9', shelf: 'bottom', h: 152, tone: 'tone-5' },
+  { id: 'b10', shelf: 'bottom', h: 146, tone: 'tone-2' },
+]
+
 function MainPage() {
   const [collectedOrbIds, setCollectedOrbIds] = useState([])
   const [activeBookId, setActiveBookId] = useState(null)
   const [activePage, setActivePage] = useState(0)
 
+  const targetBySlot = useMemo(
+    () =>
+      TARGET_BOOKS.reduce((acc, book) => {
+        acc[book.slotId] = book
+        return acc
+      }, {}),
+    [],
+  )
+
+  const topSlots = useMemo(
+    () => SHELF_SLOTS.filter((slot) => slot.shelf === 'top'),
+    [],
+  )
+
+  const bottomSlots = useMemo(
+    () => SHELF_SLOTS.filter((slot) => slot.shelf === 'bottom'),
+    [],
+  )
+
   const activeBook = useMemo(
-    () => MEMORY_BOOKS.find((book) => book.id === activeBookId) ?? null,
+    () => TARGET_BOOKS.find((book) => book.id === activeBookId) ?? null,
     [activeBookId],
   )
 
   const collectedCount = collectedOrbIds.length
-  const totalBooks = MEMORY_BOOKS.length
+  const totalBooks = TARGET_BOOKS.length
   const isLastPage = activePage === 4
   const isActiveOrbCollected = activeBook
     ? collectedOrbIds.includes(activeBook.id)
@@ -119,31 +156,83 @@ function MainPage() {
       </header>
 
       <section className="bookshelf-scene" aria-label="도서관 책장">
-        <div className="shelf shelf-top" />
-        <div className="shelf shelf-bottom" />
+        <div className="book-row top-row">
+          {topSlots.map((slot, index) => {
+            const targetBook = targetBySlot[slot.id]
 
-        {MEMORY_BOOKS.map((book, index) => {
-          const isCollected = collectedOrbIds.includes(book.id)
+            if (!targetBook) {
+              return (
+                <div
+                  key={slot.id}
+                  className={`bookshelf-book ${slot.tone}`}
+                  style={{ '--book-height': `${slot.h}px` }}
+                  aria-hidden="true"
+                >
+                  <span className="book-spine">Volume {index + 1}</span>
+                </div>
+              )
+            }
 
-          return (
-            <motion.button
-              key={book.id}
-              type="button"
-              className={`glowing-book ${isCollected ? 'is-collected' : ''}`}
-              style={{ left: `${book.x}%`, top: `${book.y}%` }}
-              onClick={() => openBook(book.id)}
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.12, duration: 0.35 }}
-              whileHover={{ scale: 1.08, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              aria-label={`${book.title} 열기`}
-            >
-              <span className="book-spine">{book.title}</span>
-              <span className="book-glow" />
-            </motion.button>
-          )
-        })}
+            const isCollected = collectedOrbIds.includes(targetBook.id)
+
+            return (
+              <motion.button
+                key={slot.id}
+                type="button"
+                className={`bookshelf-book is-target ${slot.tone} ${isCollected ? 'is-collected' : ''}`}
+                style={{ '--book-height': `${slot.h}px` }}
+                onClick={() => openBook(targetBook.id)}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.08, duration: 0.35 }}
+                whileHover={{ scale: 1.08, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label={`${targetBook.title} 열기`}
+              >
+                <span className="book-spine">{targetBook.title}</span>
+              </motion.button>
+            )
+          })}
+        </div>
+
+        <div className="book-row bottom-row">
+          {bottomSlots.map((slot, index) => {
+            const targetBook = targetBySlot[slot.id]
+
+            if (!targetBook) {
+              return (
+                <div
+                  key={slot.id}
+                  className={`bookshelf-book ${slot.tone}`}
+                  style={{ '--book-height': `${slot.h}px` }}
+                  aria-hidden="true"
+                >
+                  <span className="book-spine">Volume {topSlots.length + index + 1}</span>
+                </div>
+              )
+            }
+
+            const isCollected = collectedOrbIds.includes(targetBook.id)
+
+            return (
+              <motion.button
+                key={slot.id}
+                type="button"
+                className={`bookshelf-book is-target ${slot.tone} ${isCollected ? 'is-collected' : ''}`}
+                style={{ '--book-height': `${slot.h}px` }}
+                onClick={() => openBook(targetBook.id)}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.08 + 0.15, duration: 0.35 }}
+                whileHover={{ scale: 1.08, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label={`${targetBook.title} 열기`}
+              >
+                <span className="book-spine">{targetBook.title}</span>
+              </motion.button>
+            )
+          })}
+        </div>
       </section>
 
       <AnimatePresence>
@@ -173,13 +262,24 @@ function MainPage() {
                 <p>{activeBook.pages[activePage]}</p>
 
                 {isLastPage && (
-                  <button
-                    type="button"
-                    className={`page-orb ${isActiveOrbCollected ? 'is-collected' : ''}`}
-                    onClick={collectOrb}
-                  >
-                    {isActiveOrbCollected ? '구슬 수집 완료' : '빛나는 구슬 수집'}
-                  </button>
+                    <div className="orb-collect-zone">
+                      <p className="orb-instruction">
+                        <span className="orb-arrow">v</span> 아래 구슬을 눌러 수집하세요
+                      </p>
+                      <button
+                        type="button"
+                        className={`collectible-orb ${isActiveOrbCollected ? 'is-collected' : ''}`}
+                        onClick={collectOrb}
+                        aria-label="빛나는 구슬 수집"
+                      >
+                        <span className="orb-inner" />
+                      </button>
+                      <p className="orb-state">
+                        {isActiveOrbCollected
+                          ? '수집 완료: 기록이 안전하게 보관되었습니다.'
+                          : '아직 수집되지 않았습니다.'}
+                      </p>
+                    </div>
                 )}
               </section>
 

@@ -113,6 +113,10 @@
   position: relative;
   aspect-ratio: 16 / 9;
   min-height: 320px;
+  padding: 1.5rem 1.1rem;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5rem;
   overflow: hidden;
   border-radius: 18px;
   border: 1px solid rgba(210, 177, 124, 0.28);
@@ -124,36 +128,90 @@
   background-position: center;
 }
 
-.shelf {
+.bookshelf-scene::before {
+  content: '';
   position: absolute;
-  left: 4%;
-  width: 92%;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 2px,
+      transparent 2px,
+      transparent 46px
+    );
+  pointer-events: none;
+}
+
+.book-row {
+  position: absolute;
+  left: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.top-row {
+  top: 1.25rem;
+  bottom: calc(50% + 0.7rem);
+}
+
+.bottom-row {
+  top: calc(50% + 0.7rem);
+  bottom: 1.25rem;
+}
+
+.book-row::after {
+  content: '';
+  position: absolute;
+  left: -0.2rem;
+  right: -0.2rem;
+  bottom: -10px;
   height: 16px;
   border-radius: 10px;
   background: linear-gradient(180deg, #6f4d2f, #3f2815);
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.24);
+  z-index: 1;
 }
 
-.shelf-top {
-  top: 44%;
-}
-
-.shelf-bottom {
-  top: 77%;
-}
-
-.glowing-book {
-  position: absolute;
-  width: 84px;
-  height: 136px;
-  transform: translate(-50%, -50%);
+.bookshelf-book {
+  position: relative;
+  width: 54px;
+  height: var(--book-height);
+  border-radius: 8px 8px 3px 3px;
   border: 0;
   padding: 0;
-  border-radius: 8px 8px 4px 4px;
-  background: linear-gradient(180deg, #774826, #4d2f19 72%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset -6px 0 0 rgba(0, 0, 0, 0.22), 0 8px 10px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.bookshelf-book.tone-1 {
+  background: linear-gradient(180deg, #6f3e2f, #4a271b 72%);
+}
+
+.bookshelf-book.tone-2 {
+  background: linear-gradient(180deg, #5c3f6e, #3a2948 72%);
+}
+
+.bookshelf-book.tone-3 {
+  background: linear-gradient(180deg, #355d69, #24414a 72%);
+}
+
+.bookshelf-book.tone-4 {
+  background: linear-gradient(180deg, #7a6240, #56442c 72%);
+}
+
+.bookshelf-book.tone-5 {
+  background: linear-gradient(180deg, #3f5b3c, #2c4129 72%);
+}
+
+.bookshelf-book.is-target {
   cursor: pointer;
-  overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+  z-index: 3;
 }
 
 .book-spine {
@@ -165,34 +223,38 @@
   width: 100%;
   height: 100%;
   padding: 0.55rem;
-  color: #f8ead4;
-  font-size: 0.72rem;
+  color: rgba(248, 234, 212, 0.95);
+  font-size: 0.64rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-align: center;
   line-height: 1.3;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 
-.book-glow {
+.bookshelf-book.is-target::after {
+  content: '';
   position: absolute;
-  inset: -7px;
+  inset: -6px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 217, 153, 0.7);
-  box-shadow: 0 0 26px rgba(255, 212, 133, 0.74);
-  animation: book-glow-pulse 1.8s ease-in-out infinite;
+  border: 2px solid rgba(255, 221, 166, 0.92);
+  box-shadow: 0 0 28px rgba(255, 207, 115, 0.92), 0 0 44px rgba(255, 214, 143, 0.58);
+  animation: book-glow-pulse 1.4s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.glowing-book.is-collected {
+.bookshelf-book.is-collected {
   background: linear-gradient(180deg, #34566a, #203746 72%);
 }
 
-.glowing-book.is-collected .book-glow {
-  border-color: rgba(153, 222, 255, 0.75);
-  box-shadow: 0 0 24px rgba(133, 203, 255, 0.7);
+.bookshelf-book.is-collected::after {
+  border-color: rgba(153, 222, 255, 0.9);
+  box-shadow: 0 0 24px rgba(133, 203, 255, 0.84), 0 0 42px rgba(143, 220, 255, 0.52);
 }
 
-.glowing-book:focus-visible {
+.bookshelf-book.is-target:focus-visible {
   outline: 2px solid rgba(255, 245, 222, 0.95);
   outline-offset: 4px;
 }
@@ -257,20 +319,73 @@
   line-height: 1.68;
 }
 
-.page-orb {
+.orb-collect-zone {
   margin-top: 1rem;
-  border: 1px solid rgba(89, 57, 21, 0.4);
-  border-radius: 999px;
-  padding: 0.52rem 0.9rem;
-  background: radial-gradient(circle at 30% 30%, #fff4cf, #f6c96f 60%, #c17a2d);
-  color: #2f1f0f;
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+}
+
+.orb-instruction {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #5f3e20;
   font-weight: 600;
+}
+
+.orb-arrow {
+  display: inline-block;
+  margin-right: 0.25rem;
+  color: #8d5a27;
+  animation: bounce-arrow 1s ease-in-out infinite;
+}
+
+.collectible-orb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
   cursor: pointer;
 }
 
-.page-orb.is-collected {
-  background: radial-gradient(circle at 30% 30%, #e0f7ff, #8ecdf1 62%, #3f749c);
-  color: #122636;
+.collectible-orb::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 198, 106, 0.85);
+  box-shadow: 0 0 22px rgba(255, 191, 92, 0.8);
+  animation: orb-ring 1.6s ease-out infinite;
+}
+
+.orb-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff4cc, #ffd487 40%, #cb7d2d 78%);
+  box-shadow: inset 0 -4px 10px rgba(99, 54, 11, 0.35);
+}
+
+.collectible-orb.is-collected::before {
+  border-color: rgba(134, 215, 255, 0.86);
+  box-shadow: 0 0 22px rgba(114, 194, 241, 0.88);
+}
+
+.collectible-orb.is-collected .orb-inner {
+  background: radial-gradient(circle at 30% 30%, #e5f8ff, #9ed9f3 42%, #4979a0 80%);
+}
+
+.collectible-orb:focus-visible {
+  outline: 2px solid #fff6e7;
+  outline-offset: 3px;
+}
+
+.orb-state {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #704824;
 }
 
 .page-controls {
@@ -319,16 +434,37 @@
 
 @keyframes book-glow-pulse {
   0% {
-    opacity: 0.8;
-    transform: scale(0.95);
+    opacity: 0.78;
+    transform: scale(0.98);
   }
   50% {
     opacity: 1;
-    transform: scale(1.02);
+    transform: scale(1.05);
   }
   100% {
-    opacity: 0.8;
-    transform: scale(0.95);
+    opacity: 0.78;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes orb-ring {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes bounce-arrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
   }
 }
 
@@ -356,12 +492,11 @@
     align-items: flex-start;
   }
 
-  .glowing-book {
-    width: 68px;
-    height: 112px;
+  .bookshelf-book {
+    width: 36px;
   }
 
   .book-spine {
-    font-size: 0.63rem;
+    font-size: 0.56rem;
   }
 }
