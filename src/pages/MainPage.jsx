@@ -91,6 +91,7 @@ function MainPage() {
   const [collectedOrbIds, setCollectedOrbIds] = useState([])
   const [activeBookId, setActiveBookId] = useState(null)
   const [activePage, setActivePage] = useState(0)
+  const [scene, setScene] = useState('library')
 
   const targetBySlot = useMemo(
     () =>
@@ -143,97 +144,169 @@ function MainPage() {
     )
   }
 
+  const sceneTitle =
+    scene === 'library'
+      ? '빛나는 책에서 기억 구슬 회수하기'
+      : scene === 'exit-door'
+        ? '열쇠 구멍이 있는 출구 문'
+        : '통제 구역으로 연결되는 문'
+
+  const goToScene = (nextScene) => {
+    setScene(nextScene)
+    closeBook()
+  }
+
   return (
     <main className="case-file">
       <header className="status-bar">
         <div>
           <p className="eyebrow">Design Diary: Library Wing</p>
-          <h1>빛나는 책에서 기억 구슬 회수하기</h1>
+          <h1>{sceneTitle}</h1>
         </div>
         <p className="progress" aria-live="polite">
           수집한 구슬 <strong>{collectedCount}</strong> / {totalBooks}
         </p>
       </header>
 
-      <section className="bookshelf-scene" aria-label="도서관 책장">
-        <div className="book-row top-row">
-          {topSlots.map((slot, index) => {
-            const targetBook = targetBySlot[slot.id]
+      {scene === 'library' && (
+        <section className="bookshelf-scene" aria-label="도서관 책장">
+          <button
+            type="button"
+            className="scene-nav-button left"
+            onClick={() => goToScene('exit-door')}
+            aria-label="Exit 문 화면으로 이동"
+          >
+            ←
+          </button>
 
-            if (!targetBook) {
+          <button
+            type="button"
+            className="scene-nav-button right"
+            onClick={() => goToScene('control-room')}
+            aria-label="Control Room 문 화면으로 이동"
+          >
+            →
+          </button>
+
+          <div className="book-row top-row">
+            {topSlots.map((slot, index) => {
+              const targetBook = targetBySlot[slot.id]
+
+              if (!targetBook) {
+                return (
+                  <div
+                    key={slot.id}
+                    className={`bookshelf-book ${slot.tone}`}
+                    style={{ '--book-height': `${slot.h}px` }}
+                    aria-hidden="true"
+                  >
+                    <span className="book-spine">Volume {index + 1}</span>
+                  </div>
+                )
+              }
+
+              const isCollected = collectedOrbIds.includes(targetBook.id)
+
               return (
-                <div
+                <motion.button
                   key={slot.id}
-                  className={`bookshelf-book ${slot.tone}`}
+                  type="button"
+                  className={`bookshelf-book is-target ${slot.tone} ${isCollected ? 'is-collected' : ''}`}
                   style={{ '--book-height': `${slot.h}px` }}
-                  aria-hidden="true"
+                  onClick={() => openBook(targetBook.id)}
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.08, duration: 0.35 }}
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={`${targetBook.title} 열기`}
                 >
-                  <span className="book-spine">Volume {index + 1}</span>
-                </div>
+                  <span className="book-spine">{targetBook.title}</span>
+                </motion.button>
               )
-            }
+            })}
+          </div>
 
-            const isCollected = collectedOrbIds.includes(targetBook.id)
+          <div className="book-row bottom-row">
+            {bottomSlots.map((slot, index) => {
+              const targetBook = targetBySlot[slot.id]
 
-            return (
-              <motion.button
-                key={slot.id}
-                type="button"
-                className={`bookshelf-book is-target ${slot.tone} ${isCollected ? 'is-collected' : ''}`}
-                style={{ '--book-height': `${slot.h}px` }}
-                onClick={() => openBook(targetBook.id)}
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.08, duration: 0.35 }}
-                whileHover={{ scale: 1.08, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label={`${targetBook.title} 열기`}
-              >
-                <span className="book-spine">{targetBook.title}</span>
-              </motion.button>
-            )
-          })}
-        </div>
+              if (!targetBook) {
+                return (
+                  <div
+                    key={slot.id}
+                    className={`bookshelf-book ${slot.tone}`}
+                    style={{ '--book-height': `${slot.h}px` }}
+                    aria-hidden="true"
+                  >
+                    <span className="book-spine">Volume {topSlots.length + index + 1}</span>
+                  </div>
+                )
+              }
 
-        <div className="book-row bottom-row">
-          {bottomSlots.map((slot, index) => {
-            const targetBook = targetBySlot[slot.id]
+              const isCollected = collectedOrbIds.includes(targetBook.id)
 
-            if (!targetBook) {
               return (
-                <div
+                <motion.button
                   key={slot.id}
-                  className={`bookshelf-book ${slot.tone}`}
+                  type="button"
+                  className={`bookshelf-book is-target ${slot.tone} ${isCollected ? 'is-collected' : ''}`}
                   style={{ '--book-height': `${slot.h}px` }}
-                  aria-hidden="true"
+                  onClick={() => openBook(targetBook.id)}
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.08 + 0.15, duration: 0.35 }}
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={`${targetBook.title} 열기`}
                 >
-                  <span className="book-spine">Volume {topSlots.length + index + 1}</span>
-                </div>
+                  <span className="book-spine">{targetBook.title}</span>
+                </motion.button>
               )
-            }
+            })}
+          </div>
 
-            const isCollected = collectedOrbIds.includes(targetBook.id)
+        </section>
+      )}
 
-            return (
-              <motion.button
-                key={slot.id}
-                type="button"
-                className={`bookshelf-book is-target ${slot.tone} ${isCollected ? 'is-collected' : ''}`}
-                style={{ '--book-height': `${slot.h}px` }}
-                onClick={() => openBook(targetBook.id)}
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.08 + 0.15, duration: 0.35 }}
-                whileHover={{ scale: 1.08, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label={`${targetBook.title} 열기`}
-              >
-                <span className="book-spine">{targetBook.title}</span>
-              </motion.button>
-            )
-          })}
-        </div>
-      </section>
+      {scene === 'exit-door' && (
+        <section className="door-scene" aria-label="Exit 문 화면">
+          <p className="door-top-label">Exit</p>
+          <div className="single-door keyhole-door" aria-hidden="true">
+            <span className="door-handle" />
+            <span className="keyhole" />
+          </div>
+          <button
+            type="button"
+            className="door-arrow return-right"
+            onClick={() => goToScene('library')}
+            aria-label="책장 화면으로 돌아가기"
+          >
+            →
+          </button>
+        </section>
+      )}
+
+      {scene === 'control-room' && (
+        <section className="door-scene" aria-label="Control Room 문 화면">
+          <p className="door-top-label">Control Room</p>
+          <div className="single-door barred-door" aria-hidden="true">
+            <span className="bar" />
+            <span className="bar" />
+            <span className="bar" />
+            <span className="bar" />
+            <span className="auth-plate">Authorized Personnel Only</span>
+          </div>
+          <button
+            type="button"
+            className="door-arrow return-left"
+            onClick={() => goToScene('library')}
+            aria-label="책장 화면으로 돌아가기"
+          >
+            ←
+          </button>
+        </section>
+      )}
 
       <AnimatePresence>
         {activeBook && (
