@@ -1,0 +1,223 @@
+.case-file {
+  width: min(1080px, 100% - 2rem);
+  margin: 2rem auto;
+  padding: 1.25rem;
+  border: 1px solid rgba(193, 170, 133, 0.35);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(22, 18, 14, 0.85), rgba(8, 8, 8, 0.88));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+}
+
+.status-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(243, 220, 176, 0.7);
+}
+
+.status-bar h1 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  color: #f5e2c0;
+}
+
+.progress {
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgba(245, 226, 192, 0.28);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.26);
+  font-size: 0.95rem;
+  color: #edd6ad;
+}
+
+.progress strong {
+  font-size: 1.1rem;
+  color: #fff6e6;
+}
+
+.scene-wrapper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(216, 189, 145, 0.28);
+  background-image:
+    linear-gradient(160deg, rgba(15, 12, 9, 0.18), rgba(7, 5, 2, 0.55)),
+    url('/scene-background.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+.memory-orb {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.orb-core {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff4c8, #ffd07e 32%, #c8771f 72%);
+  box-shadow: 0 0 0 2px rgba(255, 233, 188, 0.65), 0 0 24px rgba(255, 188, 88, 0.75);
+}
+
+.orb-core::before {
+  content: '';
+  position: absolute;
+  inset: -11px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 203, 110, 0.55);
+  animation: orb-pulse 1.9s ease-out infinite;
+}
+
+.memory-orb.is-collected .orb-core {
+  background: radial-gradient(circle at 30% 30%, #d5f8ff, #7ed8ff 38%, #2e5f8f 72%);
+  box-shadow: 0 0 0 2px rgba(212, 241, 252, 0.55), 0 0 24px rgba(90, 173, 232, 0.72);
+}
+
+.memory-orb.is-collected .orb-core::before {
+  border-color: rgba(129, 204, 255, 0.52);
+}
+
+.memory-orb:focus-visible {
+  outline: 2px solid rgba(255, 245, 222, 0.95);
+  outline-offset: 4px;
+}
+
+.memory-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(7, 5, 2, 0.66);
+  backdrop-filter: blur(3px);
+}
+
+.magazine-layout {
+  width: min(780px, 100%);
+  max-height: min(90vh, 860px);
+  overflow-y: auto;
+  padding: clamp(1.05rem, 2.5vw, 2.1rem);
+  border-radius: 18px;
+  border: 1px solid rgba(132, 96, 58, 0.35);
+  color: #2f2316;
+  background: linear-gradient(180deg, #f4e4c8 0%, #ecd4a8 100%);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+}
+
+.spread-tag {
+  display: inline-block;
+  margin-bottom: 0.55rem;
+  padding: 0.32rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f8ebcc;
+  background: #4d3116;
+}
+
+.magazine-layout h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.7vw, 2.05rem);
+  line-height: 1.2;
+  color: #2f1d0d;
+}
+
+.dek {
+  margin: 0.75rem 0 1.15rem;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: #56381e;
+}
+
+.analysis-block + .analysis-block {
+  margin-top: 1rem;
+}
+
+.analysis-block h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #704824;
+}
+
+.analysis-block p {
+  margin: 0.35rem 0 0;
+  line-height: 1.62;
+}
+
+.close-button {
+  margin-top: 1.3rem;
+  border: 1px solid rgba(93, 61, 28, 0.38);
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  background: #3b2512;
+  color: #f8ebcf;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.close-button:hover {
+  transform: translateY(-1px);
+  background: #4f3118;
+}
+
+.close-button:focus-visible {
+  outline: 2px solid #f8ebcf;
+  outline-offset: 2px;
+}
+
+@keyframes orb-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+@media (max-width: 768px) {
+  .case-file {
+    width: calc(100% - 1rem);
+    margin: 0.5rem auto;
+    border-radius: 16px;
+    padding: 0.75rem;
+  }
+
+  .status-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .memory-orb {
+    width: 24px;
+    height: 24px;
+  }
+}
