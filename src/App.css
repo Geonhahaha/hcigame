@@ -1,3 +1,67 @@
+.start-page {
+  width: min(1080px, 100% - 2rem);
+  min-height: min(92vh, 940px);
+  margin: 1rem auto;
+  padding: 1.2rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}
+
+.start-title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  letter-spacing: 0.06em;
+  color: #f6ebd6;
+}
+
+.start-hero {
+  border-radius: 22px;
+  border: 1px solid rgba(231, 228, 214, 0.28);
+  background-image:
+    linear-gradient(165deg, rgba(4, 9, 13, 0.32), rgba(8, 13, 18, 0.74)),
+    url('/start-placeholder.svg');
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.36);
+}
+
+.start-placeholder {
+  margin: 0;
+  width: min(680px, 100%);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(233, 232, 223, 0.52);
+  background: rgba(0, 0, 0, 0.4);
+  color: #f4f4ef;
+  font-size: clamp(0.95rem, 2.1vw, 1.12rem);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.enter-button {
+  justify-self: center;
+  min-width: 180px;
+  border: 1px solid rgba(247, 237, 212, 0.45);
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  background: linear-gradient(180deg, #ddd0af, #c4ab76);
+  color: #2f2416;
+  font-size: 1.04rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.enter-button:focus-visible {
+  outline: 2px solid #fff6e6;
+  outline-offset: 2px;
+}
+
 .case-file {
   width: min(1080px, 100% - 2rem);
   margin: 2rem auto;
@@ -204,6 +268,17 @@
 }
 
 @media (max-width: 768px) {
+  .start-page {
+    width: calc(100% - 1rem);
+    min-height: calc(100vh - 1rem);
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+  }
+
+  .start-hero {
+    border-radius: 16px;
+  }
+
   .case-file {
     width: calc(100% - 1rem);
     margin: 0.5rem auto;
