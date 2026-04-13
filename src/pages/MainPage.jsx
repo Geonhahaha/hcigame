@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import app11Image from '../assets/app1_1.png'
+import app12Image from '../assets/app1_2.png'
+import app13Image from '../assets/app1_3.png'
 
 const TARGET_BOOKS = [
   {
@@ -17,7 +19,23 @@ const TARGET_BOOKS = [
         imageCaption:
           'The appearance of Collections tab. Memories menu is located at the very top.',
       },
-      'Page 2. 공간 구성은 체계적이지만, 일부 복도는 의도적으로 감춰진 듯 두 번 그려져 있다.',
+      {
+        title: 'The Logic of Black Box',
+        content:
+          'The more you look into memories, the more opaque the logic becomes. The system exhibits an opaque hierarchy whose criteria for prioritizing certain memories are unknown. While some trips are grouped broadly, some days are fragmented. This inconsistent data grouping hinders users from forming a mental model of the system\'s sorting criteria and causes cognitive confusion.',
+        images: [
+          {
+            src: app12Image,
+            alt: 'Apple Photos European trip grouping',
+          },
+          {
+            src: app13Image,
+            alt: 'Apple Photos Japan trip fragmentation',
+          },
+        ],
+        imageCaption:
+          'The long European trip from March 1 to 9, 2025, was combined with Germany and Austria, but the Japan trip from June 29 to July 3, 2025, was divided into separate days such as Osaka City on June 29, 2025, and Kyoto City on July 3, 2025.',
+      },
       'Page 3. 주석에는 "소리 없는 방"이라는 표현이 등장한다. 출입 흔적은 있지만 통로 표시는 없다.',
       'Page 4. 누군가 동일한 단어를 서로 다른 필체로 남겼다. 협업 기록인지 위장 기록인지 아직 미정.',
       'Page 5. 마지막 장 모서리에서 흐릿한 빛이 감지된다. 구슬을 회수하면 책의 색인이 완성된다.',
@@ -591,19 +609,33 @@ function MainPage({ onRestart }) {
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc ? 'has-image' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
                       <p className="page-entry-content">{activePageData?.content}</p>
                     </div>
 
-                    {activePageData?.imageSrc && (
+                    {(activePageData?.imageSrc || activePageData?.images) && (
                       <figure className="page-entry-image-wrap">
-                        <img
-                          className="page-entry-image"
-                          src={activePageData.imageSrc}
-                          alt={activePageData.imageAlt ?? activePageData.title}
-                        />
+                        {activePageData?.imageSrc && (
+                          <img
+                            className="page-entry-image"
+                            src={activePageData.imageSrc}
+                            alt={activePageData.imageAlt ?? activePageData.title}
+                          />
+                        )}
+                        {activePageData?.images && (
+                          <div className="page-entry-images-grid">
+                            {activePageData.images.map((image, idx) => (
+                              <img
+                                key={idx}
+                                className="page-entry-image"
+                                src={image.src}
+                                alt={image.alt}
+                              />
+                            ))}
+                          </div>
+                        )}
                         {activePageData?.imageCaption && (
                           <figcaption className="page-entry-caption">
                             {activePageData.imageCaption}

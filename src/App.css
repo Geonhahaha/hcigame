@@ -618,16 +618,27 @@
   align-items: center;
 }
 
+.page-entry-layout.has-image.has-multiple-images {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
 .page-entry-text-block {
   min-width: 0;
 }
 
 .page-entry-image-wrap {
   margin: 0;
-  justify-self: end;
-  width: min(100%, 300px);
+  width: 100%;
   display: grid;
   gap: 0.42rem;
+}
+
+.page-entry-images-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  width: 100%;
 }
 
 .page-entry-image {
