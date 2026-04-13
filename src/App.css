@@ -547,10 +547,12 @@
 }
 
 .book-popup {
+  position: relative;
   width: min(780px, 100%);
   max-height: min(90vh, 760px);
   overflow-y: auto;
   padding: clamp(1.05rem, 2.5vw, 2.1rem);
+  padding-bottom: clamp(6rem, 10vw, 8rem);
   border-radius: 18px;
   border: 1px solid rgba(132, 96, 58, 0.35);
   color: #2f2316;
@@ -739,9 +741,14 @@
 }
 
 .page-controls {
+  position: fixed;
+  bottom: clamp(4.5rem, 8vw, 6rem);
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 1000;
 }
 
 .nav-arrow {
@@ -761,15 +768,29 @@
 }
 
 .close-button {
-  margin-top: 1.3rem;
+  position: fixed;
+  top: clamp(1rem, 3vw, 1.5rem);
+  right: clamp(1rem, 3vw, 1.5rem);
+  width: 40px;
+  height: 40px;
+  padding: 0;
   border: 1px solid rgba(93, 61, 28, 0.38);
-  border-radius: 999px;
-  padding: 0.6rem 1rem;
+  border-radius: 50%;
   background: #3b2512;
   color: #f8ebcf;
-  font-size: 0.95rem;
+  font-size: 1.4rem;
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.book-popup .close-button {
+  position: fixed;
+  top: clamp(0.75rem, 2vw, 1rem);
+  right: calc((100% - min(780px, 100%)) / 2 + 0.75rem);
 }
 
 .close-button:hover {

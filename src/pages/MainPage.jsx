@@ -168,6 +168,14 @@ function MainPage({ onRestart }) {
     setActivePage(0)
   }
 
+  const goToPage = (pageNum) => {
+    setActivePage(pageNum)
+    const bookPopup = document.querySelector('.book-popup')
+    if (bookPopup) {
+      bookPopup.scrollTop = 0
+    }
+  }
+
   const collectOrb = () => {
     if (!activeBook) {
       return
@@ -667,34 +675,35 @@ function MainPage({ onRestart }) {
                     </div>
                 )}
               </section>
+            </motion.article>
 
-              <div className="page-controls">
-                <button
-                  type="button"
-                  className="nav-arrow"
-                  onClick={() => setActivePage((prev) => Math.max(prev - 1, 0))}
-                  disabled={activePage === 0}
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  className="nav-arrow"
-                  onClick={() => setActivePage((prev) => Math.min(prev + 1, 4))}
-                  disabled={activePage === 4}
-                >
-                  →
-                </button>
-              </div>
-
+            <div className="page-controls">
               <button
                 type="button"
-                className="close-button"
-                onClick={closeBook}
+                className="nav-arrow"
+                onClick={() => goToPage(Math.max(activePage - 1, 0))}
+                disabled={activePage === 0}
               >
-                책장으로 돌아가기
+                ←
               </button>
-            </motion.article>
+              <button
+                type="button"
+                className="nav-arrow"
+                onClick={() => goToPage(Math.min(activePage + 1, 4))}
+                disabled={activePage === 4}
+              >
+                →
+              </button>
+            </div>
+
+            <button
+              type="button"
+              className="close-button"
+              onClick={closeBook}
+              aria-label="책장으로 돌아가기"
+            >
+              ✕
+            </button>
           </motion.section>
         )}
       </AnimatePresence>
