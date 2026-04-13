@@ -170,10 +170,12 @@ function MainPage({ onRestart }) {
 
   const goToPage = (pageNum) => {
     setActivePage(pageNum)
-    const bookPopup = document.querySelector('.book-popup')
-    if (bookPopup) {
-      bookPopup.scrollTop = 0
-    }
+    setTimeout(() => {
+      const bookPopup = document.querySelector('.book-popup')
+      if (bookPopup) {
+        bookPopup.scrollTop = 0
+      }
+    }, 0)
   }
 
   const collectOrb = () => {
@@ -599,7 +601,7 @@ function MainPage({ onRestart }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            onClick={closeBook}
+            onClick={(e) => e.target === e.currentTarget && closeBook()}
           >
             <motion.article
               className="book-popup"
@@ -676,39 +678,43 @@ function MainPage({ onRestart }) {
                 )}
               </section>
             </motion.article>
-
-            <div className="page-controls">
-              <button
-                type="button"
-                className="nav-arrow"
-                onClick={() => goToPage(Math.max(activePage - 1, 0))}
-                disabled={activePage === 0}
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                className="nav-arrow"
-                onClick={() => goToPage(Math.min(activePage + 1, 4))}
-                disabled={activePage === 4}
-              >
-                →
-              </button>
-            </div>
-
-            <button
-              type="button"
-              className="close-button"
-              onClick={closeBook}
-              aria-label="책장으로 돌아가기"
-            >
-              ✕
-            </button>
           </motion.section>
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
+      {activeBook && (
+        <>
+          <div className="page-controls">
+            <button
+              type="button"
+              className="nav-arrow"
+              onClick={() => goToPage(Math.max(activePage - 1, 0))}
+              disabled={activePage === 0}
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              className="nav-arrow"
+              onClick={() => goToPage(Math.min(activePage + 1, 4))}
+              disabled={activePage === 4}
+            >
+              →
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="close-button"
+            onClick={closeBook}
+            aria-label="책장으로 돌아가기"
+          >
+            ✕
+          </button>
+        </>
+      )}
+
+      <AnimatePresence mode="wait">
         {activeBookId === 'control-book' && (
           <motion.section
             className="memory-overlay"
