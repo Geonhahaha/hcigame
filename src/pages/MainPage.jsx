@@ -5,6 +5,22 @@ import app12Image from '../assets/app1_2.png'
 import app13Image from '../assets/app1_3.png'
 import app14Image from '../assets/app1_4.png'
 import app15Image from '../assets/app1_5.png'
+import app16Image from '../assets/app1_6.png'
+import app17Image from '../assets/app1_7.png'
+import app18Image from '../assets/app1_8.png'
+import applePhotosIcon from '../assets/apple photos.png'
+import youtubeMusicIcon from '../assets/youtube music.png'
+import googleMapsIcon from '../assets/google maps.png'
+import instagramIcon from '../assets/instagram.png'
+import nikeIcon from '../assets/nike.png'
+
+const BOOK_ICON_BY_ID = {
+  'book-1': applePhotosIcon,
+  'book-2': youtubeMusicIcon,
+  'book-3': googleMapsIcon,
+  'book-4': instagramIcon,
+  'book-5': nikeIcon,
+}
 
 const TARGET_BOOKS = [
   {
@@ -55,8 +71,31 @@ const TARGET_BOOKS = [
         imageCaption:
           'One album is titled specifically as "Grand Canyon Exploration," while another from Pokhara, Nepal is vaguely titled "Exploration," failing to utilize available location data for the title.',
       },
-      'Page 4. 누군가 동일한 단어를 서로 다른 필체로 남겼다. 협업 기록인지 위장 기록인지 아직 미정.',
-      'Page 5. 마지막 장 모서리에서 흐릿한 빛이 감지된다. 구슬을 회수하면 책의 색인이 완성된다.',
+      {
+        title: 'Interaction & Aesthetic Trade-offs',
+        content:
+          'The memory playback interface supports both portrait and landscape modes, providing a fullscreen immersive experience synchronized with background music. However, the system forms a trade-off relationship between information integrity and aesthetic consistency to maximize this aesthetic consistency. To enforce a 16:9 fullscreen aspect ratio, the system arbitrarily crops photos and videos that do not match this ratio. While the automatic direction synchronized with the music and tempo may enhance visual satisfaction, it causes side effects such as the loss of key subjects or compositional details within the photos.',
+        images: [
+          {
+            src: app16Image,
+            alt: 'Original photo before memory playback crop',
+          },
+          {
+            src: app17Image,
+            alt: 'Cropped photo shown in memory playback slideshow',
+          },
+        ],
+        imageCaption:
+          'Original photo (left) and actual capture of the cropped photo in the memory playback slideshow (right)',
+      },
+      {
+        title: 'The Limits of Intelligent Systems',
+        content:
+          "While Natural Language Processing (NLP) via Siri accurately handles spatio-temporal queries like 'Last Summer' or 'Outing in D.C.,' it reveals critical logical flaws in complex contextual understanding. For instance, a prompt of 'Dining' often suffers from contextual misunderstanding, including portrait-heavy photos simply because food is present in the background. Most notably, the system's negation failure-such as returning only 2024 content when explicitly asked to 'exclude 2024'-represents a significant breakdown in user intent matching.",
+        imageSrc: app18Image,
+        imageAlt: 'Korean version memory video creation feature interface',
+        imageCaption: 'Korean Version Memory Video Creation Feature Interface',
+      },
     ],
   },
   {
@@ -168,6 +207,7 @@ function MainPage({ onRestart }) {
   )
 
   const activePageData = activeBook ? activeBook.pages[activePage] : null
+  const activeBookIcon = activeBook ? BOOK_ICON_BY_ID[activeBook.id] : null
 
   const collectedCount = collectedOrbIds.length
   const totalBooks = TARGET_BOOKS.length
@@ -629,15 +669,23 @@ function MainPage({ onRestart }) {
               transition={{ duration: 0.32 }}
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="spread-tag">{activeBook.title}</div>
-              <h2>기록 열람</h2>
+              <div className="book-app-header">
+                {activeBookIcon && (
+                  <img
+                    className="book-app-icon"
+                    src={activeBookIcon}
+                    alt={`${activeBook.title} icon`}
+                  />
+                )}
+                <h2 className="book-app-name">{activeBook.title}</h2>
+              </div>
               <p className="page-indicator">Page {activePage + 1} / 5</p>
 
               <section className="book-page-body">
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
                       <p className="page-entry-content">{activePageData?.content}</p>

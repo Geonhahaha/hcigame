@@ -579,6 +579,29 @@
   color: #2f1d0d;
 }
 
+.book-app-header {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  margin-bottom: 0.45rem;
+}
+
+.book-app-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.book-app-name {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  line-height: 1.2;
+  color: #2f1d0d;
+  letter-spacing: 0.01em;
+}
+
 .page-indicator {
   margin: 0.5rem 0 1rem;
   color: #5f3e20;
@@ -643,6 +666,23 @@
   width: 100%;
 }
 
+.page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid {
+  grid-template-columns: 1fr 1fr;
+  width: 94%;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid .page-entry-image:first-child {
+  width: min(100%, 90%);
+  justify-self: center;
+}
+
+.page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid .page-entry-image:last-child {
+  width: min(100%, 70%);
+  justify-self: center;
+}
+
 .page-entry-image {
   display: block;
   width: 100%;
@@ -668,6 +708,16 @@
   .page-entry-image-wrap {
     margin: 0.75rem auto;
     width: min(100%, 320px);
+  }
+
+  .page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid .page-entry-image:first-child,
+  .page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid .page-entry-image:last-child {
+    width: 100%;
+    justify-self: stretch;
   }
 }
 
