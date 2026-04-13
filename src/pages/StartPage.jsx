@@ -6,25 +6,47 @@ function StartPage({ onEnter }) {
       <h1 className="start-title">Memory Library</h1>
 
       <section className="start-hero" aria-label="시작 화면">
-        <motion.p
+        <motion.div
           className="start-placeholder"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Description placeholder: 여기에 게임 소개 문구와 조작 안내를 넣어주세요.
-        </motion.p>
+          <p>
+            You wake up to find yourself standing in the heavy silence of an
+            unfamiliar library. This is the Memory Library. It is a place
+            where the countless digital footprints we leave behind are
+            preserved as 'memories'. How does the technology we use every day
+            curate our lives, and in what ways does it interact with us?
+          </p>
+
+          <p>
+            You are trapped within this archive. The only way to escape is to
+            find the five records of memory hidden here and peer into the core
+            of their UX design. At the end of each record, collect an Orb of
+            Memory. The pieces of analysis you gather will be the only keys to
+            unlocking the Control Room and finding your way out.
+          </p>
+
+          <p className="start-closing">
+            Are you ready to uncover the hidden insights beyond the bookshelves?
+          </p>
+        </motion.div>
       </section>
 
-      <motion.button
-        type="button"
-        className="enter-button"
-        onClick={onEnter}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.97 }}
-      >
-        Enter
-      </motion.button>
+      <div className="start-actions">
+        <p className="start-hint">Enter when you are ready to begin the search.</p>
+
+        <motion.button
+          type="button"
+          className="enter-button"
+          onClick={onEnter}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          Enter
+        </motion.button>
+      </div>
     </main>
   )
 }
