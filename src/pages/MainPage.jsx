@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import app11Image from '../assets/app1_1.png'
 import app12Image from '../assets/app1_2.png'
 import app13Image from '../assets/app1_3.png'
+import app14Image from '../assets/app1_4.png'
+import app15Image from '../assets/app1_5.png'
 
 const TARGET_BOOKS = [
   {
@@ -36,7 +38,23 @@ const TARGET_BOOKS = [
         imageCaption:
           'The long European trip from March 1 to 9, 2025, was combined with Germany and Austria, but the Japan trip from June 29 to July 3, 2025, was divided into separate days such as Osaka City on June 29, 2025, and Kyoto City on July 3, 2025.',
       },
-      'Page 3. 주석에는 "소리 없는 방"이라는 표현이 등장한다. 출입 흔적은 있지만 통로 표시는 없다.',
+      {
+        title: 'Lost in Semantics',
+        content:
+          'GPS and facial recognition metadata-based naming methods show vulnerabilities. While specific locations are designated with precise place names, other data of similar nature are treated with ambiguous common nouns. The absence of such naming rules undermines the system\'s consistency and, consequently, negatively impacts the system reliability, which is the user\'s trust in the system\'s intelligence. Additionally, categories like "Memories Together (2023~2024)" lack clear generation rules. It is unclear why only 29 photos out of numerous military service period portraits were selected, making the conceptual model provided by the system to the user ambiguous.',
+        images: [
+          {
+            src: app14Image,
+            alt: 'Apple Photos metadata-based naming inconsistency example 1',
+          },
+          {
+            src: app15Image,
+            alt: 'Apple Photos metadata-based naming inconsistency example 2',
+          },
+        ],
+        imageCaption:
+          'One album is titled specifically as "Grand Canyon Exploration," while another from Pokhara, Nepal is vaguely titled "Exploration," failing to utilize available location data for the title.',
+      },
       'Page 4. 누군가 동일한 단어를 서로 다른 필체로 남겼다. 협업 기록인지 위장 기록인지 아직 미정.',
       'Page 5. 마지막 장 모서리에서 흐릿한 빛이 감지된다. 구슬을 회수하면 책의 색인이 완성된다.',
     ],
