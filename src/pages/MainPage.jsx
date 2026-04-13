@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import app11Image from '../assets/app1_1.png'
 
 const TARGET_BOOKS = [
   {
@@ -7,7 +8,13 @@ const TARGET_BOOKS = [
     slotId: 't2',
     title: 'Apple Photos',
     pages: [
-      'Page 1. 이 책은 오래된 도시 설계도와 낙서가 겹쳐진 기록이다. 지도 가장자리에는 날짜 없는 메모가 반복된다.',
+      {
+        title: 'The Gateway to Past',
+        content:
+          "Among the dust-covered bookshelves, this record shines particularly brightly as it analyzes the 'Memories' feature of the Apple Photos app. This feature is placed at the very top of the app's Collections tab, providing very high visibility and discoverability. The 'Dynamic Previews' that users encounter as soon as they open the app display fragments of the past in a slideshow format even before clicking, strongly encouraging (affording) entry into memories we had forgotten.",
+        imageSrc: app11Image,
+        imageAlt: 'Apple Photos Memories dynamic preview screen',
+      },
       'Page 2. 공간 구성은 체계적이지만, 일부 복도는 의도적으로 감춰진 듯 두 번 그려져 있다.',
       'Page 3. 주석에는 "소리 없는 방"이라는 표현이 등장한다. 출입 흔적은 있지만 통로 표시는 없다.',
       'Page 4. 누군가 동일한 단어를 서로 다른 필체로 남겼다. 협업 기록인지 위장 기록인지 아직 미정.',
@@ -121,6 +128,8 @@ function MainPage({ onRestart }) {
     () => TARGET_BOOKS.find((book) => book.id === activeBookId) ?? null,
     [activeBookId],
   )
+
+  const activePageData = activeBook ? activeBook.pages[activePage] : null
 
   const collectedCount = collectedOrbIds.length
   const totalBooks = TARGET_BOOKS.length
@@ -577,7 +586,25 @@ function MainPage({ onRestart }) {
               <p className="page-indicator">Page {activePage + 1} / 5</p>
 
               <section className="book-page-body">
-                <p>{activeBook.pages[activePage]}</p>
+                {typeof activePageData === 'string' ? (
+                  <p>{activePageData}</p>
+                ) : (
+                  <div className={`page-entry-layout ${activePageData?.imageSrc ? 'has-image' : ''}`}>
+                    <h3 className="page-entry-title">{activePageData?.title}</h3>
+
+                    {activePageData?.imageSrc && (
+                      <figure className="page-entry-image-wrap">
+                        <img
+                          className="page-entry-image"
+                          src={activePageData.imageSrc}
+                          alt={activePageData.imageAlt ?? activePageData.title}
+                        />
+                      </figure>
+                    )}
+
+                    <p className="page-entry-content">{activePageData?.content}</p>
+                  </div>
+                )}
 
                 {isLastPage && (
                     <div className="orb-collect-zone">
