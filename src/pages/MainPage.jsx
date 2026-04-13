@@ -11,9 +11,11 @@ const TARGET_BOOKS = [
       {
         title: 'The Gateway to Past',
         content:
-          "Among the dust-covered bookshelves, this record shines particularly brightly as it analyzes the 'Memories' feature of the Apple Photos app. This feature is placed at the very top of the app's Collections tab, providing very high visibility and discoverability. The 'Dynamic Previews' that users encounter as soon as they open the app display fragments of the past in a slideshow format even before clicking, strongly encouraging (affording) entry into memories we had forgotten.",
+          "'Memories' feature of the Apple Photos app is placed at the very top of the app's Collections tab, providing very high visibility and discoverability. The 'Dynamic Previews' that users encounter as soon as they open the app display fragments of the past in a slideshow format even before clicking, strongly encouraging (affording) entry into memories we had forgotten.",
         imageSrc: app11Image,
         imageAlt: 'Apple Photos Memories dynamic preview screen',
+        imageCaption:
+          'The appearance of Collections tab. Memories menu is located at the very top.',
       },
       'Page 2. 공간 구성은 체계적이지만, 일부 복도는 의도적으로 감춰진 듯 두 번 그려져 있다.',
       'Page 3. 주석에는 "소리 없는 방"이라는 표현이 등장한다. 출입 흔적은 있지만 통로 표시는 없다.',
@@ -590,7 +592,10 @@ function MainPage({ onRestart }) {
                   <p>{activePageData}</p>
                 ) : (
                   <div className={`page-entry-layout ${activePageData?.imageSrc ? 'has-image' : ''}`}>
-                    <h3 className="page-entry-title">{activePageData?.title}</h3>
+                    <div className="page-entry-text-block">
+                      <h3 className="page-entry-title">{activePageData?.title}</h3>
+                      <p className="page-entry-content">{activePageData?.content}</p>
+                    </div>
 
                     {activePageData?.imageSrc && (
                       <figure className="page-entry-image-wrap">
@@ -599,10 +604,13 @@ function MainPage({ onRestart }) {
                           src={activePageData.imageSrc}
                           alt={activePageData.imageAlt ?? activePageData.title}
                         />
+                        {activePageData?.imageCaption && (
+                          <figcaption className="page-entry-caption">
+                            {activePageData.imageCaption}
+                          </figcaption>
+                        )}
                       </figure>
                     )}
-
-                    <p className="page-entry-content">{activePageData?.content}</p>
                   </div>
                 )}
 
