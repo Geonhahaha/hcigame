@@ -666,6 +666,20 @@
   width: 100%;
 }
 
+.page-entry-image-card {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+
+.page-entry-subcaption {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: #6a4a2c;
+}
+
 .page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid {
   grid-template-columns: 1fr 1fr;
   width: 94%;

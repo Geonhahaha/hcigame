@@ -8,6 +8,9 @@ import app15Image from '../assets/app1_5.png'
 import app16Image from '../assets/app1_6.png'
 import app17Image from '../assets/app1_7.png'
 import app18Image from '../assets/app1_8.png'
+import app21Image from '../assets/app2_1.png'
+import app22Image from '../assets/app2_2.png'
+import app23Image from '../assets/app2_3.png'
 import applePhotosIcon from '../assets/apple photos.png'
 import youtubeMusicIcon from '../assets/youtube music.png'
 import googleMapsIcon from '../assets/google maps.png'
@@ -26,7 +29,7 @@ const TARGET_BOOKS = [
   {
     id: 'book-1',
     slotId: 't2',
-    title: 'Apple Photos',
+    title: 'Apple Photos - Memories',
     pages: [
       {
         title: 'The Gateway to Past',
@@ -101,10 +104,36 @@ const TARGET_BOOKS = [
   {
     id: 'book-2',
     slotId: 't5',
-    title: 'YouTube Music',
+    title: 'YouTube Music - Recap',
     pages: [
-      'Page 1. 목재 수납장의 힌지 소리와 관련된 관찰 로그. 시간별 소리의 높낮이가 적혀 있다.',
-      'Page 2. 특정 시간대에만 들리는 공명음이 있다. 책장 뒤 빈 공간과 관련 있는 듯하다.',
+      {
+        title: 'Discoverability & Contextual Guidance',
+        content:
+          'The Recap feature of YouTube Music exhibits characteristics of hidden affordance in its interface design. Although the feature exists, it is deeply nested under the profile menu, lacking sufficient visual signifiers for users to discover it. As a result, its discoverability is significantly reduced during regular use. To address this, the system employs just-in-time prompts in the form of pop-ups at specific times, such as the end of the year or the end of a season. This acts as a context-based UI strategy that compensates for low visibility and encourages user engagement.',
+        images: [
+          {
+            src: app21Image,
+            alt: 'YouTube Music recap hidden inside profile menu',
+            caption:
+              'The recap feature is placed deep within the profile menu, resulting in significantly low discoverability until users explicitly navigate to it.',
+          },
+          {
+            src: app22Image,
+            alt: 'YouTube Music recap seasonal banner prompt',
+            caption:
+              'To compensate for the usual low discoverability, a context-based UI strategy is employed by displaying a banner at the top of the home screen during specific seasons, instantly making the hidden feature visible and encouraging user engagement.',
+          },
+        ],
+      },
+      {
+        title: 'Volatility of Digital Memories',
+        content:
+          "Unlike other services that preserve records going back several years to provide users with a chronological collection of memories, YouTube Music's Recap has a short retention period measured in years. In particular, as of April 2026, it was observed that with the appearance of the latest Recap, past records are replaced and disappear, which is disappointing in terms of data continuity. This does not fully meet the system reliability model of users who expect continuous records as a digital archive and becomes a factor that limits long-term data utilization.",
+        imageSrc: app23Image,
+        imageAlt: 'YouTube Music recap retention and replacement behavior',
+        imageCaption:
+          'Recap main screen. Unlike just a month ago when it was possible to access the full 2025 recap and the 2025 recap from September to November, currently only the recap from December to February is accessible.',
+      },
       'Page 3. 장의 서랍 번호가 바뀌어 적혀 있다. 원본 도면과 현재 번호 체계가 불일치한다.',
       'Page 4. 추정 메모: 내부 누군가가 순서를 섞어 단서를 분산시켰을 가능성.',
       'Page 5. 책 안쪽 포켓에서 미세 입자가 떨어진다. 구슬을 눌러 샘플을 보관한다.',
@@ -113,7 +142,7 @@ const TARGET_BOOKS = [
   {
     id: 'book-3',
     slotId: 't8',
-    title: 'Google Maps',
+    title: 'Google Maps - Timeline',
     pages: [
       'Page 1. 계단 발자국 간격 분석. 오르막보다 내리막에서 흔적 간격이 넓어졌다.',
       'Page 2. 난간 손자국의 높이가 일정치 않다. 두 명 이상 이동했을 가능성이 있다.',
@@ -125,7 +154,7 @@ const TARGET_BOOKS = [
   {
     id: 'book-4',
     slotId: 'b3',
-    title: 'Instagram Archive',
+    title: 'Instagram - Archive',
     pages: [
       'Page 1. 조명 점등 기록의 누락 구간이 확인된다. 야간 로그가 비정상적으로 짧다.',
       'Page 2. 전구 교체 이력이 없는데도 밝기 지표가 크게 변했다. 인위적 차광 가능성.',
@@ -137,7 +166,7 @@ const TARGET_BOOKS = [
   {
     id: 'book-5',
     slotId: 'b7',
-    title: 'Nike Run Club',
+    title: 'Nike Run Club - Activity',
     pages: [
       'Page 1. 인물 목록의 번호 체계가 사건 이후 다시 매겨졌다. 삭제된 인덱스가 보인다.',
       'Page 2. 대조표의 공백 칸이 두 곳 남아 있다. 아직 찾지 못한 연결고리로 추정된다.',
@@ -703,12 +732,18 @@ function MainPage({ onRestart }) {
                         {activePageData?.images && (
                           <div className="page-entry-images-grid">
                             {activePageData.images.map((image, idx) => (
-                              <img
-                                key={idx}
-                                className="page-entry-image"
-                                src={image.src}
-                                alt={image.alt}
-                              />
+                              <figure key={idx} className="page-entry-image-card">
+                                <img
+                                  className="page-entry-image"
+                                  src={image.src}
+                                  alt={image.alt}
+                                />
+                                {image.caption && (
+                                  <figcaption className="page-entry-subcaption">
+                                    {image.caption}
+                                  </figcaption>
+                                )}
+                              </figure>
                             ))}
                           </div>
                         )}
