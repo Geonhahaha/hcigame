@@ -11,6 +11,10 @@ import app18Image from '../assets/app1_8.png'
 import app21Image from '../assets/app2_1.png'
 import app22Image from '../assets/app2_2.png'
 import app23Image from '../assets/app2_3.png'
+import app24Image from '../assets/app2_4.jpg'
+import app25Image from '../assets/app2_5.png.webp'
+import app26Image from '../assets/app2_6JPG.JPG'
+import app27Image from '../assets/app2_7.png'
 import applePhotosIcon from '../assets/apple photos.png'
 import youtubeMusicIcon from '../assets/youtube music.png'
 import googleMapsIcon from '../assets/google maps.png'
@@ -134,9 +138,56 @@ const TARGET_BOOKS = [
         imageCaption:
           'Recap main screen. Unlike just a month ago when it was possible to access the full 2025 recap and the 2025 recap from September to November, currently only the recap from December to February is accessible.',
       },
-      'Page 3. 장의 서랍 번호가 바뀌어 적혀 있다. 원본 도면과 현재 번호 체계가 불일치한다.',
-      'Page 4. 추정 메모: 내부 누군가가 순서를 섞어 단서를 분산시켰을 가능성.',
-      'Page 5. 책 안쪽 포켓에서 미세 입자가 떨어진다. 구슬을 눌러 샘플을 보관한다.',
+      {
+        title: 'Interaction Psychology & Information Flow',
+        content: [
+          'YouTube Music Recap enhances the user experience through gamification and thoughtful interaction design. By showing insights like a “Top 2% Listener” label for a particular artist, the system reinforces the user\'s sense of relatedness by linking them to others, while also driving the need for competence to reach even higher ranks-creating a strong incentive to share with friends.',
+          'At the same time, while the automated story format offers a seamless flow, the high information density relative to short dwell times can increase cognitive load. To help with this, the system includes an “escape hatch” via the “long-press to pause” gesture, giving users the level of control they need. In addition, by combining album artwork with track titles on screen, the design promotes recognition rather than recall, which reduces the mental effort required.',
+          'However, there\'s still a clear lack of granularity compared to its simple UI. Beyond telling users what they listened to, the lack of deeper contextual feedback-such as when their peak listening occurred-makes it harder for the system to build a more detailed narrative of the user\'s “musical journey.”',
+        ],
+        images: [
+          {
+            src: app24Image,
+            alt: 'YouTube Music recap screen showing top 5 genres',
+            caption:
+              "One of the recap screenshots. it shows the user's top 5 music genres they have listened to. The user can save this information to their device or share it with others.",
+          },
+          {
+            src: app25Image,
+            alt: 'YouTube Music recap top listener percentage for an artist',
+            caption:
+              'A photo showing the percentage of top listeners a user is for a specific artist during a recap.',
+          },
+        ],
+      },
+      {
+        title: 'Multimodal Association',
+        content: [
+          'YouTube Music attempts to advance multimodal interaction by integrating with Google Photos to create "music photo albums," combining auditory and visual memories. However, the heuristics of the system that matches specific photos to specific songs remain opaque, often causing frequent conceptual mismatches. For example, placing a static sunset photo alongside an energetic girl group track results in a clash between the auditory affordance of the music and the visual tone.',
+          'To compensate for the limitations of this automation, the provided "photo change (Random Shuffle)" feature functions as a mechanism that guarantees minimal user control. However, since it is not a precise manual control tool that allows users to directly select specific photos they want, there are functional constraints that prevent full intervention in the memory reconstruction proposed by the system.',
+        ],
+        imageSrc: app26Image,
+        imageAlt: 'YouTube Music music photo album with mismatched visual tone',
+        imageCaption:
+          "An actual music photo album. It combines three photos with bright and a refreshing pop dance girl group song. If you ask whether the photos match the mood of the song, well, I'm not sure.",
+      },
+      {
+        title: 'Linguistic Inequality in AI Interaction',
+        content:
+          "The YouTube Music system reveals a serious availability issue in terms of accessibility by determining the provision of core interaction tools based on the user's language settings. In the English setting environment, it offers an interactive interface that allows users to actively explore their music data through the 'Ask about Recap' feature linked with Gemini AI. However, in other language settings, including Korean, such AI-based analytical tools are completely excluded, providing only a simple static list of results.",
+        images: [
+          {
+            src: app23Image,
+            alt: 'YouTube Music English recap with Ask about Recap AI feature',
+          },
+          {
+            src: app27Image,
+            alt: 'YouTube Music Korean recap without AI ask feature',
+          },
+        ],
+        imageCaption:
+          'In the English version(left), there is a feature under the recap that allows users to ask the AI about their listening history, but in the Korean version(right), that feature is missing, and it goes directly from the recap to the music photo album.',
+      },
     ],
   },
   {
@@ -714,10 +765,18 @@ function MainPage({ onRestart }) {
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
-                      <p className="page-entry-content">{activePageData?.content}</p>
+                      {Array.isArray(activePageData?.content) ? (
+                        <div className="page-entry-content">
+                          {activePageData.content.map((paragraph, idx) => (
+                            <p key={idx}>{paragraph}</p>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="page-entry-content">{activePageData?.content}</p>
+                      )}
                     </div>
 
                     {(activePageData?.imageSrc || activePageData?.images) && (

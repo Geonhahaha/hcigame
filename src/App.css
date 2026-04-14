@@ -633,6 +633,14 @@
   color: #3d2a16;
 }
 
+.page-entry-content p {
+  margin: 0;
+}
+
+.page-entry-content p + p {
+  margin-top: 0.72rem;
+}
+
 .page-entry-layout {
   display: grid;
   gap: 1rem;
@@ -695,6 +703,10 @@
 .page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid .page-entry-image:last-child {
   width: min(100%, 70%);
   justify-self: center;
+}
+
+.page-entry-layout.is-interaction-psychology .page-entry-images-grid {
+  align-items: center;
 }
 
 .page-entry-image {
