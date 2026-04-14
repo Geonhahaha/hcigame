@@ -186,7 +186,7 @@ const TARGET_BOOKS = [
           },
         ],
         imageCaption:
-          'In the English version(left), there is a feature under the recap that allows users to ask the AI about their listening history, but in the Korean version(right), that feature is missing, and it goes directly from the recap to the music photo album.',
+          'In the English version (left), there is a feature under the recap that allows users to ask the AI about their listening history, but in the Korean version (right), that feature is missing, and it goes directly from the recap to the music photo album.',
       },
     ],
   },
