@@ -15,6 +15,17 @@ import app24Image from '../assets/app2_4.jpg'
 import app25Image from '../assets/app2_5.png.webp'
 import app26Image from '../assets/app2_6JPG.JPG'
 import app27Image from '../assets/app2_7.png'
+import app31Image from '../assets/app3_1.png'
+import app32Image from '../assets/app3_2.jpg'
+import app33Image from '../assets/app3_3.png'
+import app34Image from '../assets/app3_4.jpg'
+import app35Image from '../assets/app3_5.jpg'
+import app36Image from '../assets/app3_6.jpg'
+import app37Image from '../assets/app3_7.jpg'
+import app38Image from '../assets/app3_8.jpg'
+import app39Image from '../assets/app3_9.jpg'
+import app310Image from '../assets/app3_10.jpg'
+import app311Image from '../assets/app3_11.webp'
 import applePhotosIcon from '../assets/apple photos.png'
 import youtubeMusicIcon from '../assets/youtube music.png'
 import googleMapsIcon from '../assets/google maps.png'
@@ -195,11 +206,99 @@ const TARGET_BOOKS = [
     slotId: 't8',
     title: 'Google Maps - Timeline',
     pages: [
-      'Page 1. 계단 발자국 간격 분석. 오르막보다 내리막에서 흔적 간격이 넓어졌다.',
-      'Page 2. 난간 손자국의 높이가 일정치 않다. 두 명 이상 이동했을 가능성이 있다.',
-      'Page 3. 먼지 분포는 중간 층에서만 비어 있다. 특정 층을 우회한 동선이 존재한다.',
-      'Page 4. 페이지 하단 메모: "한 명은 시선을 끌고, 다른 한 명은 문서를 옮겼다".',
-      'Page 5. 봉인된 쪽지 대신 구슬이 보인다. 눌러 수집하고 기록을 해제한다.',
+      {
+        title: 'The Buried Map of Memories',
+        content:
+          'The timeline feature of Google Maps is hidden deep within the interface design (You -> Scroll down), which reduces its discoverability. Such a deep entry path becomes a barrier that prevents users with low technical proficiency from even realizing the existence of this comprehensive digital diary. This results in the system\'s powerful functionality being concealed from users themselves.',
+        imageSrc: app31Image,
+        imageAlt: 'Google Maps You menu with Timeline entry near the bottom',
+        imageCaption:
+          'The interface of the You menu in Google Maps. After accessing the You menu, users have to scroll all the way down to finally see the button that allows them to access the timeline.',
+      },
+      {
+        title: 'Micro-Level Precision: Day View',
+        content:
+          'The day view of Google Maps Timeline provides visibility of system status maximized at a micro level. It visualizes the exact routes traveled, modes of transportation, and time spent down to the minute, perfectly reconstructing the user\'s past physical movements. In particular, when there are errors in the places or transportation modes identified by the system, it offers a direct manipulation environment where users can immediately make corrections. This is a key design that enhances user control and freedom by allowing users to compensate for the limitations of system automation. Additionally, proactive feedback-such as asking "Did you visit this place?" regarding uncertain data-functions as a clever interaction heuristic that improves data accuracy through user confirmation.',
+        images: [
+          {
+            src: app32Image,
+            alt: 'Google Maps Timeline day view route reconstruction',
+            caption: 'It perfectly recreates the user\'s route for that day.',
+          },
+          {
+            src: app33Image,
+            alt: 'Google Maps Timeline prompt asking whether user visited Tompson Library',
+            caption:
+              'By using a prompt like "Visited Tompson Library?" to ask about the most likely place, it ensures user control while simultaneously reducing the burden on the user to recall which place they visited that day.',
+          },
+          {
+            src: app34Image,
+            alt: 'Google Maps Timeline missing visit and manual correction interface',
+            caption:
+              'For locations that the app did not recognize, it clearly alerts the user with the explicit message "Missing visit" and emphasizes it with a red color, making it clear that the user needs to manually correct the record, thereby enabling user cognition. Even for locations recognized by the app, it allows the user to directly edit them, maximizing user control.',
+          },
+        ],
+      },
+      {
+        title: 'Macro-Level Narrative: Insights',
+        content: [
+          "Insights provides a summary of the user's movement patterns from a macro perspective. In particular, the 'Highlight' feature, which extracts and displays meaningful activities during a specific period, is a positive interaction that transforms the user's experience into a data-driven narrative. For example, a summary stating that the user visited nine museums in March helps clearly identify the core theme of 'travel' amid scattered movement records.",
+          "However, the ambiguous boundaries set in the information classification system-such as between 'attractions,' 'culture,' and 'sports'-may not align with the mental model users expect. Additionally, while the design shows trends over six months through bar graphs, the omission of specific numerical data hinders the utility for users who desire precise data analysis. Although the numbers for individual months can be checked, the lack of a comparison function to analyze and contrast figures between different months is a limitation that reduces the efficiency of data utilization.",
+        ],
+        images: [
+          {
+            src: app35Image,
+            alt: 'Google Maps Insights movement statistics by category',
+            caption:
+              'Statistics related to movement in Insights. It provides detailed information by category on how many kilometers were traveled and how many hours were spent moving.',
+          },
+          {
+            src: app36Image,
+            alt: 'Google Maps Insights place statistics and category ambiguity',
+            caption:
+              'Statistics related to the places visited in Insights. It shows how many places were visited and how much time was spent at each category. However, for example, a place like "Yankee Stadium," which is a local attraction, a cultural site, and a sports venue, it is not clear under which category this place should be classified.',
+          },
+          {
+            src: app37Image,
+            alt: 'Google Maps Insights highlights at the bottom of the page',
+            caption:
+              'At the very bottom of Insights, there is Highlights. It first provides the distinctive visits in text form, and if the user wants, they can click See visits to view it immediately.',
+          },
+        ],
+      },
+      {
+        title: 'Navigation and Filtering Constraints',
+        content:
+          "The 'Places, Cities, World' views of the timeline show the user's global movement trajectory, but they reveal clear limitations in terms of flexibility in information exploration. In particular, the absence of a feature to filter data by a specific date or a user-defined custom timeframe is a major constraint that restricts flexibility and efficiency of use. Users have to sift through the vast entire record chronologically or alphabetically just to find a record from a specific point in time they want, which increases the cognitive effort required to access the data.",
+        images: [
+          {
+            src: app38Image,
+            alt: 'Google Maps timeline Places tab sorting options',
+          },
+          {
+            src: app39Image,
+            alt: 'Google Maps timeline Cities tab sorting options',
+          },
+          {
+            src: app310Image,
+            alt: 'Google Maps timeline World tab sorting options',
+          },
+        ],
+        imageCaption:
+          'Screenshot of the Places, Cities, World tab. Even when pressing Sort by, only Places can be sorted by Most recent or Most visited, while the others can only be sorted by Most recent or Alphabetically.',
+      },
+      {
+        title: 'The Paradox of Convenience',
+        content: [
+          'Google Maps Timeline demonstrates an extreme trade-off in user experience. Continuous 24-hour background location tracking offers the immense convenience of automated record-keeping, but at the same time involves issues of ethical design that provoke psychological discomfort related to privacy concerns, known as the Creepy Factor. Additionally, the ongoing battery consumption required for precise GPS logging acts as a clear physical constraint that prevents users from using their devices smoothly.',
+          'Nevertheless, this system drastically reduces cognitive load by perfectly reconstructing the user\'s past without any active effort to record it. It functions as a powerful external memory device that supports the user\'s recollection beyond a simple tool, providing overwhelming utility to users who prioritize the value of memories over the effort of recording them.',
+        ],
+        imageSrc: app311Image,
+        imageAlt:
+          'Digital privacy concern statistics related to online personal data safety in 2024',
+        imageCaption:
+          'Are Americans concerned about the safety and privacy of their online personal data? (2024): 73% of Americans express concerns about providing personal information online, which supports the psychological and ethical barriers faced by automatic tracking systems such as Google Maps Timeline. (Source: Checkr, State of Digital Privacy and Safety 2024; Data from a proprietary survey of 3,000 Americans)',
+      },
     ],
   },
   {
@@ -288,10 +387,13 @@ function MainPage({ onRestart }) {
 
   const activePageData = activeBook ? activeBook.pages[activePage] : null
   const activeBookIcon = activeBook ? BOOK_ICON_BY_ID[activeBook.id] : null
+  const totalPages = activeBook ? activeBook.pages.length : 0
 
   const collectedCount = collectedOrbIds.length
   const totalBooks = TARGET_BOOKS.length
-  const isLastPage = activePage === 4
+  const isLastPage = activeBook
+    ? activePage === activeBook.pages.length - 1
+    : false
   const isActiveOrbCollected = activeBook
     ? collectedOrbIds.includes(activeBook.id)
     : false
@@ -759,13 +861,13 @@ function MainPage({ onRestart }) {
                 )}
                 <h2 className="book-app-name">{activeBook.title}</h2>
               </div>
-              <p className="page-indicator">Page {activePage + 1} / 5</p>
+              <p className="page-indicator">Page {activePage + 1} / {totalPages}</p>
 
               <section className="book-page-body">
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints') ? 'is-micro-day-view' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
                       {Array.isArray(activePageData?.content) ? (
@@ -856,8 +958,8 @@ function MainPage({ onRestart }) {
             <button
               type="button"
               className="nav-arrow"
-              onClick={() => goToPage(Math.min(activePage + 1, 4))}
-              disabled={activePage === 4}
+              onClick={() => goToPage(Math.min(activePage + 1, totalPages - 1))}
+              disabled={activePage === totalPages - 1}
             >
               →
             </button>
