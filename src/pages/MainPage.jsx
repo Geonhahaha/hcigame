@@ -50,10 +50,15 @@ import app512Image from '../assets/app5_12.jpg'
 import app513Image from '../assets/app5_13.jpg'
 import app514Image from '../assets/app5_14.jpg'
 import applePhotosIcon from '../assets/apple photos.png'
+import applePhotosLineIcon from '../assets/apple photos_line.png'
 import youtubeMusicIcon from '../assets/youtube music.png'
+import youtubeMusicLineIcon from '../assets/youtube music_line.png'
 import googleMapsIcon from '../assets/google maps.png'
+import googleMapsLineIcon from '../assets/google maps_line.png'
 import instagramIcon from '../assets/instagram.png'
+import instagramLineIcon from '../assets/instagram_line.png'
 import nikeIcon from '../assets/nike.png'
+import nikeLineIcon from '../assets/nike_line.png'
 
 const BOOK_ICON_BY_ID = {
   'book-1': applePhotosIcon,
@@ -832,10 +837,53 @@ function MainPage({ onRestart }) {
           <div className="interior-content">
             <div className="monitor">
               <div className="monitor-screen">
-                <p>SYSTEM STATUS: ONLINE</p>
-                <p>SECURITY: ACTIVE</p>
-                <div className="data-display">█ ██ ███ █████ ███</div>
-                <div className="data-display">██ ███ █ ██ █████</div>
+                <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
+                <div className="monitor-recommendation-list">
+                  <div className="monitor-recommendation-item">
+                    <div className="monitor-app-row">
+                      <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
+                      <p className="monitor-app-name">Apple Photos - Memories</p>
+                      <p className="monitor-rating">★★★☆☆</p>
+                    </div>
+                    <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
+                  </div>
+
+                  <div className="monitor-recommendation-item">
+                    <div className="monitor-app-row">
+                      <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
+                      <p className="monitor-app-name">Youtube Music - Recap</p>
+                      <p className="monitor-rating">★★☆☆☆</p>
+                    </div>
+                    <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
+                  </div>
+
+                  <div className="monitor-recommendation-item">
+                    <div className="monitor-app-row">
+                      <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
+                      <p className="monitor-app-name">Google Maps - Timeline</p>
+                      <p className="monitor-rating">★★★★☆</p>
+                    </div>
+                    <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
+                  </div>
+
+                  <div className="monitor-recommendation-item">
+                    <div className="monitor-app-row">
+                      <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
+                      <p className="monitor-app-name">Instagram - Archive</p>
+                      <p className="monitor-rating">★★★★☆</p>
+                    </div>
+                    <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
+                  </div>
+
+                  <div className="monitor-recommendation-item">
+                    <div className="monitor-app-row">
+                      <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
+                      <p className="monitor-app-name">Nike Run Club - Activity</p>
+                      <p className="monitor-rating">★★★★☆</p>
+                    </div>
+                    <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
+                  </div>
+                </div>
               </div>
               <div className="monitor-bezel" />
             </div>

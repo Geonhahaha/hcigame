@@ -1165,15 +1165,92 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 0.6rem;
+  justify-content: flex-start;
+  gap: 0.35rem;
   font-family: 'Courier New', monospace;
   color: #00ff66;
   font-size: 0.95rem;
   line-height: 1.4;
   text-shadow: 0 0 8px #00ff66;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   animation: monitor-flicker 0.15s infinite;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 102, 0.75) rgba(0, 20, 0, 0.55);
+}
+
+.monitor-rec-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1em;
+  font-weight: 700;
+}
+
+.monitor-recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.monitor-recommendation-item {
+  margin: 0;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(0, 255, 102, 0.2);
+}
+
+.monitor-recommendation-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.monitor-app-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.monitor-app-icon {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+}
+
+.monitor-app-name {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.monitor-rating {
+  margin: 0 0 0 0.5rem;
+  padding-left: 0.45rem;
+  border-left: 1px solid rgba(0, 255, 102, 0.5);
+  font-size: 0.96em;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+.monitor-review {
+  margin: 0.08rem 0 0;
+  font-size: 0.85em;
+  line-height: 1.25;
+  opacity: 0.95;
+}
+
+.monitor-screen::-webkit-scrollbar {
+  width: 8px;
+}
+
+.monitor-screen::-webkit-scrollbar-track {
+  background: rgba(0, 20, 0, 0.55);
+  border-left: 1px solid rgba(0, 255, 102, 0.2);
+}
+
+.monitor-screen::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 255, 102, 0.95), rgba(0, 170, 68, 0.95));
+  border-radius: 999px;
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
 }
 
 @keyframes monitor-flicker {
@@ -1182,6 +1259,20 @@
   }
   50% {
     text-shadow: 0 0 12px #00ff66, 0 0 20px rgba(0, 255, 102, 0.4);
+  }
+}
+
+.app-icon-glow {
+  filter: brightness(0) saturate(100%) invert(57%) sepia(96%) saturate(3675%) hue-rotate(99deg) brightness(119%) contrast(123%) drop-shadow(0 0 8px #00ff66);
+  animation: icon-flicker 0.15s infinite;
+}
+
+@keyframes icon-flicker {
+  0%, 100% {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(96%) saturate(3675%) hue-rotate(99deg) brightness(119%) contrast(123%) drop-shadow(0 0 8px #00ff66);
+  }
+  50% {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(96%) saturate(3675%) hue-rotate(99deg) brightness(119%) contrast(123%) drop-shadow(0 0 12px #00ff66);
   }
 }
 
