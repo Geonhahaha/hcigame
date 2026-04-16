@@ -905,58 +905,62 @@ function MainPage({ onRestart }) {
               transition={{ duration: 0.32 }}
               onClick={(event) => event.stopPropagation()}
             >
-              <h3>{doorPopup === 'exit' ? 'Exit Door' : 'Control Room'}</h3>
-              <p className="door-popup-message">
-                {doorPopup === 'exit'
-                  ? keyObtained
-                    ? '🔑 Congratulation! You escaped!'
-                    : "You'll need a key to get out of here."
-                  : 'This door has 5 key holes. You need all 5 orbs to unlock it.'}
-              </p>
-              <p className="door-orb-counter">
-                {doorPopup === 'control-room' && (
-                  <>
-                    Orbs Collected: <span className="counter-value">{collectedCount} / 5</span>
-                  </>
+              <div className="popup-body">
+                <h3>{doorPopup === 'exit' ? 'Exit Door' : 'Control Room'}</h3>
+                <p className="door-popup-message">
+                  {doorPopup === 'exit'
+                    ? keyObtained
+                      ? '🔑 Congratulation! You escaped!'
+                      : "You'll need a key to get out of here."
+                    : 'This door has 5 key holes. You need all 5 orbs to unlock it.'}
+                </p>
+                <p className="door-orb-counter">
+                  {doorPopup === 'control-room' && (
+                    <>
+                      Orbs Collected: <span className="counter-value">{collectedCount} / 5</span>
+                    </>
+                  )}
+                </p>
+              </div>
+              <div className="popup-actions">
+                {doorPopup === 'exit' && keyObtained && (
+                  <motion.button
+                    type="button"
+                    className="enter-button"
+                    onClick={() => {
+                      setDoorPopup(null)
+                      onRestart()
+                    }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    Escape
+                  </motion.button>
                 )}
-              </p>
-              {doorPopup === 'exit' && keyObtained && (
-                <motion.button
+                {doorPopup === 'control-room' && collectedCount === 5 && (
+                  <motion.button
+                    type="button"
+                    className="enter-button"
+                    onClick={() => {
+                      setDoorPopup(null)
+                      goToScene('control-room-interior')
+                    }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    Enter Control Room
+                  </motion.button>
+                )}
+                <button
                   type="button"
-                  className="enter-button"
-                  onClick={() => {
-                    setDoorPopup(null)
-                    onRestart()
-                  }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
+                  className="close-button"
+                  onClick={() => setDoorPopup(null)}
                 >
-                  Escape
-                </motion.button>
-              )}
-              {doorPopup === 'control-room' && collectedCount === 5 && (
-                <motion.button
-                  type="button"
-                  className="enter-button"
-                  onClick={() => {
-                    setDoorPopup(null)
-                    goToScene('control-room-interior')
-                  }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  Enter Control Room
-                </motion.button>
-              )}
-              <button
-                type="button"
-                className="close-button"
-                onClick={() => setDoorPopup(null)}
-              >
-                Close
-              </button>
+                  Close
+                </button>
+              </div>
             </motion.article>
           </motion.section>
         )}
@@ -981,33 +985,35 @@ function MainPage({ onRestart }) {
               transition={{ duration: 0.32 }}
               onClick={(event) => event.stopPropagation()}
             >
-              <h3>ENTER PASSWORD</h3>
-              {passwordMessage && (
-                <motion.p
-                  className={`password-feedback ${passwordMessage}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  {passwordMessage === 'success'
-                    ? '✓ Correct! You obtained the key.'
-                    : '✗ Incorrect password.'}
-                </motion.p>
-              )}
-              <div className="password-input-group">
-                <input
-                  type="password"
-                  className="password-input"
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
-                  placeholder="Enter 4 digits"
-                  maxLength="4"
-                  disabled={!!passwordMessage}
-                  aria-label="비밀번호"
-                />
+              <div className="popup-body">
+                <h3>ENTER PASSWORD</h3>
+                {passwordMessage && (
+                  <motion.p
+                    className={`password-feedback ${passwordMessage}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {passwordMessage === 'success'
+                      ? '✓ Correct! You obtained the key.'
+                      : '✗ Incorrect password.'}
+                  </motion.p>
+                )}
+                <div className="password-input-group">
+                  <input
+                    type="password"
+                    className="password-input"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
+                    placeholder="Enter 4 digits"
+                    maxLength="4"
+                    disabled={!!passwordMessage}
+                    aria-label="비밀번호"
+                  />
+                </div>
               </div>
-              <div className="password-button-group">
+              <div className="popup-actions password-actions">
                 <button
                   type="button"
                   className="submit-button"
