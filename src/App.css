@@ -1162,21 +1162,61 @@
   background: linear-gradient(180deg, #001a00 0%, #000d00 100%);
   border: 2px solid #00ff66;
   border-radius: 4px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.35rem;
+  padding: 0.8rem 0.6rem 0.8rem 0.8rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 10px;
+  gap: 0.45rem;
   font-family: 'Courier New', monospace;
   color: #00ff66;
   font-size: 0.95rem;
   line-height: 1.4;
   text-shadow: 0 0 8px #00ff66;
+  overflow: hidden;
+  animation: monitor-flicker 0.15s infinite;
+}
+
+.monitor-screen-content {
+  min-height: 0;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  animation: monitor-flicker 0.15s infinite;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 255, 102, 0.75) rgba(0, 20, 0, 0.55);
+  padding-right: 0.1rem;
+}
+
+.monitor-screen-content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.monitor-screen-content {
+  scrollbar-width: none;
+}
+
+.monitor-scrollbar {
+  position: relative;
+  width: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 102, 0.28);
+  background: linear-gradient(180deg, rgba(0, 24, 0, 0.72), rgba(0, 11, 0, 0.82));
+  box-shadow: inset 0 0 6px rgba(0, 255, 102, 0.2);
+  cursor: pointer;
+}
+
+.monitor-scrollbar-thumb {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  top: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #00ff66, #00b84d);
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
+  cursor: grab;
+}
+
+.monitor-scrollbar-thumb.dragging {
+  background: linear-gradient(180deg, #45ff94, #00c755);
+  box-shadow: 0 0 14px rgba(0, 255, 102, 0.9);
+  cursor: grabbing;
 }
 
 .monitor-rec-title {
@@ -1236,21 +1276,6 @@
   font-size: 0.85em;
   line-height: 1.25;
   opacity: 0.95;
-}
-
-.monitor-screen::-webkit-scrollbar {
-  width: 8px;
-}
-
-.monitor-screen::-webkit-scrollbar-track {
-  background: rgba(0, 20, 0, 0.55);
-  border-left: 1px solid rgba(0, 255, 102, 0.2);
-}
-
-.monitor-screen::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(0, 255, 102, 0.95), rgba(0, 170, 68, 0.95));
-  border-radius: 999px;
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
 }
 
 @keyframes monitor-flicker {

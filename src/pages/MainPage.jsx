@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import app11Image from '../assets/app1_1.png'
 import app12Image from '../assets/app1_2.png'
@@ -562,6 +562,99 @@ function MainPage({ onRestart }) {
   const [passwordPopup, setPasswordPopup] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
+  const monitorScrollRef = useRef(null)
+  const monitorScrollbarRef = useRef(null)
+  const [isMonitorScrollbarDragging, setIsMonitorScrollbarDragging] = useState(false)
+  const [monitorScrollbar, setMonitorScrollbar] = useState({
+    thumbSize: 100,
+    thumbOffset: 0,
+    scrollTop: 0,
+    scrollMax: 0,
+  })
+
+  const syncMonitorScrollbar = useCallback(() => {
+    const contentEl = monitorScrollRef.current
+
+    if (!contentEl) {
+      return
+    }
+
+    const scrollMax = Math.max(contentEl.scrollHeight - contentEl.clientHeight, 0)
+    const thumbSize =
+      scrollMax === 0
+        ? 100
+        : Math.max((contentEl.clientHeight / contentEl.scrollHeight) * 100, 18)
+    const maxThumbOffset = 100 - thumbSize
+    const thumbOffset =
+      scrollMax === 0 ? 0 : (contentEl.scrollTop / scrollMax) * maxThumbOffset
+
+    setMonitorScrollbar({
+      thumbSize,
+      thumbOffset,
+      scrollTop: contentEl.scrollTop,
+      scrollMax,
+    })
+  }, [])
+
+  const scrollMonitorFromPointer = useCallback(
+    (clientY) => {
+      const contentEl = monitorScrollRef.current
+      const trackEl = monitorScrollbarRef.current
+
+      if (!contentEl || !trackEl) {
+        return
+      }
+
+      const rect = trackEl.getBoundingClientRect()
+      const thumbSizePx = (monitorScrollbar.thumbSize / 100) * rect.height
+      const maxThumbTravel = Math.max(rect.height - thumbSizePx, 0)
+      const pointerY = Math.min(Math.max(clientY - rect.top, 0), rect.height)
+      const thumbTop = Math.min(
+        Math.max(pointerY - thumbSizePx / 2, 0),
+        maxThumbTravel,
+      )
+      const ratio = maxThumbTravel === 0 ? 0 : thumbTop / maxThumbTravel
+
+      contentEl.scrollTop = ratio * (contentEl.scrollHeight - contentEl.clientHeight)
+      syncMonitorScrollbar()
+    },
+    [monitorScrollbar.thumbSize, syncMonitorScrollbar],
+  )
+
+  useEffect(() => {
+    if (scene !== 'control-room-interior') {
+      return
+    }
+
+    syncMonitorScrollbar()
+    window.addEventListener('resize', syncMonitorScrollbar)
+
+    return () => {
+      window.removeEventListener('resize', syncMonitorScrollbar)
+    }
+  }, [scene, syncMonitorScrollbar])
+
+  useEffect(() => {
+    if (!isMonitorScrollbarDragging) {
+      return
+    }
+
+    const handleMouseMove = (event) => {
+      scrollMonitorFromPointer(event.clientY)
+    }
+
+    const handleMouseUp = () => {
+      setIsMonitorScrollbarDragging(false)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isMonitorScrollbarDragging, scrollMonitorFromPointer])
 
   const targetBySlot = useMemo(
     () =>
@@ -837,52 +930,86 @@ function MainPage({ onRestart }) {
           <div className="interior-content">
             <div className="monitor">
               <div className="monitor-screen">
-                <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
-                <div className="monitor-recommendation-list">
-                  <div className="monitor-recommendation-item">
-                    <div className="monitor-app-row">
-                      <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
-                      <p className="monitor-app-name">Apple Photos - Memories</p>
-                      <p className="monitor-rating">★★★☆☆</p>
+                <div
+                  className="monitor-screen-content"
+                  id="monitor-scroll-content"
+                  ref={monitorScrollRef}
+                  onScroll={syncMonitorScrollbar}
+                >
+                  <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
+                  <div className="monitor-recommendation-list">
+                    <div className="monitor-recommendation-item">
+                      <div className="monitor-app-row">
+                        <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
+                        <p className="monitor-app-name">Apple Photos - Memories</p>
+                        <p className="monitor-rating">★★★☆☆</p>
+                      </div>
+                      <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
                     </div>
-                    <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
-                  </div>
 
-                  <div className="monitor-recommendation-item">
-                    <div className="monitor-app-row">
-                      <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
-                      <p className="monitor-app-name">Youtube Music - Recap</p>
-                      <p className="monitor-rating">★★☆☆☆</p>
+                    <div className="monitor-recommendation-item">
+                      <div className="monitor-app-row">
+                        <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
+                        <p className="monitor-app-name">Youtube Music - Recap</p>
+                        <p className="monitor-rating">★★☆☆☆</p>
+                      </div>
+                      <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
                     </div>
-                    <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
-                  </div>
 
-                  <div className="monitor-recommendation-item">
-                    <div className="monitor-app-row">
-                      <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
-                      <p className="monitor-app-name">Google Maps - Timeline</p>
-                      <p className="monitor-rating">★★★★☆</p>
+                    <div className="monitor-recommendation-item">
+                      <div className="monitor-app-row">
+                        <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
+                        <p className="monitor-app-name">Google Maps - Timeline</p>
+                        <p className="monitor-rating">★★★★☆</p>
+                      </div>
+                      <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
                     </div>
-                    <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
-                  </div>
 
-                  <div className="monitor-recommendation-item">
-                    <div className="monitor-app-row">
-                      <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
-                      <p className="monitor-app-name">Instagram - Archive</p>
-                      <p className="monitor-rating">★★★★☆</p>
+                    <div className="monitor-recommendation-item">
+                      <div className="monitor-app-row">
+                        <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
+                        <p className="monitor-app-name">Instagram - Archive</p>
+                        <p className="monitor-rating">★★★★☆</p>
+                      </div>
+                      <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
                     </div>
-                    <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
-                  </div>
 
-                  <div className="monitor-recommendation-item">
-                    <div className="monitor-app-row">
-                      <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
-                      <p className="monitor-app-name">Nike Run Club - Activity</p>
-                      <p className="monitor-rating">★★★★☆</p>
+                    <div className="monitor-recommendation-item">
+                      <div className="monitor-app-row">
+                        <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
+                        <p className="monitor-app-name">Nike Run Club - Activity</p>
+                        <p className="monitor-rating">★★★★☆</p>
+                      </div>
+                      <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
                     </div>
-                    <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
                   </div>
+                </div>
+                <div
+                  className="monitor-scrollbar"
+                  ref={monitorScrollbarRef}
+                  role="scrollbar"
+                  aria-controls="monitor-scroll-content"
+                  aria-label="Final recommendation scroll"
+                  aria-valuemin={0}
+                  aria-valuemax={Math.max(monitorScrollbar.scrollMax, 1)}
+                  aria-valuenow={Math.round(monitorScrollbar.scrollTop)}
+                  onMouseDown={(event) => {
+                    event.preventDefault()
+                    scrollMonitorFromPointer(event.clientY)
+                  }}
+                >
+                  <div
+                    className={`monitor-scrollbar-thumb${isMonitorScrollbarDragging ? ' dragging' : ''}`}
+                    style={{
+                      height: `${monitorScrollbar.thumbSize}%`,
+                      top: `${monitorScrollbar.thumbOffset}%`,
+                    }}
+                    onMouseDown={(event) => {
+                      event.preventDefault()
+                      event.stopPropagation()
+                      setIsMonitorScrollbarDragging(true)
+                    }}
+                  />
                 </div>
               </div>
               <div className="monitor-bezel" />
