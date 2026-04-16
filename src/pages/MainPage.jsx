@@ -470,7 +470,7 @@ const TARGET_BOOKS = [
           {
             src: app57Image,
             alt: 'NRC graph interaction showing detailed running information on tap',
-            caption:
+            rowCaption:
               'Users need to click on the graph to see detailed information about the running record corresponding to the bar graph.',
           },
           {
@@ -505,7 +505,7 @@ const TARGET_BOOKS = [
           {
             src: app512Image,
             alt: 'Nike Run Club another achievement detail screen',
-            caption:
+            rowCaption:
               "The Nike Run Club's Run Level system and Achievements system inform users about how many more kilometers they need to run to level up, when they have achieved an achievement, and the details of the achievement.",
           },
           {
@@ -515,7 +515,7 @@ const TARGET_BOOKS = [
           {
             src: app514Image,
             alt: 'Nike Run Club recent achievements and missing achievement details',
-            caption:
+            rowCaption:
               'On the Activity main screen, users can see badges for achievements earned in that running session, as well as the top 5 most recently achieved accomplishments. However, the running detail page does not contain any information about achievements.',
           },
         ],
@@ -1064,7 +1064,7 @@ function MainPage({ onRestart }) {
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints' || activePageData?.title === 'Spatiotemporal Triggers & User Agency') ? 'is-micro-day-view' : ''} ${activePageData?.title === 'Hierarchical Modality & Mental Models' ? 'is-nrc-hierarchy' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints' || activePageData?.title === 'Spatiotemporal Triggers & User Agency') ? 'is-micro-day-view' : ''} ${activePageData?.title === 'Hierarchical Modality & Mental Models' ? 'is-nrc-hierarchy' : ''} ${activePageData?.title === 'Gamification Loop & System Inconsistency' ? 'is-nrc-gamification' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
                       {Array.isArray(activePageData?.content) ? (
@@ -1089,8 +1089,8 @@ function MainPage({ onRestart }) {
                         )}
                         {activePageData?.images && (
                           <div className="page-entry-images-grid">
-                            {activePageData.images.map((image, idx) => (
-                              <figure key={idx} className="page-entry-image-card">
+                            {activePageData.images.map((image, idx) => [
+                              <figure key={`image-${idx}`} className="page-entry-image-card">
                                 <img
                                   className="page-entry-image"
                                   src={image.src}
@@ -1101,8 +1101,13 @@ function MainPage({ onRestart }) {
                                     {image.caption}
                                   </figcaption>
                                 )}
-                              </figure>
-                            ))}
+                              </figure>,
+                              image.rowCaption ? (
+                                <figcaption key={`row-caption-${idx}`} className="page-entry-row-caption">
+                                  {image.rowCaption}
+                                </figcaption>
+                              ) : null,
+                            ])}
                           </div>
                         )}
                         {activePageData?.imageCaption && (

@@ -688,6 +688,15 @@
   color: #6a4a2c;
 }
 
+.page-entry-row-caption {
+  grid-column: 1 / -1;
+  margin: -0.08rem 0 0.08rem;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: #5e4428;
+  text-align: center;
+}
+
 .page-entry-layout.is-aesthetic-tradeoff .page-entry-images-grid {
   grid-template-columns: 1fr 1fr;
   width: 94%;
@@ -740,6 +749,22 @@
   box-shadow: 0 4px 10px rgba(37, 24, 12, 0.12);
 }
 
+.page-entry-layout.is-nrc-gamification .page-entry-images-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(1),
+.page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(2),
+.page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(3) {
+  grid-column: span 2;
+}
+
+.page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(4),
+.page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(5) {
+  grid-column: span 3;
+}
+
 .page-entry-image {
   display: block;
   width: 100%;
@@ -787,6 +812,18 @@
 
   .page-entry-layout.is-nrc-hierarchy .page-entry-images-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-entry-layout.is-nrc-gamification .page-entry-images-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(1),
+  .page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(2),
+  .page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(3),
+  .page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(4),
+  .page-entry-layout.is-nrc-gamification .page-entry-images-grid .page-entry-image-card:nth-of-type(5) {
+    grid-column: auto;
   }
 }
 
