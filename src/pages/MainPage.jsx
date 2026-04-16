@@ -1094,7 +1094,7 @@ function MainPage({ onRestart }) {
                       )}
                     </div>
 
-                    {(activePageData?.imageSrc || activePageData?.images) && (
+                    {(activePageData?.imageSrc || activePageData?.images || activePageData?.imageGroups) && (
                       <figure className="page-entry-image-wrap">
                         {activePageData?.imageSrc && (
                           <img
@@ -1115,6 +1115,40 @@ function MainPage({ onRestart }) {
                                 {image.caption && (
                                   <figcaption className="page-entry-subcaption">
                                     {image.caption}
+                                  </figcaption>
+                                )}
+                              </figure>
+                            ))}
+                          </div>
+                        )}
+                        {activePageData?.imageGroups && (
+                          <div className="page-entry-image-groups">
+                            {activePageData.imageGroups.map((group, groupIndex) => (
+                              <figure key={groupIndex} className="page-entry-image-group">
+                                <div
+                                  className="page-entry-images-grid"
+                                  style={{
+                                    gridTemplateColumns: `repeat(${group.images.length}, minmax(0, 1fr))`,
+                                  }}
+                                >
+                                  {group.images.map((image, idx) => (
+                                    <figure key={idx} className="page-entry-image-card">
+                                      <img
+                                        className="page-entry-image"
+                                        src={image.src}
+                                        alt={image.alt}
+                                      />
+                                      {image.caption && (
+                                        <figcaption className="page-entry-subcaption">
+                                          {image.caption}
+                                        </figcaption>
+                                      )}
+                                    </figure>
+                                  ))}
+                                </div>
+                                {group.caption && (
+                                  <figcaption className="page-entry-caption">
+                                    {group.caption}
                                   </figcaption>
                                 )}
                               </figure>
