@@ -1208,14 +1208,16 @@ function MainPage({ onRestart }) {
               <section className="book-page-body">
                 <p className="access-log">Password: 0000</p>
               </section>
-              <button
-                type="button"
-                className="close-button"
-                onClick={() => setActiveBookId(null)}
-              >
-                Close
-              </button>
             </motion.article>
+
+            <button
+              type="button"
+              className="close-button"
+              onClick={() => setActiveBookId(null)}
+              aria-label="로그 닫기"
+            >
+              ✕
+            </button>
           </motion.section>
         )}
       </AnimatePresence>
