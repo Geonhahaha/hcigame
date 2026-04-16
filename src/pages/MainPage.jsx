@@ -35,6 +35,20 @@ import app46Image from '../assets/app4_6.jpg'
 import app47Image from '../assets/app4_7.png'
 import app48Image from '../assets/app4_8.jpg'
 import app49Image from '../assets/app4_9.png'
+import app51Image from '../assets/app5_1.jpg'
+import app52Image from '../assets/app5_2.jpg'
+import app53Image from '../assets/app5_3.jpg'
+import app54Image from '../assets/app5_4.jpg'
+import app55Image from '../assets/app5_5.jpg'
+import app56Image from '../assets/app5_6.jpg'
+import app57Image from '../assets/app5_7.jpg'
+import app58Image from '../assets/app5_8.png'
+import app59Image from '../assets/app5_9.jpg'
+import app510Image from '../assets/app5_10.jpg'
+import app511Image from '../assets/app5_11.jpg'
+import app512Image from '../assets/app5_12.jpg'
+import app513Image from '../assets/app5_13.jpg'
+import app514Image from '../assets/app5_14.jpg'
 import applePhotosIcon from '../assets/apple photos.png'
 import youtubeMusicIcon from '../assets/youtube music.png'
 import googleMapsIcon from '../assets/google maps.png'
@@ -408,11 +422,120 @@ const TARGET_BOOKS = [
     slotId: 'b7',
     title: 'Nike Run Club - Activity',
     pages: [
-      'Page 1. 인물 목록의 번호 체계가 사건 이후 다시 매겨졌다. 삭제된 인덱스가 보인다.',
-      'Page 2. 대조표의 공백 칸이 두 곳 남아 있다. 아직 찾지 못한 연결고리로 추정된다.',
-      'Page 3. 참고문헌에 동일 제목이 다른 출판사로 두 번 기록되어 있다.',
-      'Page 4. 마지막 전 메모: "답은 책 안이 아니라 책과 책 사이".',
-      'Page 5. 수집 가능한 핵심 구슬이 마지막 인덱스에 고정되어 있다. 눌러 확보한다.',
+      {
+        title: 'Persistent Visibility & Navigation',
+        content:
+          "The 'Activity' tab of NRC is fixed at the far right of the bottom navigation bar, ensuring high discoverability. This serves as an intuitive entry point that helps users frequently check their exercise performance and stay motivated. The design, which allows easy access to their progress anytime and anywhere, is a key structural feature of the system that encourages the formation of continuous exercise habits.",
+        imageSrc: app51Image,
+        imageAlt: 'Nike Run Club main page with Activity section at bottom right',
+        imageCaption: 'Nike Run Club main page. The Activity section is fixed at the bottom right corner.',
+      },
+      {
+        title: 'Hierarchical Modality & Mental Models',
+        content: [
+          "The activity records of NRC are systematically grouped through a hierarchical structure of 'Week / Month / Year / All.' This functions not merely as a simple period summary but as a 'collection of activities for a specific period,' providing users with a logical framework to explore their learning logs by time period and enhancing their cognition. In the 'Year' or 'All' views, the graphs display only monthly or yearly totals to ensure visual simplicity, but upon entering the detailed page, individual running records can be immediately checked, demonstrating an excellent mental model design that balances the macroscopic flow and microscopic details.",
+          "However, there is a clear limitation in the navigation design. The design in the 'Week' view, which only exposes records up to 4 weeks prior, prevents users from freely exploring data from earlier weeks without going through the 'Month' tab. This enforces the interaction flow by the system, acting as a temporal constraint that limits user control and freedom by restricting the ability to instantly move to the desired point in time.",
+        ],
+        images: [
+          {
+            src: app52Image,
+            alt: 'NRC activity interface week view',
+          },
+          {
+            src: app53Image,
+            alt: 'NRC activity interface month view',
+          },
+          {
+            src: app54Image,
+            alt: 'NRC activity interface year view',
+          },
+          {
+            src: app55Image,
+            alt: 'NRC activity interface all view',
+          },
+        ],
+        imageCaption: "Activity's Week / Month / Year / All interface.",
+      },
+      {
+        title: 'Layered Visualization & Contextual Recall',
+        content: [
+          "NRC harmoniously visualizes quantitative figures and qualitative spatial data to record users' activities from multiple perspectives. The consistent visual language using bar graphs effectively conveys overall running patterns, and the progressive disclosure method-where detailed information (distance, time, frequency) is revealed only when tapping on the graph bars-reduces initial cognitive load while encouraging in-depth data exploration, making it an efficient design. Additionally, the high scannability in the recent activity list, which immediately displays mini maps, dates, and paces, allows users to grasp key information without extra clicks, maximizing efficiency of use.",
+          "The visualization of such numerical data becomes even more valuable when combined with spatial data like detailed GPS maps. Maps that show the unique \"shape\" of running routes act as powerful contextual memory triggers that vividly reconstruct the physical environment and personal effort during exercise, going beyond simple numbers. This proves that NRC's archiving is more than just a log of workouts; it is a valuable record of experience that preserves users' physical experiences in space and time.",
+        ],
+        imageGroups: [
+          {
+            images: [
+              {
+                src: app56Image,
+                alt: 'NRC activity graph requiring tap for detailed run data',
+              },
+              {
+                src: app57Image,
+                alt: 'NRC graph interaction showing detailed running information on tap',
+              },
+            ],
+            caption:
+              'Users need to click on the graph to see detailed information about the running record corresponding to the bar graph.',
+          },
+          {
+            images: [
+              {
+                src: app58Image,
+                alt: 'NRC detailed running screen with Avg. Pace, Time, and Calories at top',
+                caption:
+                  "When entering the detailed running information, the most important information, Kilometers, is displayed largest at the top, with Avg. Pace, Time, Calories, etc. shown below. This demonstrates the app's appropriate information hierarchy setting.",
+              },
+              {
+                src: app59Image,
+                alt: 'NRC detailed running route map interface',
+                caption:
+                  'The running route map, which can be said to be the most distinctive feature of Nike Run Club. It also shows which section user ran per kilometer and visualizes Avg. Pace, Elevation, etc., displaying them as graphs below the map.',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Gamification Loop & System Inconsistency',
+        content: [
+          "NRC forms a powerful gamification loop that 'levels up' the user's physical identity through a cumulative distance-based color level system. Additionally, the trophies and achievement icons awarded upon reaching each milestone serve as immediate and positive feedback, strongly driving continuous user engagement. This generates the IKEA effect for users, fostering affection for their own efforts and accomplishments.",
+          "However, there is a minor issue that weakens this excellent reward system experience. While the main activity list displays the earned achievement icons, providing visual satisfaction, the detailed view of the respective run lacks information indicating which milestones have been achieved. This disconnect in information can be seen as a lack of efficiency that hinders users from easily verifying their accomplishments. Nevertheless, NRC’s archiving holds unique value in that it digitizes physical activity as digital assets, visually constructing the user's growth narrative.",
+        ],
+        imageGroups: [
+          {
+            images: [
+              {
+                src: app510Image,
+                alt: 'Nike Run Club run level and achievement progress screen',
+              },
+              {
+                src: app511Image,
+                alt: 'Nike Run Club achievement details screen',
+              },
+              {
+                src: app512Image,
+                alt: 'Nike Run Club another achievement detail screen',
+              },
+            ],
+            caption:
+              "The Nike Run Club's Run Level system and Achievements system inform users about how many more kilometers they need to run to level up, when they have achieved an achievement, and the details of the achievement.",
+          },
+          {
+            images: [
+              {
+                src: app513Image,
+                alt: 'Nike Run Club activity main screen with achievement badges',
+              },
+              {
+                src: app514Image,
+                alt: 'Nike Run Club recent achievements and missing achievement details',
+              },
+            ],
+            caption:
+              'On the Activity main screen, users can see badges for achievements earned in that running session, as well as the top 5 most recently achieved accomplishments. However, the running detail page does not contain any information about achievements.',
+          },
+        ],
+      },
     ],
   },
 ]
