@@ -462,36 +462,28 @@ const TARGET_BOOKS = [
           "NRC harmoniously visualizes quantitative figures and qualitative spatial data to record users' activities from multiple perspectives. The consistent visual language using bar graphs effectively conveys overall running patterns, and the progressive disclosure method-where detailed information (distance, time, frequency) is revealed only when tapping on the graph bars-reduces initial cognitive load while encouraging in-depth data exploration, making it an efficient design. Additionally, the high scannability in the recent activity list, which immediately displays mini maps, dates, and paces, allows users to grasp key information without extra clicks, maximizing efficiency of use.",
           "The visualization of such numerical data becomes even more valuable when combined with spatial data like detailed GPS maps. Maps that show the unique \"shape\" of running routes act as powerful contextual memory triggers that vividly reconstruct the physical environment and personal effort during exercise, going beyond simple numbers. This proves that NRC's archiving is more than just a log of workouts; it is a valuable record of experience that preserves users' physical experiences in space and time.",
         ],
-        imageGroups: [
+        images: [
           {
-            images: [
-              {
-                src: app56Image,
-                alt: 'NRC activity graph requiring tap for detailed run data',
-              },
-              {
-                src: app57Image,
-                alt: 'NRC graph interaction showing detailed running information on tap',
-              },
-            ],
+            src: app56Image,
+            alt: 'NRC activity graph requiring tap for detailed run data',
+          },
+          {
+            src: app57Image,
+            alt: 'NRC graph interaction showing detailed running information on tap',
             caption:
               'Users need to click on the graph to see detailed information about the running record corresponding to the bar graph.',
           },
           {
-            images: [
-              {
-                src: app58Image,
-                alt: 'NRC detailed running screen with Avg. Pace, Time, and Calories at top',
-                caption:
-                  "When entering the detailed running information, the most important information, Kilometers, is displayed largest at the top, with Avg. Pace, Time, Calories, etc. shown below. This demonstrates the app's appropriate information hierarchy setting.",
-              },
-              {
-                src: app59Image,
-                alt: 'NRC detailed running route map interface',
-                caption:
-                  'The running route map, which can be said to be the most distinctive feature of Nike Run Club. It also shows which section user ran per kilometer and visualizes Avg. Pace, Elevation, etc., displaying them as graphs below the map.',
-              },
-            ],
+            src: app58Image,
+            alt: 'NRC detailed running screen with Avg. Pace, Time, and Calories at top',
+            caption:
+              "When entering the detailed running information, the most important information, Kilometers, is displayed largest at the top, with Avg. Pace, Time, Calories, etc. shown below. This demonstrates the app's appropriate information hierarchy setting.",
+          },
+          {
+            src: app59Image,
+            alt: 'NRC detailed running route map interface',
+            caption:
+              'The running route map, which can be said to be the most distinctive feature of Nike Run Club. It also shows which section user ran per kilometer and visualizes Avg. Pace, Elevation, etc., displaying them as graphs below the map.',
           },
         ],
       },
@@ -501,36 +493,28 @@ const TARGET_BOOKS = [
           "NRC forms a powerful gamification loop that 'levels up' the user's physical identity through a cumulative distance-based color level system. Additionally, the trophies and achievement icons awarded upon reaching each milestone serve as immediate and positive feedback, strongly driving continuous user engagement. This generates the IKEA effect for users, fostering affection for their own efforts and accomplishments.",
           "However, there is a minor issue that weakens this excellent reward system experience. While the main activity list displays the earned achievement icons, providing visual satisfaction, the detailed view of the respective run lacks information indicating which milestones have been achieved. This disconnect in information can be seen as a lack of efficiency that hinders users from easily verifying their accomplishments. Nevertheless, NRC’s archiving holds unique value in that it digitizes physical activity as digital assets, visually constructing the user's growth narrative.",
         ],
-        imageGroups: [
+        images: [
           {
-            images: [
-              {
-                src: app510Image,
-                alt: 'Nike Run Club run level and achievement progress screen',
-              },
-              {
-                src: app511Image,
-                alt: 'Nike Run Club achievement details screen',
-              },
-              {
-                src: app512Image,
-                alt: 'Nike Run Club another achievement detail screen',
-              },
-            ],
+            src: app510Image,
+            alt: 'Nike Run Club run level and achievement progress screen',
+          },
+          {
+            src: app511Image,
+            alt: 'Nike Run Club achievement details screen',
+          },
+          {
+            src: app512Image,
+            alt: 'Nike Run Club another achievement detail screen',
             caption:
               "The Nike Run Club's Run Level system and Achievements system inform users about how many more kilometers they need to run to level up, when they have achieved an achievement, and the details of the achievement.",
           },
           {
-            images: [
-              {
-                src: app513Image,
-                alt: 'Nike Run Club activity main screen with achievement badges',
-              },
-              {
-                src: app514Image,
-                alt: 'Nike Run Club recent achievements and missing achievement details',
-              },
-            ],
+            src: app513Image,
+            alt: 'Nike Run Club activity main screen with achievement badges',
+          },
+          {
+            src: app514Image,
+            alt: 'Nike Run Club recent achievements and missing achievement details',
             caption:
               'On the Activity main screen, users can see badges for achievements earned in that running session, as well as the top 5 most recently achieved accomplishments. However, the running detail page does not contain any information about achievements.',
           },
@@ -1080,7 +1064,7 @@ function MainPage({ onRestart }) {
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images || activePageData?.imageGroups ? 'has-image' : ''} ${activePageData?.images || activePageData?.imageGroups ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints' || activePageData?.title === 'Spatiotemporal Triggers & User Agency') ? 'is-micro-day-view' : ''} ${activePageData?.title === 'Hierarchical Modality & Mental Models' ? 'is-nrc-hierarchy' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints' || activePageData?.title === 'Spatiotemporal Triggers & User Agency') ? 'is-micro-day-view' : ''} ${activePageData?.title === 'Hierarchical Modality & Mental Models' ? 'is-nrc-hierarchy' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
                       {Array.isArray(activePageData?.content) ? (
@@ -1094,7 +1078,7 @@ function MainPage({ onRestart }) {
                       )}
                     </div>
 
-                    {(activePageData?.imageSrc || activePageData?.images || activePageData?.imageGroups) && (
+                    {(activePageData?.imageSrc || activePageData?.images) && (
                       <figure className="page-entry-image-wrap">
                         {activePageData?.imageSrc && (
                           <img
@@ -1115,40 +1099,6 @@ function MainPage({ onRestart }) {
                                 {image.caption && (
                                   <figcaption className="page-entry-subcaption">
                                     {image.caption}
-                                  </figcaption>
-                                )}
-                              </figure>
-                            ))}
-                          </div>
-                        )}
-                        {activePageData?.imageGroups && (
-                          <div className="page-entry-image-groups">
-                            {activePageData.imageGroups.map((group, groupIndex) => (
-                              <figure key={groupIndex} className="page-entry-image-group">
-                                <div
-                                  className="page-entry-images-grid"
-                                  style={{
-                                    gridTemplateColumns: `repeat(${group.images.length}, minmax(0, 1fr))`,
-                                  }}
-                                >
-                                  {group.images.map((image, idx) => (
-                                    <figure key={idx} className="page-entry-image-card">
-                                      <img
-                                        className="page-entry-image"
-                                        src={image.src}
-                                        alt={image.alt}
-                                      />
-                                      {image.caption && (
-                                        <figcaption className="page-entry-subcaption">
-                                          {image.caption}
-                                        </figcaption>
-                                      )}
-                                    </figure>
-                                  ))}
-                                </div>
-                                {group.caption && (
-                                  <figcaption className="page-entry-caption">
-                                    {group.caption}
                                   </figcaption>
                                 )}
                               </figure>
