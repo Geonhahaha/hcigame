@@ -26,6 +26,15 @@ import app38Image from '../assets/app3_8.jpg'
 import app39Image from '../assets/app3_9.jpg'
 import app310Image from '../assets/app3_10.jpg'
 import app311Image from '../assets/app3_11.webp'
+import app41Image from '../assets/app4_1.jpg'
+import app42Image from '../assets/app4_2.jpg'
+import app43Image from '../assets/app4_3.png'
+import app44Image from '../assets/app4_4.jpg'
+import app45Image from '../assets/app4_5.jpg'
+import app46Image from '../assets/app4_6.jpg'
+import app47Image from '../assets/app4_7.png'
+import app48Image from '../assets/app4_8.jpg'
+import app49Image from '../assets/app4_9.png'
 import applePhotosIcon from '../assets/apple photos.png'
 import youtubeMusicIcon from '../assets/youtube music.png'
 import googleMapsIcon from '../assets/google maps.png'
@@ -306,11 +315,92 @@ const TARGET_BOOKS = [
     slotId: 'b3',
     title: 'Instagram - Archive',
     pages: [
-      'Page 1. 조명 점등 기록의 누락 구간이 확인된다. 야간 로그가 비정상적으로 짧다.',
-      'Page 2. 전구 교체 이력이 없는데도 밝기 지표가 크게 변했다. 인위적 차광 가능성.',
-      'Page 3. 반사면 각도 측정치가 벽면 도면과 다르다. 임시 설치물이 있었을 수 있다.',
-      'Page 4. 기록자는 "빛을 끄지 않고 어둡게 만드는 법"을 언급했다.',
-      'Page 5. 마지막 줄 옆에 빛나는 구슬이 맺혀 있다. 눌러 수집한다.',
+      {
+        title: 'Navigation Paths & Mental Model Alignment',
+        content: [
+          "Instagram's Archive is located somewhat deep within the layers under 'Profile -> Settings and Activity,' but considering that it is an auxiliary navigation feature rather than a main function, it demonstrates an appropriate information hierarchy that does not disrupt the user's primary flow. It provides a reasonable entry path to satisfy the intermittent desire to look back on past records.",
+          "However, the functional distinction between the 'Archive' menu and the 'Your activity' menu is ambiguous, which may cause confusion in the user's mental model. Both menus provide access routes to user-generated content, but there is a lack of clear visual differentiation regarding which specific content belongs where (e.g., archived stories vs. managing current posts). This conceptual overlap results in unnecessary navigation costs, as users may have to switch back and forth between the two menus to find specific records.",
+        ],
+        imageSrc: app41Image,
+        imageAlt: 'Instagram settings and activity menu with Archive entry',
+        imageCaption: 'Settings and activity menu',
+      },
+      {
+        title: 'Navigation Logic & Visual Language',
+        content: [
+          "Instagram Story Archive adopts a vertical scroll method, perfectly aligning with the user's mental model. Scrolling upward moves toward the past, while scrolling downward leads to the most recent data, following the temporal grammar typical of standard calendar apps and minimizing cognitive confusion.",
+          "At the same time, the icon design of the top tabs strikes a balance between intuitiveness and originality. The calendar and map tabs use resemblance icons modeled after real objects to facilitate immediate recognition. In contrast, the arbitrary icons representing 'All Stories' and 'Highlights' rotate clockwise and transition from solid to dotted lines, using a circular metaphor to visually express the ephemeral nature of stories-an excellent design solution. Additionally, visual variations using the presence or absence of a 'heart' icon elegantly convey the functional difference between the entire archive and selected highlights while maintaining aesthetic consistency.",
+        ],
+        images: [
+          {
+            src: app42Image,
+            alt: 'Instagram Archive all stories chronological layout view',
+          },
+          {
+            src: app43Image,
+            alt: 'Instagram Archive tab icons for all stories and highlights',
+          },
+        ],
+        imageCaption:
+          'All Stories layout of Archive. The stories are arranged from oldest at the top to newest at the bottom.',
+      },
+      {
+        title: 'Spatiotemporal Triggers & User Agency',
+        content: [
+          "Instagram Story Archive cleverly utilizes spatiotemporal data to strongly aid users in recalling their memories. The calendar view borrows the familiar calendar format, providing an excellent design that allows users to intuitively and immediately grasp 'when' stories were posted. Additionally, the map view serves as a powerful contextual memory trigger by anchoring visual content to specific geographic locations, evoking the spatial context of the moment beyond simply viewing photos.",
+          'However, some limitations are observed in terms of interaction design. In the calendar view, only the first story of a given date is shown as a thumbnail, making it difficult to estimate the actual amount of posted data in advance. Also, the map view only displays posts where users have manually attached location stickers, increasing the tasks users must perform to specify locations. Especially for users unaware of the logic that only posts with location tags appear on the map, this lack of understandability within accessibility leads to unintended loss of spatial history.',
+          "Paradoxically, unlike Google Maps' automatic tracking method, this design guarantees user control by allowing users to decide whether to provide their location data. This reduces privacy concerns and strengthens user agency, making it a positive design choice.",
+        ],
+        images: [
+          {
+            src: app44Image,
+            alt: 'Instagram Stories archive calendar view',
+            caption: 'Calendar view of Stories archive',
+          },
+          {
+            src: app45Image,
+            alt: 'Instagram Stories archive map view',
+            caption: 'Map view of Stories archive',
+          },
+          {
+            src: app46Image,
+            alt: 'Instagram story with Osaka location sticker attached',
+            caption: 'A story with a location sticker (Osaka) attached.',
+          },
+        ],
+      },
+      {
+        title: 'Privacy & Data Management',
+        content: [
+          "The post archive feature offers users the option to 'archive' instead of 'delete,' providing user agency and psychological safety. This helps preserve the emotional value of content while managing a public persona.",
+          'However, the complete lack of search and filtering functions can be a burden in terms of efficiency of use. The structure that requires users to navigate years of accumulated posts solely through a single scrolling list increases cognitive load as the archive grows.',
+        ],
+        imageSrc: app47Image,
+        imageAlt: 'Instagram posts archive layout in profile grid format',
+        imageCaption: 'Posts archive layout. The same layout as the profile post layout is provided.',
+      },
+      {
+        title: 'The Harmony of Ephemerality and Persistence',
+        content: [
+          'Instagram Story Archive possesses a powerful permanence behind the ephemeral feature of sharing everyday moments that last only 24 hours. From the moment users start using the service up to the present, it preserves all records. Through this, users can share fleeting daily life lightly with others while personally having a permanent digital autobiography that allows them to look back on the trajectory of their lives at any time.',
+          "In particular, the 'likes' that remain unchanged within the archive act as social residuals. This forms a permanent social feedback loop that is not limited to the time when the post was created, reinforcing the positive emotions of that time whenever the past records are revisited. Additionally, the efficient interface that allows stored records to be instantly reorganized into 'highlights' smoothly connects the process of transforming deeply private memories into public curation.",
+          "As a result, Instagram harmoniously designs the conflicting values of the 'ephemerality' of communication and the 'archiving' of records, providing users with both a sense of connection in the present and continuity with the past.",
+        ],
+        images: [
+          {
+            src: app48Image,
+            alt: 'Instagram stories archive preserving records from April 2019 to present',
+            caption:
+              'A long time has passed, but all the stories from April 2019, when the user first posted a story, up to the present are all preserved.',
+          },
+          {
+            src: app49Image,
+            alt: 'Instagram story archive showing likes remain while viewers disappear after 24 hours',
+            caption:
+              'After 24 hours, the people who viewed the story disappear, but the people who liked the story remain.',
+          },
+        ],
+      },
     ],
   },
   {
@@ -867,7 +957,7 @@ function MainPage({ onRestart }) {
                 {typeof activePageData === 'string' ? (
                   <p>{activePageData}</p>
                 ) : (
-                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints') ? 'is-micro-day-view' : ''}`}>
+                  <div className={`page-entry-layout ${activePageData?.imageSrc || activePageData?.images ? 'has-image' : ''} ${activePageData?.images ? 'has-multiple-images' : ''} ${activePageData?.title === 'Interaction & Aesthetic Trade-offs' ? 'is-aesthetic-tradeoff' : ''} ${activePageData?.title === 'Interaction Psychology & Information Flow' ? 'is-interaction-psychology' : ''} ${(activePageData?.title === 'Micro-Level Precision: Day View' || activePageData?.title === 'Macro-Level Narrative: Insights' || activePageData?.title === 'Navigation and Filtering Constraints' || activePageData?.title === 'Spatiotemporal Triggers & User Agency') ? 'is-micro-day-view' : ''}`}>
                     <div className="page-entry-text-block">
                       <h3 className="page-entry-title">{activePageData?.title}</h3>
                       {Array.isArray(activePageData?.content) ? (
