@@ -521,10 +521,6 @@
   pointer-events: none;
 }
 
-.bookshelf-book.is-collected {
-  background: linear-gradient(180deg, #34566a, #203746 72%);
-}
-
 .bookshelf-book.is-collected::after {
   border-color: rgba(153, 222, 255, 0.9);
   box-shadow: 0 0 24px rgba(133, 203, 255, 0.84), 0 0 42px rgba(143, 220, 255, 0.52);

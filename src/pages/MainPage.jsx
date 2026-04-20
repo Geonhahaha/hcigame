@@ -775,11 +775,6 @@ function MainPage({ onRestart }) {
   }
 
   const switchToDeveloperMode = () => {
-    if (!keyObtained) {
-      setPasswordPopup(true)
-      return
-    }
-
     if (!hasPlayedDevIntro) {
       setShouldAnimateDevIntro(true)
       setHasPlayedDevIntro(true)
