@@ -560,6 +560,7 @@ function MainPage({ onRestart }) {
   const [doorPopup, setDoorPopup] = useState(null)
   const [keyObtained, setKeyObtained] = useState(false)
   const [passwordPopup, setPasswordPopup] = useState(false)
+  const [hintPopupOpen, setHintPopupOpen] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
   const [monitorMode, setMonitorMode] = useState('client')
@@ -753,7 +754,7 @@ function MainPage({ onRestart }) {
   }
 
   const handlePasswordSubmit = () => {
-    if (passwordInput === '0000') {
+    if (passwordInput === '15946') {
       setPasswordMessage('success')
       setKeyObtained(true)
       setPasswordInput('')
@@ -1168,6 +1169,18 @@ apps is reflected in the very structure of this evaluation.</pre>
                 <p>KEY OBTAINED</p>
               </div>
             )}
+
+            <div className="hint-desk">
+              <button
+                type="button"
+                className="hint-note-button"
+                onClick={() => setHintPopupOpen(true)}
+                aria-label="Open password hint note"
+              >
+                <span className="hint-note-title">PASSWORD NOTE</span>
+                <span className="hint-note-sub">Click to inspect</span>
+              </button>
+            </div>
           </div>
           <button
             type="button"
@@ -1300,8 +1313,8 @@ apps is reflected in the very structure of this evaluation.</pre>
                     value={passwordInput}
                     onChange={(e) => setPasswordInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
-                    placeholder="Enter 4 digits"
-                    maxLength="4"
+                    placeholder="Enter 5 digits"
+                    maxLength="5"
                     disabled={!!passwordMessage}
                     aria-label="비밀번호"
                   />
@@ -1312,7 +1325,7 @@ apps is reflected in the very structure of this evaluation.</pre>
                   type="button"
                   className="submit-button"
                   onClick={handlePasswordSubmit}
-                  disabled={passwordInput.length !== 4 || !!passwordMessage}
+                  disabled={passwordInput.length !== 5 || !!passwordMessage}
                 >
                   SUBMIT
                 </button>
@@ -1322,6 +1335,55 @@ apps is reflected in the very structure of this evaluation.</pre>
                   onClick={() => setPasswordPopup(false)}
                 >
                   CANCEL
+                </button>
+              </div>
+            </motion.article>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {hintPopupOpen && (
+          <motion.section
+            className="hint-popup-overlay"
+            key="hint-note"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setHintPopupOpen(false)}
+          >
+            <motion.article
+              className="hint-popup-content"
+              initial={{ y: 36, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 24, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.28 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="popup-body">
+                <h3>
+                  <span className="hint-mark">?</span>
+                  <span className="hint-mark">?</span>
+                  <span className="hint-mark">?</span>
+                  <span className="hint-mark">?</span>
+                  <span className="hint-mark">?</span>
+                </h3>
+                <ol className="hint-list">
+                  <li>His Germany and Austria trip started on March <span className="hint-mark">?</span>.</li>
+                  <li>He listened to Korean R&amp;B in the top <span className="hint-mark">?</span>%.</li>
+                  <li>He visited <span className="hint-mark">?</span> museums in March.</li>
+                  <li>His oldest record is archived in 2019-<span className="hint-mark">?</span> (YYYY-M format).</li>
+                  <li>He went for <span className="hint-mark">?</span> runs in September 2025.</li>
+                </ol>
+              </div>
+              <div className="popup-actions hint-actions">
+                <button
+                  type="button"
+                  className="close-button"
+                  onClick={() => setHintPopupOpen(false)}
+                >
+                  CLOSE NOTE
                 </button>
               </div>
             </motion.article>
