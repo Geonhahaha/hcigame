@@ -1157,6 +1157,7 @@
 }
 
 .monitor-screen {
+  position: relative;
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, #001a00 0%, #000d00 100%);
@@ -1168,14 +1169,43 @@
   gap: 0.45rem;
   font-family: 'Courier New', monospace;
   color: #00ff66;
-  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  font-size: clamp(1.1rem, 1.18vw, 1.2rem);
   line-height: 1.4;
   text-shadow: 0 0 8px #00ff66;
   overflow: hidden;
   animation: monitor-flicker 0.15s infinite;
 }
 
+.monitor-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(125, 255, 190, 0.04) 0,
+    rgba(125, 255, 190, 0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.45;
+}
+
+.monitor-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(123, 255, 186, 0.18), transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(0, 0, 0, 0.5), transparent 45%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22), transparent 14%, transparent 86%, rgba(0, 0, 0, 0.22));
+}
+
 .monitor-screen-content {
+  position: relative;
+  z-index: 1;
   min-height: 0;
   height: 100%;
   overflow-y: auto;
@@ -1221,7 +1251,7 @@
 
 .monitor-rec-title {
   margin: 0 0 0.35rem;
-  font-size: 1.1em;
+  font-size: 1.16em;
   font-weight: 700;
 }
 
@@ -1253,16 +1283,6 @@
 .monitor-mode-button:focus-visible {
   outline: 2px solid rgba(172, 255, 204, 0.95);
   outline-offset: 2px;
-}
-
-.monitor-notice {
-  margin: 0 0 0.55rem;
-  border: 1px solid rgba(0, 255, 102, 0.3);
-  border-radius: 5px;
-  padding: 0.34rem 0.45rem;
-  font-size: 0.78em;
-  color: #98ffca;
-  background: rgba(0, 30, 0, 0.5);
 }
 
 .monitor-recommendation-list {
@@ -1299,13 +1319,14 @@
   margin: 0;
   font-weight: 700;
   line-height: 1.2;
+  font-size: 1.04em;
 }
 
 .monitor-rating {
   margin: 0 0 0 0.5rem;
   padding-left: 0.45rem;
   border-left: 1px solid rgba(0, 255, 102, 0.5);
-  font-size: 0.96em;
+  font-size: 1em;
   letter-spacing: 0.03em;
   font-weight: 700;
   opacity: 0.95;
@@ -1313,104 +1334,182 @@
 
 .monitor-review {
   margin: 0.08rem 0 0;
-  font-size: 0.85em;
-  line-height: 1.25;
+  font-size: 0.9em;
+  line-height: 1.34;
   opacity: 0.95;
 }
 
 .monitor-dev-pane {
+  position: relative;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.76rem;
+  border: 1px solid rgba(79, 255, 154, 0.22);
+  border-radius: 8px;
+  padding: 0.76rem;
+  background:
+    linear-gradient(180deg, rgba(0, 24, 7, 0.46), rgba(0, 9, 3, 0.72)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(87, 255, 164, 0.04) 0,
+      rgba(87, 255, 164, 0.04) 1px,
+      transparent 1px,
+      transparent 19px
+    );
 }
 
-.monitor-dev-subtitle {
+.monitor-dev-pane::before {
+  content: 'root@control-room:~# cat meta-evaluation.log';
+  position: absolute;
+  top: 0.36rem;
+  right: 0.5rem;
+  font-size: 0.62em;
+  color: rgba(146, 255, 200, 0.5);
+  letter-spacing: 0.03em;
+}
+
+.monitor-console-title {
   margin: 0;
-  font-size: 0.82em;
-  color: rgba(152, 255, 204, 0.9);
-}
-
-.monitor-log-label {
-  font-size: 0.78em;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
-.monitor-log-editor {
-  width: 100%;
-  min-height: 124px;
-  resize: vertical;
-  border: 1px solid rgba(0, 255, 102, 0.5);
-  border-radius: 6px;
-  padding: 0.55rem;
-  background: rgba(0, 12, 0, 0.84);
-  color: #95ffc8;
-  font: inherit;
-  line-height: 1.35;
-}
-
-.monitor-log-editor:focus {
-  outline: none;
-  border-color: rgba(138, 255, 190, 0.9);
-  box-shadow: 0 0 10px rgba(0, 255, 102, 0.28);
-}
-
-.monitor-log-save {
-  justify-self: start;
-  border: 1px solid rgba(111, 255, 171, 0.75);
-  border-radius: 5px;
-  padding: 0.38rem 0.62rem;
-  background: linear-gradient(180deg, #2cff81, #129e52);
-  color: #021406;
-  font-family: 'Courier New', monospace;
-  font-size: 0.76em;
+  font-size: 1.08em;
   font-weight: 700;
   letter-spacing: 0.04em;
-  cursor: pointer;
+  color: #adffd2;
 }
 
-.monitor-log-save:hover {
-  filter: brightness(1.07);
+.monitor-console-line {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.45;
+  color: rgba(153, 255, 206, 0.98);
 }
 
-.monitor-log-history {
-  border-top: 1px solid rgba(0, 255, 102, 0.26);
-  padding-top: 0.45rem;
+.monitor-console-section {
   display: grid;
-  gap: 0.4rem;
+  gap: 0.42rem;
+  border-left: 2px solid rgba(99, 255, 172, 0.26);
+  padding-left: 0.58rem;
 }
 
-.monitor-log-history-title {
+.monitor-console-list {
   margin: 0;
-  font-size: 0.78em;
-  font-weight: 700;
-  color: #79ffb5;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
 }
 
-.monitor-log-empty {
+.monitor-console-list li {
   margin: 0;
-  font-size: 0.76em;
-  opacity: 0.82;
+  font-size: 0.88em;
+  line-height: 1.45;
+  color: rgba(141, 255, 198, 0.96);
 }
 
-.monitor-log-entry {
-  border: 1px solid rgba(0, 255, 102, 0.2);
-  border-radius: 5px;
-  padding: 0.36rem 0.42rem;
-  background: rgba(0, 17, 0, 0.7);
-}
-
-.monitor-log-time {
+.monitor-console-comment,
+.monitor-console-note {
   margin: 0;
-  font-size: 0.74em;
-  opacity: 0.88;
-}
-
-.monitor-log-content {
-  margin: 0.2rem 0 0;
-  font: inherit;
+  font-family: 'Courier New', monospace;
   white-space: pre-wrap;
-  font-size: 0.78em;
-  line-height: 1.28;
+  font-size: 0.88em;
+  line-height: 1.5;
+  color: rgba(121, 255, 187, 0.86);
+}
+
+.monitor-console-number {
+  margin: 0;
+  font-size: 0.92em;
+  color: #b6ffdd;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.monitor-console-paragraph {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1.66;
+  letter-spacing: 0.01em;
+  color: rgba(149, 255, 202, 0.94);
+}
+
+.console-typed {
+  display: block;
+}
+
+.console-fade-in {
+  opacity: 1;
+  transform: none;
+}
+
+.dev-intro-animating .console-typed {
+  --line-index: 1;
+  --type-steps: 34;
+  --type-speed: 0.95s;
+  --type-delay-base: 0.26s;
+  opacity: 0;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation:
+    console-line-visible 0.01s linear forwards,
+    console-typewriter var(--type-speed) steps(var(--type-steps)) forwards,
+    console-caret-blink 0.8s steps(1) 4;
+  animation-delay:
+    calc(var(--line-index) * var(--type-delay-base)),
+    calc(var(--line-index) * var(--type-delay-base)),
+    calc(var(--line-index) * var(--type-delay-base));
+}
+
+.dev-intro-animating .console-fade-in {
+  --line-index: 1;
+  --type-delay-base: 0.26s;
+  opacity: 0;
+  transform: translateY(5px);
+  animation: console-fade-in 0.45s ease forwards;
+  animation-delay: calc(var(--line-index) * var(--type-delay-base));
+}
+
+@keyframes console-line-visible {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes console-typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes console-caret-blink {
+  0%,
+  49% {
+    border-right: 2px solid rgba(152, 255, 202, 0.95);
+  }
+  50%,
+  100% {
+    border-right: 2px solid transparent;
+  }
+}
+
+@keyframes console-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dev-intro-animating .console-typed,
+  .dev-intro-animating .console-fade-in {
+    animation: none;
+    opacity: 1;
+    width: auto;
+    transform: none;
+    border-right: none;
+  }
 }
 
 @keyframes monitor-flicker {

@@ -553,8 +553,6 @@ const SHELF_SLOTS = [
 ]
 
 function MainPage({ onRestart }) {
-  const defaultSystemLog =
-    '[2026-04-20 20:00] Meta Evaluation Draft\n- Usability signal:\n- Major friction point:\n- Design revision applied:\n- Next experiment:'
   const [collectedOrbIds, setCollectedOrbIds] = useState([])
   const [activeBookId, setActiveBookId] = useState(null)
   const [activePage, setActivePage] = useState(0)
@@ -565,9 +563,8 @@ function MainPage({ onRestart }) {
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
   const [monitorMode, setMonitorMode] = useState('client')
-  const [monitorNotice, setMonitorNotice] = useState(null)
-  const [systemLogDraft, setSystemLogDraft] = useState(defaultSystemLog)
-  const [systemLogEntries, setSystemLogEntries] = useState([])
+  const [shouldAnimateDevIntro, setShouldAnimateDevIntro] = useState(false)
+  const [hasPlayedDevIntro, setHasPlayedDevIntro] = useState(false)
   const monitorScrollRef = useRef(null)
   const monitorScrollbarRef = useRef(null)
   const [isMonitorScrollbarDragging, setIsMonitorScrollbarDragging] = useState(false)
@@ -672,7 +669,21 @@ function MainPage({ onRestart }) {
     })
 
     return () => cancelAnimationFrame(raf)
-  }, [scene, monitorMode, systemLogEntries.length, syncMonitorScrollbar])
+  }, [scene, monitorMode, syncMonitorScrollbar])
+
+  useEffect(() => {
+    if (!shouldAnimateDevIntro) {
+      return
+    }
+
+    const timeout = window.setTimeout(() => {
+      setShouldAnimateDevIntro(false)
+    }, 6800)
+
+    return () => {
+      window.clearTimeout(timeout)
+    }
+  }, [shouldAnimateDevIntro])
 
   const targetBySlot = useMemo(
     () =>
@@ -745,7 +756,6 @@ function MainPage({ onRestart }) {
     if (passwordInput === '0000') {
       setPasswordMessage('success')
       setKeyObtained(true)
-      setMonitorNotice('Developer mode unlocked. Console authorization granted.')
       setPasswordInput('')
       setTimeout(() => {
         setPasswordPopup(false)
@@ -762,40 +772,20 @@ function MainPage({ onRestart }) {
 
   const switchToClientMode = () => {
     setMonitorMode('client')
-    setMonitorNotice('Client view active: Final recommendation visible.')
   }
 
   const switchToDeveloperMode = () => {
     if (!keyObtained) {
-      setMonitorMode('client')
-      setMonitorNotice('Developer mode locked. Use ENTER PASSWORD first.')
+      setPasswordPopup(true)
       return
+    }
+
+    if (!hasPlayedDevIntro) {
+      setShouldAnimateDevIntro(true)
+      setHasPlayedDevIntro(true)
     }
 
     setMonitorMode('developer')
-    setMonitorNotice('Developer mode active. System log editing enabled.')
-  }
-
-  const appendSystemLog = () => {
-    const trimmedLog = systemLogDraft.trim()
-
-    if (!trimmedLog) {
-      setMonitorNotice('No content to save. Write system log text first.')
-      return
-    }
-
-    const stamp = new Date().toLocaleString('ko-KR', { hour12: false })
-
-    setSystemLogEntries((prev) => [
-      {
-        id: `${Date.now()}-${prev.length}`,
-        timestamp: stamp,
-        content: trimmedLog,
-      },
-      ...prev,
-    ])
-    setSystemLogDraft('')
-    setMonitorNotice('System log saved to developer console history.')
   }
 
   const sceneTitle =
@@ -809,6 +799,12 @@ function MainPage({ onRestart }) {
     setScene(nextScene)
     closeBook()
   }
+
+  const typedStyle = (lineIndex, steps = 34, speed = 0.95) => ({
+    '--line-index': lineIndex,
+    '--type-steps': steps,
+    '--type-speed': `${speed}s`,
+  })
 
   return (
     <main className="case-file">
@@ -1014,8 +1010,6 @@ function MainPage({ onRestart }) {
                     </button>
                   </div>
 
-                  {monitorNotice && <p className="monitor-notice">{monitorNotice}</p>}
-
                   {monitorMode === 'client' && (
                     <>
                       <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
@@ -1069,45 +1063,58 @@ function MainPage({ onRestart }) {
                   )}
 
                   {monitorMode === 'developer' && (
-                    <div className="monitor-dev-pane" aria-label="Developer mode system log panel">
-                      <p className="monitor-rec-title">SYSTEM LOG // DEVELOPER MODE</p>
-                      <p className="monitor-dev-subtitle">
-                        Compose your meta evaluation notes and archive them in the system log history.
-                      </p>
+                    <div
+                      className={`monitor-dev-pane ${shouldAnimateDevIntro ? 'dev-intro-animating' : ''}`}
+                      aria-label="Developer mode system log panel"
+                    >
+                      <p className="monitor-console-title console-typed" style={typedStyle(1, 26, 0.65)}>Meta-evaluation</p>
+                      <p className="monitor-console-line console-typed" style={typedStyle(2, 28, 0.72)}>[SYSTEM_AUDIT_LOG_ENTRY]</p>
+                      <p className="monitor-console-line console-typed" style={typedStyle(3, 44, 0.95)}>&gt; ANALYZING PROJECT_STRUCTURE... [OK]</p>
+                      <p className="monitor-console-line console-typed" style={typedStyle(4, 46, 0.95)}>&gt; LOCATING DESIGN_PRINCIPLES... [OK]</p>
 
-                      <label className="monitor-log-label" htmlFor="system-log-editor">
-                        Write System Log
-                      </label>
-                      <textarea
-                        id="system-log-editor"
-                        className="monitor-log-editor"
-                        value={systemLogDraft}
-                        onChange={(event) => setSystemLogDraft(event.target.value)}
-                        placeholder="Write your latest meta evaluation..."
-                        spellCheck="false"
-                      />
+                      <section className="monitor-console-section">
+                        <p className="monitor-console-line console-typed" style={typedStyle(5, 20, 0.62)}>[STATUS_REPORT]</p>
+                        <ul className="monitor-console-list">
+                          <li className="console-typed" style={typedStyle(6, 38, 0.92)}>DIARY_PLATFORM_INTEGRATION: ACTIVE</li>
+                          <li className="console-typed" style={typedStyle(7, 30, 0.8)}>HCI_PRINCIPLES_APPLIED: TRUE</li>
+                        </ul>
+                      </section>
 
-                      <button
-                        type="button"
-                        className="monitor-log-save"
-                        onClick={appendSystemLog}
-                      >
-                        SAVE TO SYSTEM LOG
-                      </button>
+                      <section className="monitor-console-section">
+                        <p className="monitor-console-line console-typed" style={typedStyle(8, 22, 0.66)}>[SYSTEM_RATIONALE]</p>
+                        <ul className="monitor-console-list">
+                          <li className="console-typed" style={typedStyle(9, 45, 1.05)}>PROJECT_FORMAT: RETRO_FLASH_GAME_ESCAPE_ROOM</li>
+                          <li className="console-typed" style={typedStyle(10, 47, 1.08)}>PRIMARY_DESIGN_PRINCIPLE: AESTHETIC_CONSISTENCY</li>
+                        </ul>
+                      </section>
 
-                      <div className="monitor-log-history">
-                        <p className="monitor-log-history-title">Saved History</p>
-                        {systemLogEntries.length === 0 ? (
-                          <p className="monitor-log-empty">No log entries saved yet.</p>
-                        ) : (
-                          systemLogEntries.map((entry) => (
-                            <article key={entry.id} className="monitor-log-entry">
-                              <p className="monitor-log-time">[{entry.timestamp}]</p>
-                              <pre className="monitor-log-content">{entry.content}</pre>
-                            </article>
-                          ))
-                        )}
-                      </div>
+                      <pre className="monitor-console-comment console-typed" style={typedStyle(11, 58, 1.2)}>// [Meta-evaluation: Design Logic]
+// The project structure is not a mere container for reports,
+// but a functional metaphor for the act of memory retrieval.</pre>
+
+                      <section className="monitor-console-section console-fade-in" style={typedStyle(12, 1, 0.55)}>
+                        <p className="monitor-console-number">1. CONCEPTUAL_ALIGNMENT (Nostalgia as Interface)</p>
+                        <p className="monitor-console-paragraph">The core theme of my project is 'memory'-specifically how different apps allow us to store and look back at our past. I chose the 'point-and-click escape game' format because it is deeply nostalgic to me personally; it reminds me of the old Flash games I used to enjoy. By using this retro format, I wanted the design itself to embody the theme of 'retrieving the past.' The goal was to ensure that the interface is not just a container for the reports, but an extension of the theme: a nostalgic space where the reader explores data, just as the apps analyzed help us explore our own personal history.</p>
+                      </section>
+
+                      <section className="monitor-console-section console-fade-in" style={typedStyle(13, 1, 0.55)}>
+                        <p className="monitor-console-number">2. DESIGN TRADE-OFF (Information vs. Immersion)</p>
+                        <p className="monitor-console-paragraph">I made a calculated trade-off between usability and immersion. For the 'books' where the core analysis resides, I prioritized readability and clarity-using clean layouts and images to ensure the user can digest the analysis without friction. However, for the final recommendation and meta-evaluation in the 'Control Room,' I intentionally shifted the aesthetic. The 'hacker terminal' style (green text on dark background) might be slightly less readable, but it is a conscious design choice to enhance the 'game' atmosphere. By making the evaluation feel like a system hack, I transformed a boring summary into a gamified event, prioritizing the player's emotional immersion over pure textual efficiency.</p>
+                      </section>
+
+                      <section className="monitor-console-section console-fade-in" style={typedStyle(14, 1, 0.55)}>
+                        <p className="monitor-console-number">3. USER_EXPERIENCE_INTEGRATION (Active Engagement)</p>
+                        <p className="monitor-console-paragraph">Reading long reports can often feel like a passive chore. By embedding my analysis into an escape room, I transformed 'reading' into an active 'exploration' task. This structure leverages intrinsic motivation; the user is not just consuming information, they are playing to uncover it. I also tapped into the IKEA Effect-because the reader has to invest effort to solve puzzles and unlock each section to reach the analysis, they value the content significantly more than if it were simply handed to them. By weaving in enjoyment and challenge through gamification, the process becomes an engaging experience where the user feels a sense of ownership over the discoveries they make.</p>
+                      </section>
+
+                      <section className="monitor-console-section">
+                        <p className="monitor-console-line console-typed" style={typedStyle(15, 22, 0.62)}>[DEVELOPER_NOTE]</p>
+                        <pre className="monitor-console-note console-typed" style={typedStyle(16, 58, 1.28)}>The medium is the message. By choosing a retro-interactive format,
+I have ensured that the 'Memory Archiving' theme of the analyzed
+apps is reflected in the very structure of this evaluation.</pre>
+                      </section>
+
+                      <p className="monitor-console-line console-typed" style={typedStyle(17, 38, 0.9)}>&gt; SYSTEM_STATUS: AUDIT_COMPLETE</p>
                     </div>
                   )}
                 </div>
