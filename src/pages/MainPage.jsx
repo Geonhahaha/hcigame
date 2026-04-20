@@ -553,6 +553,8 @@ const SHELF_SLOTS = [
 ]
 
 function MainPage({ onRestart }) {
+  const defaultSystemLog =
+    '[2026-04-20 20:00] Meta Evaluation Draft\n- Usability signal:\n- Major friction point:\n- Design revision applied:\n- Next experiment:'
   const [collectedOrbIds, setCollectedOrbIds] = useState([])
   const [activeBookId, setActiveBookId] = useState(null)
   const [activePage, setActivePage] = useState(0)
@@ -562,6 +564,10 @@ function MainPage({ onRestart }) {
   const [passwordPopup, setPasswordPopup] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
+  const [monitorMode, setMonitorMode] = useState('client')
+  const [monitorNotice, setMonitorNotice] = useState(null)
+  const [systemLogDraft, setSystemLogDraft] = useState(defaultSystemLog)
+  const [systemLogEntries, setSystemLogEntries] = useState([])
   const monitorScrollRef = useRef(null)
   const monitorScrollbarRef = useRef(null)
   const [isMonitorScrollbarDragging, setIsMonitorScrollbarDragging] = useState(false)
@@ -656,6 +662,18 @@ function MainPage({ onRestart }) {
     }
   }, [isMonitorScrollbarDragging, scrollMonitorFromPointer])
 
+  useEffect(() => {
+    if (scene !== 'control-room-interior') {
+      return
+    }
+
+    const raf = requestAnimationFrame(() => {
+      syncMonitorScrollbar()
+    })
+
+    return () => cancelAnimationFrame(raf)
+  }, [scene, monitorMode, systemLogEntries.length, syncMonitorScrollbar])
+
   const targetBySlot = useMemo(
     () =>
       TARGET_BOOKS.reduce((acc, book) => {
@@ -727,6 +745,7 @@ function MainPage({ onRestart }) {
     if (passwordInput === '0000') {
       setPasswordMessage('success')
       setKeyObtained(true)
+      setMonitorNotice('Developer mode unlocked. Console authorization granted.')
       setPasswordInput('')
       setTimeout(() => {
         setPasswordPopup(false)
@@ -739,6 +758,44 @@ function MainPage({ onRestart }) {
         setPasswordMessage(null)
       }, 2000)
     }
+  }
+
+  const switchToClientMode = () => {
+    setMonitorMode('client')
+    setMonitorNotice('Client view active: Final recommendation visible.')
+  }
+
+  const switchToDeveloperMode = () => {
+    if (!keyObtained) {
+      setMonitorMode('client')
+      setMonitorNotice('Developer mode locked. Use ENTER PASSWORD first.')
+      return
+    }
+
+    setMonitorMode('developer')
+    setMonitorNotice('Developer mode active. System log editing enabled.')
+  }
+
+  const appendSystemLog = () => {
+    const trimmedLog = systemLogDraft.trim()
+
+    if (!trimmedLog) {
+      setMonitorNotice('No content to save. Write system log text first.')
+      return
+    }
+
+    const stamp = new Date().toLocaleString('ko-KR', { hour12: false })
+
+    setSystemLogEntries((prev) => [
+      {
+        id: `${Date.now()}-${prev.length}`,
+        timestamp: stamp,
+        content: trimmedLog,
+      },
+      ...prev,
+    ])
+    setSystemLogDraft('')
+    setMonitorNotice('System log saved to developer console history.')
   }
 
   const sceneTitle =
@@ -936,53 +993,123 @@ function MainPage({ onRestart }) {
                   ref={monitorScrollRef}
                   onScroll={syncMonitorScrollbar}
                 >
-                  <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
-                  <div className="monitor-recommendation-list">
-                    <div className="monitor-recommendation-item">
-                      <div className="monitor-app-row">
-                        <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
-                        <p className="monitor-app-name">Apple Photos - Memories</p>
-                        <p className="monitor-rating">★★★☆☆</p>
-                      </div>
-                      <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
-                    </div>
-
-                    <div className="monitor-recommendation-item">
-                      <div className="monitor-app-row">
-                        <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
-                        <p className="monitor-app-name">Youtube Music - Recap</p>
-                        <p className="monitor-rating">★★☆☆☆</p>
-                      </div>
-                      <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
-                    </div>
-
-                    <div className="monitor-recommendation-item">
-                      <div className="monitor-app-row">
-                        <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
-                        <p className="monitor-app-name">Google Maps - Timeline</p>
-                        <p className="monitor-rating">★★★★☆</p>
-                      </div>
-                      <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
-                    </div>
-
-                    <div className="monitor-recommendation-item">
-                      <div className="monitor-app-row">
-                        <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
-                        <p className="monitor-app-name">Instagram - Archive</p>
-                        <p className="monitor-rating">★★★★☆</p>
-                      </div>
-                      <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
-                    </div>
-
-                    <div className="monitor-recommendation-item">
-                      <div className="monitor-app-row">
-                        <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
-                        <p className="monitor-app-name">Nike Run Club - Activity</p>
-                        <p className="monitor-rating">★★★★☆</p>
-                      </div>
-                      <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
-                    </div>
+                  <div className="monitor-view-switch" role="tablist" aria-label="Monitor mode switch">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={monitorMode === 'client'}
+                      className={`monitor-mode-button ${monitorMode === 'client' ? 'is-active' : ''}`}
+                      onClick={switchToClientMode}
+                    >
+                      CLIENT VIEW
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={monitorMode === 'developer'}
+                      className={`monitor-mode-button ${monitorMode === 'developer' ? 'is-active' : ''}`}
+                      onClick={switchToDeveloperMode}
+                    >
+                      DEV MODE
+                    </button>
                   </div>
+
+                  {monitorNotice && <p className="monitor-notice">{monitorNotice}</p>}
+
+                  {monitorMode === 'client' && (
+                    <>
+                      <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
+                      <div className="monitor-recommendation-list">
+                        <div className="monitor-recommendation-item">
+                          <div className="monitor-app-row">
+                            <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
+                            <p className="monitor-app-name">Apple Photos - Memories</p>
+                            <p className="monitor-rating">★★★☆☆</p>
+                          </div>
+                          <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
+                        </div>
+
+                        <div className="monitor-recommendation-item">
+                          <div className="monitor-app-row">
+                            <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
+                            <p className="monitor-app-name">Youtube Music - Recap</p>
+                            <p className="monitor-rating">★★☆☆☆</p>
+                          </div>
+                          <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
+                        </div>
+
+                        <div className="monitor-recommendation-item">
+                          <div className="monitor-app-row">
+                            <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
+                            <p className="monitor-app-name">Google Maps - Timeline</p>
+                            <p className="monitor-rating">★★★★☆</p>
+                          </div>
+                          <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
+                        </div>
+
+                        <div className="monitor-recommendation-item">
+                          <div className="monitor-app-row">
+                            <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
+                            <p className="monitor-app-name">Instagram - Archive</p>
+                            <p className="monitor-rating">★★★★☆</p>
+                          </div>
+                          <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
+                        </div>
+
+                        <div className="monitor-recommendation-item">
+                          <div className="monitor-app-row">
+                            <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
+                            <p className="monitor-app-name">Nike Run Club - Activity</p>
+                            <p className="monitor-rating">★★★★☆</p>
+                          </div>
+                          <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {monitorMode === 'developer' && (
+                    <div className="monitor-dev-pane" aria-label="Developer mode system log panel">
+                      <p className="monitor-rec-title">SYSTEM LOG // DEVELOPER MODE</p>
+                      <p className="monitor-dev-subtitle">
+                        Compose your meta evaluation notes and archive them in the system log history.
+                      </p>
+
+                      <label className="monitor-log-label" htmlFor="system-log-editor">
+                        Write System Log
+                      </label>
+                      <textarea
+                        id="system-log-editor"
+                        className="monitor-log-editor"
+                        value={systemLogDraft}
+                        onChange={(event) => setSystemLogDraft(event.target.value)}
+                        placeholder="Write your latest meta evaluation..."
+                        spellCheck="false"
+                      />
+
+                      <button
+                        type="button"
+                        className="monitor-log-save"
+                        onClick={appendSystemLog}
+                      >
+                        SAVE TO SYSTEM LOG
+                      </button>
+
+                      <div className="monitor-log-history">
+                        <p className="monitor-log-history-title">Saved History</p>
+                        {systemLogEntries.length === 0 ? (
+                          <p className="monitor-log-empty">No log entries saved yet.</p>
+                        ) : (
+                          systemLogEntries.map((entry) => (
+                            <article key={entry.id} className="monitor-log-entry">
+                              <p className="monitor-log-time">[{entry.timestamp}]</p>
+                              <pre className="monitor-log-content">{entry.content}</pre>
+                            </article>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div
                   className="monitor-scrollbar"
@@ -1039,16 +1166,6 @@ function MainPage({ onRestart }) {
                 <p>KEY OBTAINED</p>
               </div>
             )}
-            <div className="desk">
-              <button
-                type="button"
-                className="control-room-book"
-                onClick={() => setActiveBookId('control-book')}
-                aria-label="콘솔 책 읽기"
-              >
-                <span className="book-title-small">System Log</span>
-              </button>
-            </div>
           </div>
           <button
             type="button"
@@ -1359,43 +1476,6 @@ function MainPage({ onRestart }) {
         </>
       )}
 
-      <AnimatePresence mode="wait">
-        {activeBookId === 'control-book' && (
-          <motion.section
-            className="memory-overlay"
-            key="control-book"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            onClick={() => setActiveBookId(null)}
-          >
-            <motion.article
-              className="book-popup"
-              initial={{ y: 40, opacity: 0, scale: 0.98 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 28, opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.32 }}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="spread-tag">System Log</div>
-              <h2>Access Log</h2>
-              <section className="book-page-body">
-                <p className="access-log">Password: 0000</p>
-              </section>
-            </motion.article>
-
-            <button
-              type="button"
-              className="close-button"
-              onClick={() => setActiveBookId(null)}
-              aria-label="로그 닫기"
-            >
-              ✕
-            </button>
-          </motion.section>
-        )}
-      </AnimatePresence>
     </main>
   )
 }
