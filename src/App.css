@@ -255,14 +255,14 @@
 
 .door-scene {
   position: relative;
-  min-height: 430px;
+  min-height: 500px;
   border-radius: 18px;
   border: 1px solid rgba(210, 177, 124, 0.28);
   background-image: linear-gradient(180deg, #4f3a24 0%, #392817 74%, #302113 74%, #281b10 100%);
   display: grid;
   justify-items: center;
-  align-content: center;
-  padding: 1rem 1rem 1rem;
+  align-content: stretch;
+  padding: 0.8rem 1rem 0;
   overflow: hidden;
 }
 
@@ -283,8 +283,11 @@
 }
 
 .door-top-label {
-  margin: 0 0 0.55rem;
-  position: relative;
+  margin: 0;
+  position: absolute;
+  top: 0.72rem;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 0.82rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -295,6 +298,77 @@
   border: 1px solid rgba(238, 206, 156, 0.25);
   border-radius: 999px;
   padding: 0.24rem 0.62rem;
+}
+
+.image-door-button {
+  width: min(460px, 78vw);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  z-index: 2;
+  transition: transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+.exit-door-button {
+  width: min(520px, 86vw);
+  bottom: -34px;
+}
+
+.control-door-button {
+  width: min(470px, 76vw);
+  bottom: -6px;
+}
+
+.image-door-button:hover,
+.image-door-button:focus-visible {
+  transform: translateX(-50%) scale(1.02);
+}
+
+.image-door-button:active {
+  transform: translateX(-50%) scale(0.992);
+}
+
+.image-door {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  clip-path: inset(0 0 2.5% 0);
+}
+
+.exit-door-button .image-door {
+  clip-path: inset(0 0 10.5% 0);
+}
+
+.control-door-button .image-door {
+  clip-path: inset(0 0 2% 0);
+}
+
+.door-warning-sign {
+  position: absolute;
+  top: 24%;
+  left: 51%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: min(118px, 18.5vw);
+  pointer-events: none;
+}
+
+.door-warning-sign img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: none;
 }
 
 .single-door {

@@ -59,6 +59,9 @@ import instagramIcon from '../assets/instagram.png'
 import instagramLineIcon from '../assets/instagram_line.png'
 import nikeIcon from '../assets/nike.png'
 import nikeLineIcon from '../assets/nike_line.png'
+import controlRoomDoorImage from '../assets/control room.png'
+import exitDoorImage from '../assets/exit.png'
+import noExitSignImage from '../assets/no exit.png'
 
 const BOOK_ICON_BY_ID = {
   'book-1': applePhotosIcon,
@@ -927,12 +930,11 @@ function MainPage({ onRestart }) {
           <p className="door-top-label">Exit</p>
           <button
             type="button"
-            className="single-door keyhole-door door-interactive"
+            className="image-door-button exit-door-button"
             onClick={() => setDoorPopup('exit')}
             aria-label="Interact with Exit door"
           >
-            <span className="door-handle" />
-            <span className="keyhole" />
+            <img className="image-door" src={exitDoorImage} alt="Exit door" />
           </button>
           <button
             type="button"
@@ -948,20 +950,18 @@ function MainPage({ onRestart }) {
       {scene === 'control-room-door' && (
         <section className="door-scene" aria-label="Control Room door scene">
           <p className="door-top-label">Control Room</p>
-          <motion.button
+          <button
             type="button"
-            className="single-door barred-door door-interactive"
+            className="image-door-button control-door-button"
             onClick={() => setDoorPopup('control-room')}
             aria-label="Interact with Control Room door"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
           >
-            <span className="bar" />
-            <span className="bar" />
-            <span className="bar" />
-            <span className="bar" />
-            <span className="auth-plate">Authorized Personnel Only</span>
-          </motion.button>
+            <img className="image-door" src={controlRoomDoorImage} alt="Control Room door" />
+            <span className="door-warning-sign" aria-hidden="true">
+              <img src={noExitSignImage} alt="" />
+            </span>
+          </button>
+
           <button
             type="button"
             className="door-arrow return-left"
