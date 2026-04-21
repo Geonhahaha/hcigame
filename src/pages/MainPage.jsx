@@ -786,10 +786,10 @@ function MainPage({ onRestart }) {
 
   const sceneTitle =
     scene === 'library'
-      ? '빛나는 책에서 기억 구슬 회수하기'
+      ? 'Retrieve Memory Orbs from Glowing Books'
       : scene === 'exit-door'
-        ? '열쇠 구멍이 있는 출구 문'
-        : '통제 구역으로 연결되는 문'
+        ? 'Exit Door with Keyhole'
+        : 'Door Leading to the Control Zone'
 
   const goToScene = (nextScene) => {
     setScene(nextScene)
@@ -811,7 +811,7 @@ function MainPage({ onRestart }) {
         </div>
         <div className="progress-info" aria-live="polite">
           <p className="progress">
-            수집한 구슬 <strong>{collectedCount}</strong> / {totalBooks}
+            Collected Orbs <strong>{collectedCount}</strong> / {totalBooks}
           </p>
           {keyObtained && (
             <p className="progress key-status">
@@ -822,12 +822,12 @@ function MainPage({ onRestart }) {
       </header>
 
       {scene === 'library' && (
-        <section className="bookshelf-scene" aria-label="도서관 책장">
+        <section className="bookshelf-scene" aria-label="Library bookshelf">
           <button
             type="button"
             className="scene-nav-button left"
             onClick={() => goToScene('exit-door')}
-            aria-label="Exit 문 화면으로 이동"
+            aria-label="Go to Exit door scene"
           >
             ←
           </button>
@@ -836,7 +836,7 @@ function MainPage({ onRestart }) {
             type="button"
             className="scene-nav-button right"
             onClick={() => goToScene('control-room-door')}
-            aria-label="Control Room 문 화면으로 이동"
+            aria-label="Go to Control Room door scene"
           >
             →
           </button>
@@ -872,7 +872,7 @@ function MainPage({ onRestart }) {
                   transition={{ delay: index * 0.08, duration: 0.35 }}
                   whileHover={{ scale: 1.08, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  aria-label={`${targetBook.title} 열기`}
+                  aria-label={`Open ${targetBook.title}`}
                 >
                   <span className="book-spine">{targetBook.title}</span>
                 </motion.button>
@@ -911,7 +911,7 @@ function MainPage({ onRestart }) {
                   transition={{ delay: index * 0.08 + 0.15, duration: 0.35 }}
                   whileHover={{ scale: 1.08, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  aria-label={`${targetBook.title} 열기`}
+                  aria-label={`Open ${targetBook.title}`}
                 >
                   <span className="book-spine">{targetBook.title}</span>
                 </motion.button>
@@ -923,13 +923,13 @@ function MainPage({ onRestart }) {
       )}
 
       {scene === 'exit-door' && (
-        <section className="door-scene" aria-label="Exit 문 화면">
+        <section className="door-scene" aria-label="Exit door scene">
           <p className="door-top-label">Exit</p>
           <button
             type="button"
             className="single-door keyhole-door door-interactive"
             onClick={() => setDoorPopup('exit')}
-            aria-label="Exit 문과 상호작용하기"
+            aria-label="Interact with Exit door"
           >
             <span className="door-handle" />
             <span className="keyhole" />
@@ -938,7 +938,7 @@ function MainPage({ onRestart }) {
             type="button"
             className="door-arrow return-right"
             onClick={() => goToScene('library')}
-            aria-label="책장 화면으로 돌아가기"
+            aria-label="Return to bookshelf scene"
           >
             →
           </button>
@@ -946,13 +946,13 @@ function MainPage({ onRestart }) {
       )}
 
       {scene === 'control-room-door' && (
-        <section className="door-scene" aria-label="Control Room 문 화면">
+        <section className="door-scene" aria-label="Control Room door scene">
           <p className="door-top-label">Control Room</p>
           <motion.button
             type="button"
             className="single-door barred-door door-interactive"
             onClick={() => setDoorPopup('control-room')}
-            aria-label="Control Room 문과 상호작용하기"
+            aria-label="Interact with Control Room door"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -966,7 +966,7 @@ function MainPage({ onRestart }) {
             type="button"
             className="door-arrow return-left"
             onClick={() => goToScene('library')}
-            aria-label="책장 화면으로 돌아가기"
+            aria-label="Return to bookshelf scene"
           >
             ←
           </button>
@@ -974,7 +974,7 @@ function MainPage({ onRestart }) {
       )}
 
       {scene === 'control-room-interior' && (
-        <section className="control-room-interior" aria-label="Control Room 내부">
+        <section className="control-room-interior" aria-label="Inside the Control Room">
           <h2 className="room-title">Control Room</h2>
           <div className="interior-content">
             <div className="monitor">
@@ -1157,7 +1157,7 @@ apps is reflected in the very structure of this evaluation.</pre>
                   type="button"
                   className="console-button"
                   onClick={() => setPasswordPopup(true)}
-                  aria-label="비밀번호 입력"
+                  aria-label="Enter password"
                 >
                   ENTER PASSWORD
                 </button>
@@ -1186,7 +1186,7 @@ apps is reflected in the very structure of this evaluation.</pre>
             type="button"
             className="door-arrow bottom-arrow"
             onClick={() => goToScene('control-room-door')}
-            aria-label="Control Room 문으로 돌아가기"
+            aria-label="Return to Control Room door"
           >
             ↓
           </button>
@@ -1316,7 +1316,7 @@ apps is reflected in the very structure of this evaluation.</pre>
                     placeholder="Enter 5 digits"
                     maxLength="5"
                     disabled={!!passwordMessage}
-                    aria-label="비밀번호"
+                    aria-label="Password"
                   />
                 </div>
               </div>
@@ -1485,20 +1485,20 @@ apps is reflected in the very structure of this evaluation.</pre>
                 {isLastPage && (
                     <div className="orb-collect-zone">
                       <p className="orb-instruction">
-                        <span className="orb-arrow">v</span> 아래 구슬을 눌러 수집하세요
+                        <span className="orb-arrow">v</span> Press the orb below to collect it
                       </p>
                       <button
                         type="button"
                         className={`collectible-orb ${isActiveOrbCollected ? 'is-collected' : ''}`}
                         onClick={collectOrb}
-                        aria-label="빛나는 구슬 수집"
+                        aria-label="Collect glowing orb"
                       >
                         <span className="orb-inner" />
                       </button>
                       <p className="orb-state">
                         {isActiveOrbCollected
-                          ? '수집 완료: 기록이 안전하게 보관되었습니다.'
-                          : '아직 수집되지 않았습니다.'}
+                          ? 'Collected: This record has been archived safely.'
+                          : 'Not collected yet.'}
                       </p>
                     </div>
                 )}
@@ -1533,7 +1533,7 @@ apps is reflected in the very structure of this evaluation.</pre>
             type="button"
             className="close-button"
             onClick={closeBook}
-            aria-label="책장으로 돌아가기"
+            aria-label="Return to bookshelf"
           >
             ✕
           </button>

@@ -5,7 +5,7 @@ function StartPage({ onEnter }) {
     <main className="start-page">
       <h1 className="start-title">Memory Library</h1>
 
-      <section className="start-hero" aria-label="시작 화면">
+      <section className="start-hero" aria-label="Start screen">
         <motion.div
           className="start-placeholder"
           initial={{ opacity: 0, y: 14 }}
