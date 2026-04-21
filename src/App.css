@@ -165,6 +165,18 @@
   align-items: center;
 }
 
+.progress-notes-group {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.progress-notes-help {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(240, 224, 193, 0.8);
+  letter-spacing: 0.01em;
+}
+
 .progress {
   margin: 0;
   padding: 0.6rem 0.85rem;
@@ -173,6 +185,21 @@
   background: rgba(0, 0, 0, 0.26);
   font-size: 0.95rem;
   color: #edd6ad;
+}
+
+.progress-notes-button {
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.progress-notes-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(245, 226, 192, 0.52);
+}
+
+.progress-notes-button:focus-visible {
+  outline: 2px solid #fff6e6;
+  outline-offset: 2px;
 }
 
 .progress strong {
@@ -897,70 +924,62 @@
   }
 }
 
-.orb-collect-zone {
+.note-collect-zone {
   margin-top: 1rem;
   display: grid;
   justify-items: center;
   gap: 0.55rem;
 }
 
-.orb-instruction {
+.note-instruction {
   margin: 0;
   font-size: 0.92rem;
   color: #5f3e20;
   font-weight: 600;
 }
 
-.orb-arrow {
+.note-arrow {
   display: inline-block;
   margin-right: 0.25rem;
   color: #8d5a27;
   animation: bounce-arrow 1s ease-in-out infinite;
 }
 
-.collectible-orb {
+.torn-note-button {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 94px;
+  height: 94px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 12px;
   background: transparent;
   cursor: pointer;
+  padding: 0;
+  transition: transform 0.22s ease;
 }
 
-.collectible-orb::before {
-  content: '';
-  position: absolute;
-  inset: -7px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 198, 106, 0.85);
-  box-shadow: 0 0 22px rgba(255, 191, 92, 0.8);
-  animation: orb-ring 1.6s ease-out infinite;
+.torn-note-button:hover {
+  transform: translateY(-3px);
 }
 
-.orb-inner {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff4cc, #ffd487 40%, #cb7d2d 78%);
-  box-shadow: inset 0 -4px 10px rgba(99, 54, 11, 0.35);
+.torn-note-button img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 14px rgba(58, 40, 18, 0.34));
 }
 
-.collectible-orb.is-collected::before {
-  border-color: rgba(134, 215, 255, 0.86);
-  box-shadow: 0 0 22px rgba(114, 194, 241, 0.88);
+.torn-note-button.is-collected img {
+  filter:
+    drop-shadow(0 0 12px rgba(123, 198, 255, 0.68))
+    drop-shadow(0 10px 12px rgba(58, 40, 18, 0.3));
 }
 
-.collectible-orb.is-collected .orb-inner {
-  background: radial-gradient(circle at 30% 30%, #e5f8ff, #9ed9f3 42%, #4979a0 80%);
-}
-
-.collectible-orb:focus-visible {
+.torn-note-button:focus-visible {
   outline: 2px solid #fff6e7;
   outline-offset: 3px;
 }
 
-.orb-state {
+.note-state {
   margin: 0;
   font-size: 0.82rem;
   color: #704824;
@@ -1041,17 +1060,6 @@
   100% {
     opacity: 0.78;
     transform: scale(0.98);
-  }
-}
-
-@keyframes orb-ring {
-  0% {
-    opacity: 0.95;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.25);
   }
 }
 
@@ -1136,7 +1144,7 @@
   color: #e8d9c5;
 }
 
-.door-orb-counter {
+.door-note-counter {
   margin: 1rem 0 0 0;
   font-size: 1rem;
   color: #d4c4aa;
@@ -2037,14 +2045,6 @@
   letter-spacing: 0.18em;
 }
 
-.hint-mark {
-  display: inline-block;
-  color: #7a1f16;
-  font-weight: 800;
-  text-shadow: 0 0 8px rgba(255, 196, 110, 0.65);
-  transform: translateY(-0.5px);
-}
-
 .hint-list {
   margin: 0;
   padding-left: 1.15rem;
@@ -2052,6 +2052,71 @@
   gap: 0.58rem;
   line-height: 1.5;
   font-size: 0.98rem;
+}
+
+.hint-list strong {
+  color: #513117;
+}
+
+.hint-empty {
+  margin: 0;
+  text-align: center;
+  color: #6b4c2d;
+}
+
+.collected-note-board {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.collected-note-slot {
+  position: relative;
+  min-height: 152px;
+  display: grid;
+  place-items: center;
+}
+
+.collected-note-slot img {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+}
+
+.collected-note-slot-text {
+  position: absolute;
+  inset: 14% 17% 18%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: 'Bradley Hand', 'Segoe Print', 'Comic Sans MS', cursive;
+  color: #3f2b18;
+}
+
+.collected-note-slot-text p {
+  margin: 0;
+  line-height: 1.42;
+  font-size: 0.9rem;
+}
+
+.collected-note-slot.is-missing img {
+  opacity: 0.48;
+  filter: grayscale(0.24);
+}
+
+.collected-note-slot.is-missing .collected-note-slot-text p {
+  letter-spacing: 0.05em;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(72, 50, 28, 0.72);
+}
+
+.collected-note-slot:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(50%, 260px);
 }
 
 .hint-popup-content .popup-actions {
@@ -2074,6 +2139,92 @@
 
 .hint-popup-content .close-button:hover {
   background: linear-gradient(135deg, #84572b, #5f3f1f);
+}
+
+.note-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 9, 6, 0.74);
+  display: grid;
+  place-items: center;
+  z-index: 1300;
+}
+
+.note-detail-card {
+  position: relative;
+  width: min(760px, 94vw);
+  max-height: 90vh;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #332310;
+  box-shadow: none;
+}
+
+.note-paper-stage {
+  position: relative;
+  width: min(100%, 680px);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transform: translateY(-3.5vh);
+}
+
+.note-paper-image {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  height: auto;
+}
+
+.note-paper-text {
+  position: absolute;
+  inset: 12% 17% 18%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 0;
+  color: #3f2b18;
+  font-family: 'Bradley Hand', 'Segoe Print', 'Comic Sans MS', cursive;
+}
+
+.note-paper-hint {
+  margin: 0;
+  max-width: 86%;
+  line-height: 1.5;
+  font-size: 1.34rem;
+  font-weight: 700;
+}
+
+.note-inline-close {
+  position: absolute;
+  left: 50%;
+  bottom: 9.5%;
+  transform: translateX(-50%);
+  border: 1px solid rgba(88, 58, 29, 0.55);
+  border-radius: 999px;
+  background: rgba(248, 236, 207, 0.84);
+  color: #3a2714;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  z-index: 6;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.note-inline-close:hover {
+  transform: translateX(-50%) translateY(-1px);
+  background: rgba(255, 245, 218, 0.95);
+}
+
+.note-inline-close:focus-visible {
+  outline: 2px solid #fff7e4;
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {

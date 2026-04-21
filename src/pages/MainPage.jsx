@@ -62,6 +62,7 @@ import nikeLineIcon from '../assets/nike_line.png'
 import controlRoomDoorImage from '../assets/control room.png'
 import exitDoorImage from '../assets/exit.png'
 import noExitSignImage from '../assets/no exit.png'
+import notePaperImage from '../assets/note.png'
 
 const BOOK_ICON_BY_ID = {
   'book-1': applePhotosIcon,
@@ -70,6 +71,16 @@ const BOOK_ICON_BY_ID = {
   'book-4': instagramIcon,
   'book-5': nikeIcon,
 }
+
+const PASSWORD_HINT_BY_BOOK_ID = {
+  'book-1': '1. His Germany and Austria trip started on March ?.',
+  'book-2': '2. He listened to Korean R&B in the top ?%.',
+  'book-3': '3. He visited ? museums in March.',
+  'book-4': '4. His oldest record is archived in 2019-? (YYYY-M format).',
+  'book-5': '5. He went for ? runs in September 2025.',
+}
+
+const NOTE_SLOT_BOOK_IDS = ['book-1', 'book-2', 'book-3', 'book-4', 'book-5']
 
 const TARGET_BOOKS = [
   {
@@ -556,14 +567,17 @@ const SHELF_SLOTS = [
 ]
 
 function MainPage({ onRestart }) {
-  const [collectedOrbIds, setCollectedOrbIds] = useState([])
+  const [collectedNoteIds, setCollectedNoteIds] = useState([])
   const [activeBookId, setActiveBookId] = useState(null)
+  const [activeNoteDetailBookId, setActiveNoteDetailBookId] = useState(null)
   const [activePage, setActivePage] = useState(0)
   const [scene, setScene] = useState('library')
   const [doorPopup, setDoorPopup] = useState(null)
   const [keyObtained, setKeyObtained] = useState(false)
+  const [controlRoomAccessGranted, setControlRoomAccessGranted] = useState(false)
   const [passwordPopup, setPasswordPopup] = useState(false)
-  const [hintPopupOpen, setHintPopupOpen] = useState(false)
+  const [passwordPopupMode, setPasswordPopupMode] = useState('key')
+  const [collectedNotesPopupOpen, setCollectedNotesPopupOpen] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
   const [monitorMode, setMonitorMode] = useState('client')
@@ -713,17 +727,22 @@ function MainPage({ onRestart }) {
     [activeBookId],
   )
 
+  const activeNoteDetailBook = useMemo(
+    () => TARGET_BOOKS.find((book) => book.id === activeNoteDetailBookId) ?? null,
+    [activeNoteDetailBookId],
+  )
+
   const activePageData = activeBook ? activeBook.pages[activePage] : null
   const activeBookIcon = activeBook ? BOOK_ICON_BY_ID[activeBook.id] : null
   const totalPages = activeBook ? activeBook.pages.length : 0
 
-  const collectedCount = collectedOrbIds.length
+  const collectedCount = collectedNoteIds.length
   const totalBooks = TARGET_BOOKS.length
   const isLastPage = activeBook
     ? activePage === activeBook.pages.length - 1
     : false
-  const isActiveOrbCollected = activeBook
-    ? collectedOrbIds.includes(activeBook.id)
+  const isActiveNoteCollected = activeBook
+    ? collectedNoteIds.includes(activeBook.id)
     : false
 
   const openBook = (bookId) => {
@@ -746,32 +765,57 @@ function MainPage({ onRestart }) {
     }, 0)
   }
 
-  const collectOrb = () => {
-    if (!activeBook) {
+  const collectNote = (bookId) => {
+    if (!bookId) {
       return
     }
 
-    setCollectedOrbIds((prev) =>
-      prev.includes(activeBook.id) ? prev : [...prev, activeBook.id],
+    setCollectedNoteIds((prev) =>
+      prev.includes(bookId) ? prev : [...prev, bookId],
     )
   }
 
+  const openNoteDetail = (bookId) => {
+    collectNote(bookId)
+    setActiveNoteDetailBookId(bookId)
+  }
+
+  const openPasswordPopup = (mode) => {
+    setPasswordPopupMode(mode)
+    setPasswordMessage(null)
+    setPasswordInput('')
+    setPasswordPopup(true)
+  }
+
   const handlePasswordSubmit = () => {
-    if (passwordInput === '15946') {
-      setPasswordMessage('success')
-      setKeyObtained(true)
-      setPasswordInput('')
-      setTimeout(() => {
-        setPasswordPopup(false)
-        setPasswordMessage(null)
-      }, 2000)
-    } else {
+    if (passwordInput !== '15946') {
       setPasswordMessage('error')
       setPasswordInput('')
       setTimeout(() => {
         setPasswordMessage(null)
       }, 2000)
+      return
     }
+
+    setPasswordMessage('success')
+
+    if (passwordPopupMode === 'control-room') {
+      setControlRoomAccessGranted(true)
+      setTimeout(() => {
+        setPasswordPopup(false)
+        setPasswordMessage(null)
+        setDoorPopup(null)
+        goToScene('control-room-interior')
+      }, 900)
+      return
+    }
+
+    setKeyObtained(true)
+    setPasswordInput('')
+    setTimeout(() => {
+      setPasswordPopup(false)
+      setPasswordMessage(null)
+    }, 2000)
   }
 
   const switchToClientMode = () => {
@@ -789,7 +833,7 @@ function MainPage({ onRestart }) {
 
   const sceneTitle =
     scene === 'library'
-      ? 'Retrieve Memory Orbs from Glowing Books'
+      ? 'Retrieve Torn Notes from Glowing Books'
       : scene === 'exit-door'
         ? 'Exit Door with Keyhole'
         : 'Door Leading to the Control Zone'
@@ -813,9 +857,17 @@ function MainPage({ onRestart }) {
           <h1>{sceneTitle}</h1>
         </div>
         <div className="progress-info" aria-live="polite">
-          <p className="progress">
-            Collected Orbs <strong>{collectedCount}</strong> / {totalBooks}
-          </p>
+          <div className="progress-notes-group">
+            <button
+              type="button"
+              className="progress progress-notes-button"
+              onClick={() => setCollectedNotesPopupOpen(true)}
+              aria-label="View collected notes"
+            >
+              Collected Notes <strong>{collectedCount}</strong> / {totalBooks}
+            </button>
+            <p className="progress-notes-help">Click to review all collected note hints.</p>
+          </div>
           {keyObtained && (
             <p className="progress key-status">
               🔑 <strong>KEY OBTAINED</strong>
@@ -861,7 +913,7 @@ function MainPage({ onRestart }) {
                 )
               }
 
-              const isCollected = collectedOrbIds.includes(targetBook.id)
+              const isCollected = collectedNoteIds.includes(targetBook.id)
 
               return (
                 <motion.button
@@ -900,7 +952,7 @@ function MainPage({ onRestart }) {
                 )
               }
 
-              const isCollected = collectedOrbIds.includes(targetBook.id)
+              const isCollected = collectedNoteIds.includes(targetBook.id)
 
               return (
                 <motion.button
@@ -1156,7 +1208,7 @@ apps is reflected in the very structure of this evaluation.</pre>
                 <button
                   type="button"
                   className="console-button"
-                  onClick={() => setPasswordPopup(true)}
+                  onClick={() => openPasswordPopup('key')}
                   aria-label="Enter password"
                 >
                   ENTER PASSWORD
@@ -1170,17 +1222,6 @@ apps is reflected in the very structure of this evaluation.</pre>
               </div>
             )}
 
-            <div className="hint-desk">
-              <button
-                type="button"
-                className="hint-note-button"
-                onClick={() => setHintPopupOpen(true)}
-                aria-label="Open password hint note"
-              >
-                <span className="hint-note-title">PASSWORD NOTE</span>
-                <span className="hint-note-sub">Click to inspect</span>
-              </button>
-            </div>
           </div>
           <button
             type="button"
@@ -1219,12 +1260,12 @@ apps is reflected in the very structure of this evaluation.</pre>
                     ? keyObtained
                       ? '🔑 Congratulation! You escaped!'
                       : "You'll need a key to get out of here."
-                    : 'This door has 5 key holes. You need all 5 orbs to unlock it.'}
+                    : 'This door is protected by a 5-digit password lock. Collect all 5 notes to decode it.'}
                 </p>
-                <p className="door-orb-counter">
+                <p className="door-note-counter">
                   {doorPopup === 'control-room' && (
                     <>
-                      Orbs Collected: <span className="counter-value">{collectedCount} / 5</span>
+                      Notes Collected: <span className="counter-value">{collectedCount} / 5</span>
                     </>
                   )}
                 </p>
@@ -1245,13 +1286,18 @@ apps is reflected in the very structure of this evaluation.</pre>
                     Escape
                   </motion.button>
                 )}
-                {doorPopup === 'control-room' && collectedCount === 5 && (
+                {doorPopup === 'control-room' && (
                   <motion.button
                     type="button"
                     className="enter-button"
                     onClick={() => {
-                      setDoorPopup(null)
-                      goToScene('control-room-interior')
+                      if (controlRoomAccessGranted) {
+                        setDoorPopup(null)
+                        goToScene('control-room-interior')
+                        return
+                      }
+
+                      openPasswordPopup('control-room')
                     }}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -1293,7 +1339,11 @@ apps is reflected in the very structure of this evaluation.</pre>
               onClick={(event) => event.stopPropagation()}
             >
               <div className="popup-body">
-                <h3>ENTER PASSWORD</h3>
+                <h3>
+                  {passwordPopupMode === 'control-room'
+                    ? 'ENTER CONTROL ROOM PASSWORD'
+                    : 'ENTER PASSWORD'}
+                </h3>
                 {passwordMessage && (
                   <motion.p
                     className={`password-feedback ${passwordMessage}`}
@@ -1302,7 +1352,9 @@ apps is reflected in the very structure of this evaluation.</pre>
                     exit={{ opacity: 0 }}
                   >
                     {passwordMessage === 'success'
-                      ? '✓ Correct! You obtained the key.'
+                      ? passwordPopupMode === 'control-room'
+                        ? '✓ Access granted. Entering Control Room...'
+                        : '✓ Correct! You obtained the key.'
                       : '✗ Incorrect password.'}
                   </motion.p>
                 )}
@@ -1332,7 +1384,11 @@ apps is reflected in the very structure of this evaluation.</pre>
                 <button
                   type="button"
                   className="close-button"
-                  onClick={() => setPasswordPopup(false)}
+                  onClick={() => {
+                    setPasswordPopup(false)
+                    setPasswordMessage(null)
+                    setPasswordInput('')
+                  }}
                 >
                   CANCEL
                 </button>
@@ -1343,15 +1399,15 @@ apps is reflected in the very structure of this evaluation.</pre>
       </AnimatePresence>
 
       <AnimatePresence>
-        {hintPopupOpen && (
+        {collectedNotesPopupOpen && (
           <motion.section
             className="hint-popup-overlay"
-            key="hint-note"
+            key="collected-notes"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            onClick={() => setHintPopupOpen(false)}
+            onClick={() => setCollectedNotesPopupOpen(false)}
           >
             <motion.article
               className="hint-popup-content"
@@ -1362,28 +1418,76 @@ apps is reflected in the very structure of this evaluation.</pre>
               onClick={(event) => event.stopPropagation()}
             >
               <div className="popup-body">
-                <h3>
-                  <span className="hint-mark">?</span>
-                  <span className="hint-mark">?</span>
-                  <span className="hint-mark">?</span>
-                  <span className="hint-mark">?</span>
-                  <span className="hint-mark">?</span>
-                </h3>
-                <ol className="hint-list">
-                  <li>His Germany and Austria trip started on March <span className="hint-mark">?</span>.</li>
-                  <li>He listened to Korean R&amp;B in the top <span className="hint-mark">?</span>%.</li>
-                  <li>He visited <span className="hint-mark">?</span> museums in March.</li>
-                  <li>His oldest record is archived in 2019-<span className="hint-mark">?</span> (YYYY-M format).</li>
-                  <li>He went for <span className="hint-mark">?</span> runs in September 2025.</li>
-                </ol>
+                <h3>Collected Notes</h3>
+                <p className="hint-empty">Recovered notes are pinned to fixed slots (1-5).</p>
+
+                <div className="collected-note-board">
+                  {NOTE_SLOT_BOOK_IDS.map((bookId, index) => {
+                    const isCollected = collectedNoteIds.includes(bookId)
+
+                    return (
+                      <article
+                        key={bookId}
+                        className={`collected-note-slot ${isCollected ? 'is-collected' : 'is-missing'}`}
+                      >
+                        <img src={notePaperImage} alt="" aria-hidden="true" />
+                        <div className="collected-note-slot-text">
+                          {isCollected ? (
+                            <p>{PASSWORD_HINT_BY_BOOK_ID[bookId]}</p>
+                          ) : (
+                            <p>#{index + 1} NOTE MISSING</p>
+                          )}
+                        </div>
+                      </article>
+                    )
+                  })}
+                </div>
               </div>
               <div className="popup-actions hint-actions">
                 <button
                   type="button"
                   className="close-button"
-                  onClick={() => setHintPopupOpen(false)}
+                  onClick={() => setCollectedNotesPopupOpen(false)}
                 >
-                  CLOSE NOTE
+                  CLOSE
+                </button>
+              </div>
+            </motion.article>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {activeNoteDetailBook && (
+          <motion.section
+            className="note-detail-overlay"
+            key={activeNoteDetailBook.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setActiveNoteDetailBookId(null)}
+          >
+            <motion.article
+              className="note-detail-card"
+              initial={{ y: 28, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 20, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.28 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="note-paper-stage">
+                <img className="note-paper-image" src={notePaperImage} alt="Torn note" />
+                <div className="note-paper-text">
+                  <p className="note-paper-hint">{PASSWORD_HINT_BY_BOOK_ID[activeNoteDetailBook.id]}</p>
+                </div>
+                <button
+                  type="button"
+                  className="note-inline-close"
+                  onClick={() => setActiveNoteDetailBookId(null)}
+                  aria-label="Close note detail"
+                >
+                  CLOSE
                 </button>
               </div>
             </motion.article>
@@ -1483,21 +1587,21 @@ apps is reflected in the very structure of this evaluation.</pre>
                 )}
 
                 {isLastPage && (
-                    <div className="orb-collect-zone">
-                      <p className="orb-instruction">
-                        <span className="orb-arrow">v</span> Press the orb below to collect it
+                    <div className="note-collect-zone">
+                      <p className="note-instruction">
+                        <span className="note-arrow">v</span> Inspect the torn note below to reveal this hint
                       </p>
                       <button
                         type="button"
-                        className={`collectible-orb ${isActiveOrbCollected ? 'is-collected' : ''}`}
-                        onClick={collectOrb}
-                        aria-label="Collect glowing orb"
+                        className={`torn-note-button ${isActiveNoteCollected ? 'is-collected' : ''}`}
+                        onClick={() => openNoteDetail(activeBook.id)}
+                        aria-label="Inspect torn note"
                       >
-                        <span className="orb-inner" />
+                        <img src={notePaperImage} alt="Torn note fragment" />
                       </button>
-                      <p className="orb-state">
-                        {isActiveOrbCollected
-                          ? 'Collected: This record has been archived safely.'
+                      <p className="note-state">
+                        {isActiveNoteCollected
+                          ? 'Collected: Note fragment archived.'
                           : 'Not collected yet.'}
                       </p>
                     </div>
@@ -1508,7 +1612,7 @@ apps is reflected in the very structure of this evaluation.</pre>
         )}
       </AnimatePresence>
 
-      {activeBook && (
+      {activeBook && !activeNoteDetailBook && (
         <>
           <div className="page-controls">
             <button

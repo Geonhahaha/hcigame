@@ -23,8 +23,8 @@ function StartPage({ onEnter }) {
           <p>
             You are trapped within this archive. The only way to escape is to
             find the five records of memory hidden here and peer into the core
-            of their UX design. At the end of each record, collect an Orb of
-            Memory. The pieces of analysis you gather will be the only keys to
+            of their UX design. At the end of each record, collect a torn note
+            fragment. The pieces of analysis you gather will be the only keys to
             unlocking the Control Room and finding your way out.
           </p>
 
