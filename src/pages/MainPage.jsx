@@ -63,6 +63,7 @@ import controlRoomDoorImage from '../assets/control room.png'
 import exitDoorImage from '../assets/exit.png'
 import noExitSignImage from '../assets/no exit.png'
 import notePaperImage from '../assets/note.png'
+import noteLineImage from '../assets/note_line.png'
 
 const BOOK_ICON_BY_ID = {
   'book-1': applePhotosIcon,
@@ -1443,20 +1444,24 @@ apps is reflected in the very structure of this evaluation.</pre>
               </button>
               <div className="popup-body">
                 <div className="collected-note-board">
-                  {NOTE_SLOT_BOOK_IDS.map((bookId) => {
+                  {NOTE_SLOT_BOOK_IDS.map((bookId, idx) => {
                     const isCollected = collectedNoteIds.includes(bookId)
 
                     return (
                       <article
                         key={bookId}
                         className={`collected-note-slot ${isCollected ? 'is-collected' : 'is-missing'}`}
-                        aria-label={isCollected ? 'Collected note' : 'Missing note silhouette'}
-                        style={{ '--note-image': `url(${notePaperImage})` }}
+                        aria-label={isCollected ? 'Collected note' : `Missing note ${idx + 1}`}
                       >
-                        <img src={notePaperImage} alt="" aria-hidden="true" />
+                        <img src={isCollected ? notePaperImage : noteLineImage} alt="" aria-hidden="true" />
                         {isCollected && (
                           <div className="collected-note-slot-text">
                             <p>{renderPasswordHint(PASSWORD_HINT_BY_BOOK_ID[bookId])}</p>
+                          </div>
+                        )}
+                        {!isCollected && (
+                          <div className="missing-note-order">
+                            <p>{idx + 1}</p>
                           </div>
                         )}
                       </article>
