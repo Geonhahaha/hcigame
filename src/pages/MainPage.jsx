@@ -80,6 +80,22 @@ const PASSWORD_HINT_BY_BOOK_ID = {
   'book-5': '5. He went for ? runs in September 2025.',
 }
 
+// Helper function to render password hints with styled question marks
+const renderPasswordHint = (text) => {
+  if (typeof text !== 'string') return text
+  const parts = text.split('?')
+  return (
+    <>
+      {parts.map((part, idx) => (
+        <span key={idx}>
+          {part}
+          {idx < parts.length - 1 && <span className="question-mark">?</span>}
+        </span>
+      ))}
+    </>
+  )
+}
+
 const NOTE_SLOT_BOOK_IDS = ['book-1', 'book-2', 'book-3', 'book-4', 'book-5']
 
 const TARGET_BOOKS = [
@@ -1435,11 +1451,12 @@ apps is reflected in the very structure of this evaluation.</pre>
                         key={bookId}
                         className={`collected-note-slot ${isCollected ? 'is-collected' : 'is-missing'}`}
                         aria-label={isCollected ? 'Collected note' : 'Missing note silhouette'}
+                        style={{ '--note-image': `url(${notePaperImage})` }}
                       >
                         <img src={notePaperImage} alt="" aria-hidden="true" />
                         {isCollected && (
                           <div className="collected-note-slot-text">
-                            <p>{PASSWORD_HINT_BY_BOOK_ID[bookId]}</p>
+                            <p>{renderPasswordHint(PASSWORD_HINT_BY_BOOK_ID[bookId])}</p>
                           </div>
                         )}
                       </article>
@@ -1474,7 +1491,7 @@ apps is reflected in the very structure of this evaluation.</pre>
               <div className="note-paper-stage">
                 <img className="note-paper-image" src={notePaperImage} alt="Torn note" />
                 <div className="note-paper-text">
-                  <p className="note-paper-hint">{PASSWORD_HINT_BY_BOOK_ID[activeNoteDetailBook.id]}</p>
+                  <p className="note-paper-hint">{renderPasswordHint(PASSWORD_HINT_BY_BOOK_ID[activeNoteDetailBook.id])}</p>
                 </div>
                 <button
                   type="button"
