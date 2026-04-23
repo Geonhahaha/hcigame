@@ -10,13 +10,5 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      const isGitHubPagesHost = window.location.hostname.endsWith('github.io')
-      const isDocsPath = /\/docs\/?$/.test(window.location.pathname)
-      if (isGitHubPagesHost && !isDocsPath) {
-        const rootPath = window.location.pathname.replace(/\/?$/, '/')
-        window.location.replace(`${rootPath}docs/`)
-      }
-    </script>
   </body>
 </html>
