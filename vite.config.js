@@ -5,5 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   // Use relative asset paths so GitHub Pages project sites do not request /assets from domain root.
   base: './',
+  build: {
+    outDir: 'docs',
+    emptyOutDir: true,
+  },
   plugins: [react()],
 })
