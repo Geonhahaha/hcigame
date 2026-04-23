@@ -1417,40 +1417,35 @@ apps is reflected in the very structure of this evaluation.</pre>
               transition={{ duration: 0.28 }}
               onClick={(event) => event.stopPropagation()}
             >
+              <button
+                type="button"
+                className="hint-popup-close-x"
+                onClick={() => setCollectedNotesPopupOpen(false)}
+                aria-label="Close collected notes"
+              >
+                ✕
+              </button>
               <div className="popup-body">
-                <h3>Collected Notes</h3>
-                <p className="hint-empty">Recovered notes are pinned to fixed slots (1-5).</p>
-
                 <div className="collected-note-board">
-                  {NOTE_SLOT_BOOK_IDS.map((bookId, index) => {
+                  {NOTE_SLOT_BOOK_IDS.map((bookId) => {
                     const isCollected = collectedNoteIds.includes(bookId)
 
                     return (
                       <article
                         key={bookId}
                         className={`collected-note-slot ${isCollected ? 'is-collected' : 'is-missing'}`}
+                        aria-label={isCollected ? 'Collected note' : 'Missing note silhouette'}
                       >
                         <img src={notePaperImage} alt="" aria-hidden="true" />
-                        <div className="collected-note-slot-text">
-                          {isCollected ? (
+                        {isCollected && (
+                          <div className="collected-note-slot-text">
                             <p>{PASSWORD_HINT_BY_BOOK_ID[bookId]}</p>
-                          ) : (
-                            <p>#{index + 1} NOTE MISSING</p>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </article>
                     )
                   })}
                 </div>
-              </div>
-              <div className="popup-actions hint-actions">
-                <button
-                  type="button"
-                  className="close-button"
-                  onClick={() => setCollectedNotesPopupOpen(false)}
-                >
-                  CLOSE
-                </button>
               </div>
             </motion.article>
           </motion.section>

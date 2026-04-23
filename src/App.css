@@ -2015,73 +2015,86 @@
 .hint-popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(12, 9, 6, 0.74);
+  background: rgba(5, 4, 3, 0.82);
   display: grid;
   place-items: center;
   z-index: 1000;
 }
 
 .hint-popup-content {
-  width: min(640px, 92vw);
-  max-height: 78vh;
+  position: relative;
+  width: min(860px, 94vw);
+  max-height: min(700px, 88vh);
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(182, 157, 110, 0.55);
-  border-radius: 12px;
-  background: linear-gradient(180deg, #efdfb5 0%, #ddca98 100%);
-  color: #332310;
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.62);
+  border: 1px solid rgba(249, 234, 193, 0.22);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(18, 14, 10, 0.98), rgba(9, 7, 5, 0.98));
+  color: #f2e7d0;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.68);
 }
 
 .hint-popup-content .popup-body {
-  padding: 1.35rem 1.4rem;
+  padding: 1.15rem 1.1rem 1.25rem;
   overflow-y: auto;
 }
 
-.hint-popup-content h3 {
-  margin: 0 0 0.85rem;
-  text-align: center;
-  font-size: 1.24rem;
-  letter-spacing: 0.18em;
+.hint-popup-close-x {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(249, 234, 193, 0.35);
+  border-radius: 999px;
+  background: rgba(26, 19, 13, 0.9);
+  color: #f8ebcf;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.hint-list {
-  margin: 0;
-  padding-left: 1.15rem;
-  display: grid;
-  gap: 0.58rem;
-  line-height: 1.5;
-  font-size: 0.98rem;
+.hint-popup-close-x:hover {
+  transform: translateY(-1px);
+  background: rgba(41, 30, 20, 0.94);
 }
 
-.hint-list strong {
-  color: #513117;
-}
-
-.hint-empty {
-  margin: 0;
-  text-align: center;
-  color: #6b4c2d;
+.hint-popup-close-x:focus-visible {
+  outline: 2px solid #fff5dd;
+  outline-offset: 2px;
 }
 
 .collected-note-board {
-  margin-top: 0.9rem;
+  margin-top: 1.4rem;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.9rem;
+  align-items: center;
 }
 
 .collected-note-slot {
   position: relative;
-  min-height: 152px;
+  grid-column: span 2;
+  min-height: 164px;
   display: grid;
   place-items: center;
+}
+
+.collected-note-slot:nth-child(4) {
+  grid-column: 2 / span 2;
+}
+
+.collected-note-slot:nth-child(5) {
+  grid-column: 4 / span 2;
 }
 
 .collected-note-slot img {
   display: block;
   width: 100%;
-  max-width: 260px;
+  max-width: 250px;
   height: auto;
 }
 
@@ -2092,53 +2105,45 @@
   place-items: center;
   text-align: center;
   font-family: 'Bradley Hand', 'Segoe Print', 'Comic Sans MS', cursive;
-  color: #3f2b18;
+  color: #2f2114;
 }
 
 .collected-note-slot-text p {
   margin: 0;
   line-height: 1.42;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
+  font-weight: 700;
 }
 
 .collected-note-slot.is-missing img {
-  opacity: 0.48;
-  filter: grayscale(0.24);
+  opacity: 0.5;
+  filter: grayscale(1) brightness(0.18) contrast(1.18);
 }
 
-.collected-note-slot.is-missing .collected-note-slot-text p {
-  letter-spacing: 0.05em;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: rgba(72, 50, 28, 0.72);
+.collected-note-slot.is-missing .collected-note-slot-text {
+  display: none;
 }
 
-.collected-note-slot:last-child {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: min(50%, 260px);
-}
+@media (max-width: 768px) {
+  .hint-popup-content {
+    width: min(520px, 95vw);
+  }
 
-.hint-popup-content .popup-actions {
-  padding: 0.8rem 1.4rem 1.2rem;
-}
+  .collected-note-board {
+    margin-top: 1.6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
 
-.hint-popup-content .close-button {
-  position: relative;
-  top: auto;
-  right: auto;
-  width: auto;
-  height: auto;
-  border-radius: 8px;
-  padding: 0.62rem 1rem;
-  background: linear-gradient(135deg, #6f4a24, #4e3418);
-  border: 1px solid rgba(255, 223, 171, 0.4);
-  color: #f5e7cc;
-  font-size: 0.9rem;
-}
+  .collected-note-slot {
+    grid-column: span 1;
+    min-height: 140px;
+  }
 
-.hint-popup-content .close-button:hover {
-  background: linear-gradient(135deg, #84572b, #5f3f1f);
+  .collected-note-slot:nth-child(4),
+  .collected-note-slot:nth-child(5) {
+    grid-column: span 1;
+  }
 }
 
 .note-detail-overlay {
