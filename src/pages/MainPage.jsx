@@ -595,6 +595,7 @@ function MainPage({ onRestart }) {
   const [passwordPopup, setPasswordPopup] = useState(false)
   const [passwordPopupMode, setPasswordPopupMode] = useState('key')
   const [collectedNotesPopupOpen, setCollectedNotesPopupOpen] = useState(false)
+  const [controlRoomHintOpen, setControlRoomHintOpen] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
   const [monitorMode, setMonitorMode] = useState('client')
@@ -805,7 +806,9 @@ function MainPage({ onRestart }) {
   }
 
   const handlePasswordSubmit = () => {
-    if (passwordInput !== '15946') {
+    const expectedPassword = passwordPopupMode === 'control-room' ? '15946' : 'GRAY'
+
+    if (passwordInput.toUpperCase() !== expectedPassword) {
       setPasswordMessage('error')
       setPasswordInput('')
       setTimeout(() => {
@@ -1046,172 +1049,175 @@ function MainPage({ onRestart }) {
         <section className="control-room-interior" aria-label="Inside the Control Room">
           <h2 className="room-title">Control Room</h2>
           <div className="interior-content">
-            <div className="monitor">
-              <div className="monitor-screen">
-                <div
-                  className="monitor-screen-content"
-                  id="monitor-scroll-content"
-                  ref={monitorScrollRef}
-                  onScroll={syncMonitorScrollbar}
-                >
-                  <div className="monitor-view-switch" role="tablist" aria-label="Monitor mode switch">
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={monitorMode === 'client'}
-                      className={`monitor-mode-button ${monitorMode === 'client' ? 'is-active' : ''}`}
-                      onClick={switchToClientMode}
-                    >
-                      CLIENT VIEW
-                    </button>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={monitorMode === 'developer'}
-                      className={`monitor-mode-button ${monitorMode === 'developer' ? 'is-active' : ''}`}
-                      onClick={switchToDeveloperMode}
-                    >
-                      DEV MODE
-                    </button>
-                  </div>
+            <div className="control-room-monitor-row">
+              <div className="monitor">
+                <div className="monitor-screen">
+                  <div
+                    className="monitor-screen-content"
+                    id="monitor-scroll-content"
+                    ref={monitorScrollRef}
+                    onScroll={syncMonitorScrollbar}
+                  >
+                    <div className="monitor-view-switch" role="tablist" aria-label="Monitor mode switch">
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={monitorMode === 'client'}
+                        className={`monitor-mode-button ${monitorMode === 'client' ? 'is-active' : ''}`}
+                        onClick={switchToClientMode}
+                      >
+                        CLIENT VIEW
+                      </button>
+                      <button
+                        type="button"
+                        role="tab"
+                        aria-selected={monitorMode === 'developer'}
+                        className={`monitor-mode-button ${monitorMode === 'developer' ? 'is-active' : ''}`}
+                        onClick={switchToDeveloperMode}
+                      >
+                        DEV MODE
+                      </button>
+                    </div>
 
-                  {monitorMode === 'client' && (
-                    <>
-                      <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
-                      <div className="monitor-recommendation-list">
-                        <div className="monitor-recommendation-item">
-                          <div className="monitor-app-row">
-                            <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
-                            <p className="monitor-app-name">Apple Photos - Memories</p>
-                            <p className="monitor-rating">★★★☆☆</p>
+                    {monitorMode === 'client' && (
+                      <>
+                        <p className="monitor-rec-title">FINAL RECOMMENDATION</p>
+                        <div className="monitor-recommendation-list">
+                          <div className="monitor-recommendation-item">
+                            <div className="monitor-app-row">
+                              <img src={applePhotosLineIcon} alt="Apple Photos" className="app-icon-glow monitor-app-icon" />
+                              <p className="monitor-app-name">Apple Photos - Memories</p>
+                              <p className="monitor-rating">★★★☆☆</p>
+                            </div>
+                            <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
                           </div>
-                          <p className="monitor-review">Apple's unique aesthetics and the convenience of automation are overwhelming, but the classification logic is opaque, and a dumb AI that can't even understand a single negative sentence can be really frustrating.</p>
-                        </div>
 
-                        <div className="monitor-recommendation-item">
-                          <div className="monitor-app-row">
-                            <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
-                            <p className="monitor-app-name">Youtube Music - Recap</p>
-                            <p className="monitor-rating">★★☆☆☆</p>
+                          <div className="monitor-recommendation-item">
+                            <div className="monitor-app-row">
+                              <img src={youtubeMusicLineIcon} alt="YouTube Music" className="app-icon-glow monitor-app-icon" />
+                              <p className="monitor-app-name">Youtube Music - Recap</p>
+                              <p className="monitor-rating">★★☆☆☆</p>
+                            </div>
+                            <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
                           </div>
-                          <p className="monitor-review">The design has high uniformity and is simple, but the records are a temporary archive that may disappear at any time. In particular, Korean users have to endure 'language discrimination,' being excluded even from core AI features.</p>
-                        </div>
 
-                        <div className="monitor-recommendation-item">
-                          <div className="monitor-app-row">
-                            <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
-                            <p className="monitor-app-name">Google Maps - Timeline</p>
-                            <p className="monitor-rating">★★★★☆</p>
+                          <div className="monitor-recommendation-item">
+                            <div className="monitor-app-row">
+                              <img src={googleMapsLineIcon} alt="Google Maps" className="app-icon-glow monitor-app-icon" />
+                              <p className="monitor-app-name">Google Maps - Timeline</p>
+                              <p className="monitor-rating">★★★★☆</p>
+                            </div>
+                            <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
                           </div>
-                          <p className="monitor-review">Although there are costs such as privacy and resource consumption, its value as an intelligent archive that transforms moments that were about to be forgotten into 'Memento' is very high.</p>
-                        </div>
 
-                        <div className="monitor-recommendation-item">
-                          <div className="monitor-app-row">
-                            <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
-                            <p className="monitor-app-name">Instagram - Archive</p>
-                            <p className="monitor-rating">★★★★☆</p>
+                          <div className="monitor-recommendation-item">
+                            <div className="monitor-app-row">
+                              <img src={instagramLineIcon} alt="Instagram" className="app-icon-glow monitor-app-icon" />
+                              <p className="monitor-app-name">Instagram - Archive</p>
+                              <p className="monitor-rating">★★★★☆</p>
+                            </div>
+                            <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
                           </div>
-                          <p className="monitor-review">This is the most emotional and ideal digital autobiography. It is the best choice for those who want to record and cherish their daily lives without much effort, but you have to accept the inconvenience of searching when the records become extensive and it becomes difficult to pinpoint exactly what you want.</p>
-                        </div>
 
-                        <div className="monitor-recommendation-item">
-                          <div className="monitor-app-row">
-                            <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
-                            <p className="monitor-app-name">Nike Run Club - Activity</p>
-                            <p className="monitor-rating">★★★★☆</p>
+                          <div className="monitor-recommendation-item">
+                            <div className="monitor-app-row">
+                              <img src={nikeLineIcon} alt="Nike Run Club" className="app-icon-glow monitor-app-icon" />
+                              <p className="monitor-app-name">Nike Run Club - Activity</p>
+                              <p className="monitor-rating">★★★★☆</p>
+                            </div>
+                            <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
                           </div>
-                          <p className="monitor-review">While the constraints of time exploration and the inconsistency of information exposure need improvement, the visual storytelling of data and user engagement through gamification demonstrate the pinnacle of digital healthcare archives.</p>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    )}
 
-                  {monitorMode === 'developer' && (
-                    <div
-                      className={`monitor-dev-pane ${shouldAnimateDevIntro ? 'dev-intro-animating' : ''}`}
-                      aria-label="Developer mode system log panel"
-                    >
-                      <p className="monitor-console-title console-typed" style={typedStyle(1, 26, 0.65)}>Meta-evaluation</p>
-                      <p className="monitor-console-line console-typed" style={typedStyle(2, 28, 0.72)}>[SYSTEM_AUDIT_LOG_ENTRY]</p>
-                      <p className="monitor-console-line console-typed" style={typedStyle(3, 44, 0.95)}>&gt; ANALYZING PROJECT_STRUCTURE... [OK]</p>
-                      <p className="monitor-console-line console-typed" style={typedStyle(4, 46, 0.95)}>&gt; LOCATING DESIGN_PRINCIPLES... [OK]</p>
+                    {monitorMode === 'developer' && (
+                      <div
+                        className={`monitor-dev-pane ${shouldAnimateDevIntro ? 'dev-intro-animating' : ''}`}
+                        aria-label="Developer mode system log panel"
+                      >
+                        <p className="monitor-console-title console-typed" style={typedStyle(1, 26, 0.65)}>Meta-evaluation</p>
+                        <p className="monitor-console-line console-typed" style={typedStyle(2, 28, 0.72)}>[SYSTEM_AUDIT_LOG_ENTRY]</p>
+                        <p className="monitor-console-line console-typed" style={typedStyle(3, 44, 0.95)}>&gt; ANALYZING PROJECT_STRUCTURE... [OK]</p>
+                        <p className="monitor-console-line console-typed" style={typedStyle(4, 46, 0.95)}>&gt; LOCATING DESIGN_PRINCIPLES... [OK]</p>
 
-                      <section className="monitor-console-section">
-                        <p className="monitor-console-line console-typed" style={typedStyle(5, 20, 0.62)}>[STATUS_REPORT]</p>
-                        <ul className="monitor-console-list">
-                          <li className="console-typed" style={typedStyle(6, 38, 0.92)}>DIARY_PLATFORM_INTEGRATION: ACTIVE</li>
-                          <li className="console-typed" style={typedStyle(7, 30, 0.8)}>HCI_PRINCIPLES_APPLIED: TRUE</li>
-                        </ul>
-                      </section>
+                        <section className="monitor-console-section">
+                          <p className="monitor-console-line console-typed" style={typedStyle(5, 20, 0.62)}>[STATUS_REPORT]</p>
+                          <ul className="monitor-console-list">
+                            <li className="console-typed" style={typedStyle(6, 38, 0.92)}>DIARY_PLATFORM_INTEGRATION: ACTIVE</li>
+                            <li className="console-typed" style={typedStyle(7, 30, 0.8)}>HCI_PRINCIPLES_APPLIED: TRUE</li>
+                          </ul>
+                        </section>
 
-                      <section className="monitor-console-section">
-                        <p className="monitor-console-line console-typed" style={typedStyle(8, 22, 0.66)}>[SYSTEM_RATIONALE]</p>
-                        <ul className="monitor-console-list">
-                          <li className="console-typed" style={typedStyle(9, 45, 1.05)}>PROJECT_FORMAT: RETRO_FLASH_GAME_ESCAPE_ROOM</li>
-                          <li className="console-typed" style={typedStyle(10, 47, 1.08)}>PRIMARY_DESIGN_PRINCIPLE: AESTHETIC_CONSISTENCY</li>
-                        </ul>
-                      </section>
+                        <section className="monitor-console-section">
+                          <p className="monitor-console-line console-typed" style={typedStyle(8, 22, 0.66)}>[SYSTEM_RATIONALE]</p>
+                          <ul className="monitor-console-list">
+                            <li className="console-typed" style={typedStyle(9, 45, 1.05)}>PROJECT_FORMAT: RETRO_FLASH_GAME_ESCAPE_ROOM</li>
+                            <li className="console-typed" style={typedStyle(10, 47, 1.08)}>PRIMARY_DESIGN_PRINCIPLE: AESTHETIC_CONSISTENCY</li>
+                          </ul>
+                        </section>
 
-                      <pre className="monitor-console-comment console-typed" style={typedStyle(11, 58, 1.2)}>// [Meta-evaluation: Design Logic]
+                        <pre className="monitor-console-comment console-typed" style={typedStyle(11, 58, 1.2)}>// [Meta-evaluation: Design Logic]
 // The project structure is not a mere container for reports,
 // but a functional metaphor for the act of memory retrieval.</pre>
 
-                      <section className="monitor-console-section console-fade-in" style={typedStyle(12, 1, 0.55)}>
-                        <p className="monitor-console-number">1. CONCEPTUAL_ALIGNMENT (Nostalgia as Interface)</p>
-                        <p className="monitor-console-paragraph">The core theme of my project is 'memory'-specifically how different apps allow us to store and look back at our past. I chose the 'point-and-click escape game' format because it is deeply nostalgic to me personally; it reminds me of the old Flash games I used to enjoy. By using this retro format, I wanted the design itself to embody the theme of 'retrieving the past.' The goal was to ensure that the interface is not just a container for the reports, but an extension of the theme: a nostalgic space where the reader explores data, just as the apps analyzed help us explore our own personal history.</p>
-                      </section>
+                        <section className="monitor-console-section console-fade-in" style={typedStyle(12, 1, 0.55)}>
+                          <p className="monitor-console-number">1. CONCEPTUAL_ALIGNMENT (Nostalgia as Interface)</p>
+                          <p className="monitor-console-paragraph">The core theme of my project is 'memory'-specifically how different apps allow us to store and look back at our past. I chose the 'point-and-click escape game' format because it is deeply nostalgic to me personally; it reminds me of the old Flash games I used to enjoy. By using this retro format, I wanted the design itself to embody the theme of 'retrieving the past.' The goal was to ensure that the interface is not just a container for the reports, but an extension of the theme: a nostalgic space where the reader explores data, just as the apps analyzed help us explore our own personal history.</p>
+                        </section>
 
-                      <section className="monitor-console-section console-fade-in" style={typedStyle(13, 1, 0.55)}>
-                        <p className="monitor-console-number">2. DESIGN TRADE-OFF (Information vs. Immersion)</p>
-                        <p className="monitor-console-paragraph">I made a calculated trade-off between usability and immersion. For the 'books' where the core analysis resides, I prioritized readability and clarity-using clean layouts and images to ensure the user can digest the analysis without friction. However, for the final recommendation and meta-evaluation in the 'Control Room,' I intentionally shifted the aesthetic. The 'hacker terminal' style (green text on dark background) might be slightly less readable, but it is a conscious design choice to enhance the 'game' atmosphere. By making the evaluation feel like a system hack, I transformed a boring summary into a gamified event, prioritizing the player's emotional immersion over pure textual efficiency.</p>
-                      </section>
+                        <section className="monitor-console-section console-fade-in" style={typedStyle(13, 1, 0.55)}>
+                          <p className="monitor-console-number">2. DESIGN TRADE-OFF (Information vs. Immersion)</p>
+                          <p className="monitor-console-paragraph">I made a calculated trade-off between usability and immersion. For the 'books' where the core analysis resides, I prioritized readability and clarity-using clean layouts and images to ensure the user can digest the analysis without friction. However, for the final recommendation and meta-evaluation in the 'Control Room,' I intentionally shifted the aesthetic. The 'hacker terminal' style (green text on dark background) might be slightly less readable, but it is a conscious design choice to enhance the 'game' atmosphere. By making the evaluation feel like a system hack, I transformed a boring summary into a gamified event, prioritizing the player's emotional immersion over pure textual efficiency.</p>
+                        </section>
 
-                      <section className="monitor-console-section console-fade-in" style={typedStyle(14, 1, 0.55)}>
-                        <p className="monitor-console-number">3. USER_EXPERIENCE_INTEGRATION (Active Engagement)</p>
-                        <p className="monitor-console-paragraph">Reading long reports can often feel like a passive chore. By embedding my analysis into an escape room, I transformed 'reading' into an active 'exploration' task. This structure leverages intrinsic motivation; the user is not just consuming information, they are playing to uncover it. I also tapped into the IKEA Effect-because the reader has to invest effort to solve puzzles and unlock each section to reach the analysis, they value the content significantly more than if it were simply handed to them. By weaving in enjoyment and challenge through gamification, the process becomes an engaging experience where the user feels a sense of ownership over the discoveries they make.</p>
-                      </section>
+                        <section className="monitor-console-section console-fade-in" style={typedStyle(14, 1, 0.55)}>
+                          <p className="monitor-console-number">3. USER_EXPERIENCE_INTEGRATION (Active Engagement)</p>
+                          <p className="monitor-console-paragraph">Reading long reports can often feel like a passive chore. By embedding my analysis into an escape room, I transformed 'reading' into an active 'exploration' task. This structure leverages intrinsic motivation; the user is not just consuming information, they are playing to uncover it. I also tapped into the IKEA Effect-because the reader has to invest effort to solve puzzles and unlock each section to reach the analysis, they value the content significantly more than if it were simply handed to them. By weaving in enjoyment and challenge through gamification, the process becomes an engaging experience where the user feels a sense of ownership over the discoveries they make.</p>
+                        </section>
 
-                      <section className="monitor-console-section">
-                        <p className="monitor-console-line console-typed" style={typedStyle(15, 22, 0.62)}>[DEVELOPER_NOTE]</p>
-                        <pre className="monitor-console-note console-typed" style={typedStyle(16, 58, 1.28)}>The medium is the message. By choosing a retro-interactive format,
+                        <section className="monitor-console-section">
+                          <p className="monitor-console-line console-typed" style={typedStyle(15, 22, 0.62)}>[DEVELOPER_NOTE]</p>
+                          <pre className="monitor-console-note console-typed" style={typedStyle(16, 58, 1.28)}>The medium is the message. By choosing a retro-interactive format,
 I have ensured that the 'Memory Archiving' theme of the analyzed
 apps is reflected in the very structure of this evaluation.</pre>
-                      </section>
+                        </section>
 
-                      <p className="monitor-console-line console-typed" style={typedStyle(17, 38, 0.9)}>&gt; SYSTEM_STATUS: AUDIT_COMPLETE</p>
-                    </div>
-                  )}
-                </div>
-                <div
-                  className="monitor-scrollbar"
-                  ref={monitorScrollbarRef}
-                  role="scrollbar"
-                  aria-controls="monitor-scroll-content"
-                  aria-label="Final recommendation scroll"
-                  aria-valuemin={0}
-                  aria-valuemax={Math.max(monitorScrollbar.scrollMax, 1)}
-                  aria-valuenow={Math.round(monitorScrollbar.scrollTop)}
-                  onMouseDown={(event) => {
-                    event.preventDefault()
-                    scrollMonitorFromPointer(event.clientY)
-                  }}
-                >
+                        <p className="monitor-console-line console-typed" style={typedStyle(17, 38, 0.9)}>&gt; SYSTEM_STATUS: AUDIT_COMPLETE</p>
+                      </div>
+                    )}
+                  </div>
                   <div
-                    className={`monitor-scrollbar-thumb${isMonitorScrollbarDragging ? ' dragging' : ''}`}
-                    style={{
-                      height: `${monitorScrollbar.thumbSize}%`,
-                      top: `${monitorScrollbar.thumbOffset}%`,
-                    }}
+                    className="monitor-scrollbar"
+                    ref={monitorScrollbarRef}
+                    role="scrollbar"
+                    aria-controls="monitor-scroll-content"
+                    aria-label="Final recommendation scroll"
+                    aria-valuemin={0}
+                    aria-valuemax={Math.max(monitorScrollbar.scrollMax, 1)}
+                    aria-valuenow={Math.round(monitorScrollbar.scrollTop)}
                     onMouseDown={(event) => {
                       event.preventDefault()
-                      event.stopPropagation()
-                      setIsMonitorScrollbarDragging(true)
+                      scrollMonitorFromPointer(event.clientY)
                     }}
-                  />
+                  >
+                    <div
+                      className={`monitor-scrollbar-thumb${isMonitorScrollbarDragging ? ' dragging' : ''}`}
+                      style={{
+                        height: `${monitorScrollbar.thumbSize}%`,
+                        top: `${monitorScrollbar.thumbOffset}%`,
+                      }}
+                      onMouseDown={(event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        setIsMonitorScrollbarDragging(true)
+                      }}
+                    />
+                  </div>
                 </div>
+                <div className="monitor-bezel" />
               </div>
-              <div className="monitor-bezel" />
+
             </div>
             <div className="control-panel">
               <div className="panel-light on" />
@@ -1220,6 +1226,14 @@ apps is reflected in the very structure of this evaluation.</pre>
               <div className="panel-button" />
               <div className="panel-button" />
             </div>
+            <button
+              type="button"
+              className="control-room-note-trigger"
+              onClick={() => setControlRoomHintOpen(true)}
+              aria-label="Inspect control room note"
+            >
+              <img src={notePaperImage} alt="" aria-hidden="true" className="control-room-note-image" />
+            </button>
             {!keyObtained && (
               <div className="console-section">
                 <button
@@ -1377,13 +1391,13 @@ apps is reflected in the very structure of this evaluation.</pre>
                 )}
                 <div className="password-input-group">
                   <input
-                    type="password"
+                    type="text"
                     className="password-input"
                     value={passwordInput}
-                    onChange={(e) => setPasswordInput(e.target.value)}
+                    onChange={(e) => setPasswordInput(e.target.value.toUpperCase())}
                     onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
-                    placeholder="Enter 5 digits"
-                    maxLength="5"
+                    placeholder={passwordPopupMode === 'control-room' ? 'Enter 5 digits' : 'Enter 4 letters'}
+                    maxLength={passwordPopupMode === 'control-room' ? '5' : '4'}
                     disabled={!!passwordMessage}
                     aria-label="Password"
                   />
@@ -1394,7 +1408,7 @@ apps is reflected in the very structure of this evaluation.</pre>
                   type="button"
                   className="submit-button"
                   onClick={handlePasswordSubmit}
-                  disabled={passwordInput.length !== 5 || !!passwordMessage}
+                  disabled={passwordInput.length !== (passwordPopupMode === 'control-room' ? 5 : 4) || !!passwordMessage}
                 >
                   SUBMIT
                 </button>
@@ -1408,6 +1422,47 @@ apps is reflected in the very structure of this evaluation.</pre>
                   }}
                 >
                   CANCEL
+                </button>
+              </div>
+            </motion.article>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {controlRoomHintOpen && (
+          <motion.section
+            className="note-detail-overlay"
+            key="control-room-hint"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setControlRoomHintOpen(false)}
+          >
+            <motion.article
+              className="note-detail-card"
+              initial={{ y: 28, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 20, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.28 }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="note-paper-stage">
+                <img className="note-paper-image" src={notePaperImage} alt="Hint note" />
+                <div className="note-paper-text control-room-hint-text">
+                  <p>1. In CLIENT VIEW, take the initial of the app described as “Memento.”</p>
+                  <p>2. In CLIENT VIEW, take the initial of the app described as “language discrimination.”</p>
+                  <p>3. In DEV MODE, find the theme this retro format was meant to embody, and take its first letter.</p>
+                  <p>4. In DEV MODE, find the initial of the primary design principle.</p>
+                </div>
+                <button
+                  type="button"
+                  className="note-inline-close"
+                  onClick={() => setControlRoomHintOpen(false)}
+                  aria-label="Close control room hint"
+                >
+                  CLOSE
                 </button>
               </div>
             </motion.article>
