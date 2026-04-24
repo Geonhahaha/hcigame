@@ -36,29 +36,25 @@
 
 .start-hero {
   width: 100%;
-  border-radius: 22px;
-  border: 1px solid rgba(231, 228, 214, 0.24);
-  background-image:
-    linear-gradient(165deg, rgba(4, 9, 13, 0.32), rgba(8, 13, 18, 0.74)),
-    url('/start-placeholder.svg');
-  background-size: cover;
-  background-position: center;
+  border-radius: 0;
+  border: 0;
+  background: none;
   display: grid;
   place-items: stretch;
-  padding: 2.2rem;
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.36);
+  padding: 0;
+  box-shadow: none;
 }
 
 .start-placeholder {
   margin: 0;
-  width: min(960px, 100%);
+  width: min(820px, 100%);
   justify-self: center;
   padding: 1.45rem 1.6rem;
   border-radius: 18px;
   border: 1px solid rgba(233, 232, 223, 0.18);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.34));
   color: #f4f4ef;
-  font-size: clamp(1rem, 1.65vw, 1.08rem);
+  font-size: clamp(1.06rem, 1.72vw, 1.16rem);
   text-align: left;
   line-height: 2.3;
   letter-spacing: 0.005em;
@@ -76,7 +72,7 @@
 
 .start-placeholder p + p {
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(233, 232, 223, 0.1);
+  border-top: 1px solid rgba(233, 232, 223, 0.06);
 }
 
 .start-closing {
