@@ -852,10 +852,10 @@ function MainPage({ onRestart }) {
 
   const sceneTitle =
     scene === 'library'
-      ? 'Retrieve Torn Notes from Glowing Books'
+      ? 'Library Bookshelf'
       : scene === 'exit-door'
-        ? 'Exit Door with Keyhole'
-        : 'Door Leading to the Control Zone'
+        ? 'Exit Door'
+        : 'Control Room'
 
   const goToScene = (nextScene) => {
     setScene(nextScene)
@@ -872,7 +872,7 @@ function MainPage({ onRestart }) {
     <main className="case-file">
       <header className="status-bar">
         <div>
-          <p className="eyebrow">Design Diary: Library Wing</p>
+          <p className="eyebrow">Memory Library</p>
           <h1>{sceneTitle}</h1>
         </div>
         <div className="progress-info" aria-live="polite">
