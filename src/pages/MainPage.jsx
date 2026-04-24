@@ -595,7 +595,6 @@ function MainPage({ onRestart }) {
   const [passwordPopup, setPasswordPopup] = useState(false)
   const [passwordPopupMode, setPasswordPopupMode] = useState('key')
   const [collectedNotesPopupOpen, setCollectedNotesPopupOpen] = useState(false)
-  const [controlRoomHintOpen, setControlRoomHintOpen] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const [passwordMessage, setPasswordMessage] = useState(null)
   const [monitorMode, setMonitorMode] = useState('client')
@@ -1226,14 +1225,6 @@ apps is reflected in the very structure of this evaluation.</pre>
               <div className="panel-button" />
               <div className="panel-button" />
             </div>
-            <button
-              type="button"
-              className="control-room-note-trigger"
-              onClick={() => setControlRoomHintOpen(true)}
-              aria-label="Inspect control room note"
-            >
-              <img src={notePaperImage} alt="" aria-hidden="true" className="control-room-note-image" />
-            </button>
             {!keyObtained && (
               <div className="console-section">
                 <button
@@ -1375,6 +1366,15 @@ apps is reflected in the very structure of this evaluation.</pre>
                     ? 'ENTER CONTROL ROOM PASSWORD'
                     : 'ENTER PASSWORD'}
                 </h3>
+                {passwordPopupMode === 'key' && (
+                  <ol className="password-hint-list">
+                    <li>In CLIENT VIEW, take the initial of the app described as “Memento.”</li>
+                    <li>In CLIENT VIEW, take the initial of the app described as “language discrimination.”</li>
+                    <li>In DEV MODE, find the theme this retro format was meant to embody, and take its first letter.</li>
+                    <li>In DEV MODE, find the initial of the primary design principle.</li>
+                    <li>Rearrange the four letters into a normal English word.</li>
+                  </ol>
+                )}
                 {passwordMessage && (
                   <motion.p
                     className={`password-feedback ${passwordMessage}`}
@@ -1422,47 +1422,6 @@ apps is reflected in the very structure of this evaluation.</pre>
                   }}
                 >
                   CANCEL
-                </button>
-              </div>
-            </motion.article>
-          </motion.section>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {controlRoomHintOpen && (
-          <motion.section
-            className="note-detail-overlay"
-            key="control-room-hint"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            onClick={() => setControlRoomHintOpen(false)}
-          >
-            <motion.article
-              className="note-detail-card"
-              initial={{ y: 28, opacity: 0, scale: 0.98 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 20, opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.28 }}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="note-paper-stage">
-                <img className="note-paper-image" src={notePaperImage} alt="Hint note" />
-                <div className="note-paper-text control-room-hint-text">
-                  <p>1. In CLIENT VIEW, take the initial of the app described as “Memento.”</p>
-                  <p>2. In CLIENT VIEW, take the initial of the app described as “language discrimination.”</p>
-                  <p>3. In DEV MODE, find the theme this retro format was meant to embody, and take its first letter.</p>
-                  <p>4. In DEV MODE, find the initial of the primary design principle.</p>
-                </div>
-                <button
-                  type="button"
-                  className="note-inline-close"
-                  onClick={() => setControlRoomHintOpen(false)}
-                  aria-label="Close control room hint"
-                >
-                  CLOSE
                 </button>
               </div>
             </motion.article>
