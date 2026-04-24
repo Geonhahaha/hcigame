@@ -1368,10 +1368,10 @@ apps is reflected in the very structure of this evaluation.</pre>
                 </h3>
                 {passwordPopupMode === 'key' && (
                   <ol className="password-hint-list">
-                    <li>In CLIENT VIEW, take the initial of the app described as “Memento.”</li>
-                    <li>In CLIENT VIEW, take the initial of the app described as “language discrimination.”</li>
+                    <li>In CLIENT VIEW, take the first letter of the app described as “Memento.”</li>
+                    <li>In CLIENT VIEW, take the first letter of the app described as “language discrimination.”</li>
                     <li>In DEV MODE, find the theme this retro format was meant to embody in 1. CONCEPTUAL_ALIGNMENT, and take its first letter.</li>
-                    <li>In DEV MODE, find the initial of the primary design principle.</li>
+                    <li>In DEV MODE, take the first letter of the primary design principle of this diary.</li>
                     <li>Rearrange the four letters into a normal English word.</li>
                   </ol>
                 )}
