@@ -927,7 +927,7 @@ function MainPage({ onRestart }) {
                     style={{ '--book-height': `${slot.h}px` }}
                     aria-hidden="true"
                   >
-                    <span className="book-spine">Volume {index + 1}</span>
+                    <span className="book-spine"></span>
                   </div>
                 )
               }
@@ -966,7 +966,7 @@ function MainPage({ onRestart }) {
                     style={{ '--book-height': `${slot.h}px` }}
                     aria-hidden="true"
                   >
-                    <span className="book-spine">Volume {topSlots.length + index + 1}</span>
+                    <span className="book-spine"></span>
                   </div>
                 )
               }
@@ -1277,13 +1277,22 @@ apps is reflected in the very structure of this evaluation.</pre>
             >
               <div className="popup-body">
                 <h3>{doorPopup === 'exit' ? 'Exit Door' : 'Control Room'}</h3>
-                <p className="door-popup-message">
-                  {doorPopup === 'exit'
-                    ? keyObtained
-                      ? '🔑 Congratulation! You escaped!'
-                      : "You'll need a key to get out of here."
-                    : 'This door is protected by a 5-digit password lock. Collect all 5 notes to decode it.'}
-                </p>
+                {doorPopup === 'exit' && keyObtained ? (
+                  <>
+                    <p className="door-popup-message">
+                      Click🔑. As the key turns, the outside air seeps in through the door.
+                    </p>
+                    <p className="door-popup-submessage">
+                      The quiet time in the library, where you gathered and analyzed fragments of the past, has finally come to an end. You have deciphered all the secrets of this room. Now, close the door of this library and return to your daily life, holding the pieces of memories you have collected.
+                    </p>
+                  </>
+                ) : (
+                  <p className="door-popup-message">
+                    {doorPopup === 'exit'
+                      ? "You'll need a key to get out of here."
+                      : 'This door is protected by a 5-digit password lock. Collect all 5 notes to decode it.'}
+                  </p>
+                )}
                 <p className="door-note-counter">
                   {doorPopup === 'control-room' && (
                     <>
